@@ -36,3 +36,12 @@ Deploys
 - in there there's a pre-receive hook (ops/pre-receive.bb)
 - pushed to this repo will trigger a deploy
 - the github actions does a push
+
+Backups:
+
+curl ifconfig.me -> whitelist your IP in exoscale
+exo dbaas -z ch-gva-2 show hoc-compass-db  --uri -> find credentials/hostname
+
+curl https://datomic-pro-downloads.s3.amazonaws.com/1.0.7622/datomic-pro-1.0.7622.zip -O
+unzip datomic-pro-1.0.7622.zip
+./datomic-pro-1.0.7622/bin/datomic -Xmx4g -Xms4g backup-db "datomic:sql://compass?jdbc:postgresql://hostname:port/datomic?sslmode=require&user=...&password=..." file:/home/arne/Gaiwan/compass/prod-datomic-backup
