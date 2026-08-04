@@ -25,12 +25,13 @@
                                 (constantly tx))))))
        @(requiring-resolve 'lambdaisland.compass.db.migrations/all)))
 
-(defmethod ig/init-key :compass/db [_ {:keys [url]}]
-  (d/create-database url)
-  (let [conn (d/connect url)]
-    @(transact conn (concat (schema/schema-tx) wagontrain/schema))
-    (wagontrain/migrate! conn (migrations))
-    conn))
+(defmethod ig/init-key :compass/db [_ {:keys [url password]}]
+  (let [url (if password (str url "&password=" password) url)]
+    (d/create-database url)
+    (let [conn (d/connect url)]
+      @(transact conn (concat (schema/schema-tx) wagontrain/schema))
+      (wagontrain/migrate! conn (migrations))
+      conn)))
 
 (defmethod ig/halt-key! :compass/db [_ conn])
 
