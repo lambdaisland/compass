@@ -37,6 +37,7 @@
 
 (defn join-server [token]
   (let [{:keys [id username]} (fetch-user-info token)]
+    ;; https://docs.discord.com/developers/resources/guild#add-guild-member
     (discord-bot-request
      :put
      (str "/guilds/" (config/value :discord/server-id) "/members/" id)
@@ -78,6 +79,7 @@
 (defn create-session-thread
   "Create private thread for session in channel configured by `:discord/session-channel-id`."
   [session]
+  ;; https://docs.discord.com/developers/resources/channel#start-thread-in-forum-or-media-channel
   (let [{:keys [status] thread :body :as response}
         (discord-bot-request
          :post

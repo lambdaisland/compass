@@ -12,7 +12,7 @@
 
 (def discord-oauth-endpoint "https://discord.com/oauth2/authorize")
 
-(def default-scopes  ["email" "identify" "guilds.join"])
+(def default-scopes ["email" "identify" "guilds.join"])
 
 (defn request-token [params]
   (hato/post
