@@ -4,7 +4,7 @@
   `(requiring-resolve '~sym))
 
 (defn go [& args]
-  (apply (jit co.gaiwan.compass/go) args))
+  (apply (jit lambdaisland.compass/go) args))
 
 (defn reset []
   ((jit clojure.tools.namespace.repl/set-refresh-dirs) "src")

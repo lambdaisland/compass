@@ -7,8 +7,8 @@
    3. Go to the /profile page to do the revoke testing
   "
   (:require
-   [co.gaiwan.compass.db :as db]
-   [co.gaiwan.compass.model.assets :as assets]
+   [lambdaisland.compass.db :as db]
+   [lambdaisland.compass.model.assets :as assets]
    [datomic.api :as d]))
 
 (defn test-user-eid

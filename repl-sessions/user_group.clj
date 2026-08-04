@@ -1,7 +1,7 @@
 (ns repl-sessions.user-group
   "Prepare some testing data to transact into db for testing"
   (:require
-   [co.gaiwan.compass.db :as db]
+   [lambdaisland.compass.db :as db]
    [datomic.api :as d]))
 
 (defn find-user-eid [email]

@@ -1,6 +1,6 @@
 (ns repl-sessions.db
   (:require
-   [co.gaiwan.compass.db :as db]
+   [lambdaisland.compass.db :as db]
    [datomic.api :as d]))
 
 (db/q

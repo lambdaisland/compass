@@ -1,7 +1,7 @@
 (ns repl-sessions.init-db
   "Prepare some testing data to transact into db for testing"
   (:require
-   [co.gaiwan.compass.db :as db]
+   [lambdaisland.compass.db :as db]
    [datomic.api :as d]))
 
 ;; Utility
@@ -63,7 +63,7 @@
 ;; Demonstrate the behaviors of Datomic Entity
 
 (type session-entity)
-;; => co.gaiwan.compass.db.munged-entity
+;; => lambdaisland.compass.db.munged-entity
 
 (type (-> session-entity
           :session/participants
