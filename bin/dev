@@ -1,27 +1,112 @@
 #!/usr/bin/env bb
 
 (require
+ '[babashka.curl :as curl]
+ '[cheshire.core :as json]
  '[clojure.java.io :as io]
  '[clojure.java.shell :as shell]
  '[clojure.pprint :as pprint]
  '[clojure.string :as str]
  '[lambdaisland.cli :as cli]
- '[lambdaisland.shellutils :as su]
- )
+ '[lambdaisland.shellutils :as su])
 
-(def init {})
+(def init
+  (merge
+   {:mux-token-id (System/getenv "MUX_TOKEN_ID")
+    :mux-secret-key (System/getenv "MUX_SECRET_KEY")}
+   (when (.exists (io/file "config.local.edn"))
+     (read-string (slurp "config.local.edn")))))
 
 (defn prod-repl
   "REPL into production"
   [opts]
   (su/spawn "ssh" "root@compass.heartofclojure.eu" "nc" "localhost" "5555"))
 
+(defn- mux-request [{:keys [mux-token-id mux-secret-key]} req]
+  (assert (and mux-token-id mux-secret-key))
+  (let [{:keys [status body] :as response}
+        (curl/request
+         (cond-> (merge {:as :json
+                         :content-type :json
+                         :headers {"Content-Type" "application/json"}
+                         :basic-auth [mux-token-id mux-secret-key]
+                         :url (str "https://api.mux.com" (:path req))}
+                        req)
+           (:body req)
+           (-> (assoc :data-raw (json/generate-string (:body req)))
+               (dissoc :body))))]
+    (if (and (#{200 201} status) (not (str/blank? body)))
+      (json/parse-string body true)
+      response)))
+
+(defn streams-table [streams-data]
+  (pprint/print-table
+   (for [{:keys [id stream_key playback_ids created_at test]} streams-data]
+     (array-map
+      :id id
+      :stream-key stream_key
+      :playback-ids (str/join ", " (map :id playback_ids))
+      :created-at (java.util.Date. (* (read-string created_at) 1000))
+      :test test))))
+
+(defn mux-ls [opts]
+  (streams-table
+   (:data (mux-request opts {:method :get :path "/video/v1/live-streams"}))))
+
+(defn mux-ls-assets [opts]
+  (pprint/print-table
+   (for [{:keys [id live_stream_id created_at duration]} (:data (mux-request opts {:method :get :path "/video/v1/assets"}))]
+     (array-map
+      :id id
+      :live_stream live_stream_id
+      :created-at (java.util.Date. (* (read-string created_at) 1000))
+      :duration (format "%.2fm" (/ duration 60))))))
+
+(defn mux-clean-assets [opts]
+  (doseq [{:keys [id]} (:data (mux-request opts {:method :get :path "/video/v1/assets"}))]
+    (println "Deleting" id)
+    (mux-request opts {:method :delete :path (str "/video/v1/assets/" id)})))
+
+(defn mux-new-stream [opts]
+  (streams-table
+   [(:data
+     (mux-request
+      opts
+      {:method :post
+       :path "/video/v1/live-streams"
+       :body {:playback_policy ["public"]
+              :new_asset_settings {:playback_policy ["public"]}}}))]))
+
+(defn mux-rm-playback-id [{:keys [stream-id playback-id] :as opts}]
+  (mux-request
+   opts
+   {:method :delete
+    :path (str "/video/v1/live-streams/" stream-id "/playback-ids/" playback-id)}))
+
+(defn mux-add-playback-id [{:keys [stream-id] :as opts}]
+  (mux-request
+   opts
+   {:method :post
+    :path (str "/video/v1/live-streams/" stream-id "/playback-ids")
+    :body {:policy "public" #_"signed"}}))
+
+(defn mux-delete-stream [{:keys [stream-id] :as opts}]
+  (mux-request opts {:method :delete :path (str "/video/v1/live-streams/" stream-id)}))
+
 (def commands
-  ["prod-repl" #'prod-repl])
+  ["prod-repl" #'prod-repl
+   "mux" {:commands ["stream" {:commands ["ls" #'mux-ls
+                                          "create" #'mux-new-stream
+                                          "add-playback-id <stream-id>" #'mux-add-playback-id
+                                          "rm-playback-id <stream-id> <playback-id>" #'mux-rm-playback-id
+                                          "rm <stream-id>" #'mux-delete-stream]}
+
+                     "assets" {:commands ["ls" #'mux-ls-assets
+                                          "clean" #'mux-clean-assets]}]}])
 
 (def flags
-  ["-v, --verbose"          "Increase verbosity"
-   "-n, --dry-run"          "Show shell commands, but don't execute them"])
+  ["-v, --verbose" "Increase verbosity"
+   "-n, --dry-run" "Show shell commands, but don't execute them"])
 
 (cli/dispatch
  {:init init
