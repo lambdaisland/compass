@@ -27,7 +27,7 @@
 (defonce config
   (-> {:prefix prefix}
       config/create
-      system-creds/add-provider
+      (system-creds/add-provider {:prefix nil})
       cli/add-provider))
 
 (defn value [k]
