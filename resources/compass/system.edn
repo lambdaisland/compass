@@ -2,6 +2,7 @@
                   :router   #ig/ref :compass/router
                   :dynamic? #config :dynamic-routes?}
  :compass/router {:dynamic? #config :dynamic-routes?}
- :compass/db     {:url #config :datomic/url}
+ :compass/db     {:url #config :datomic/url
+                  :password #config :datomic/password}
  :tito/sync      {:db #ig/ref :compass/db
                   :interval-seconds #config :tito/sync-interval-seconds}}
