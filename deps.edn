@@ -36,7 +36,8 @@
 
   ;; Markdown
   markdown-to-hiccup/markdown-to-hiccup {:mvn/version "0.6.2"}
-  com.drewnoakes/metadata-extractor {:mvn/version "2.21.0"}}
+  com.drewnoakes/metadata-extractor {:mvn/version "2.21.0"}
+  com.lambdaisland/wagontrain {:mvn/version "0.6.15"}}
 
  :aliases
  {:dev
