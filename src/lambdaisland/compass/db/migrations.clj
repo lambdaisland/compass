@@ -10,16 +10,16 @@
    {:label :add-session-types
     :tx-data #(data/session-types)}
 
-   {:label :add-initial-schedule
-    :tx-data #(data/load-schedule "compass/schedule.edn")}
+   #_{:label :add-initial-schedule
+      :tx-data #(data/load-schedule "compass/schedule.edn")}
 
    {:label :add-live-set
     :tx-data [{:session.type/name  "Live Set"
                :session.type/color "var(--workshop-color)"
                :db/ident           :session.type/live-set}]}
 
-   {:label :add-updated-schedule
-    :tx-data #(data/load-schedule "compass/schedule_20240909.edn")}
+   #_{:label :add-updated-schedule
+      :tx-data #(data/load-schedule "compass/schedule_20240909.edn")}
 
    {:label :update-locations
     :tx-data
