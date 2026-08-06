@@ -7,6 +7,9 @@
   organized by participants.
   "
   (:require
+   [clojure.string :as str]
+   [java-time.api :as time]
+   [lambdaisland.compass.config :as config]
    [lambdaisland.compass.db :as db]
    [lambdaisland.compass.db.queries :as q]
    [lambdaisland.compass.html.sessions :as session-html]
@@ -14,10 +17,8 @@
    [lambdaisland.compass.model.assets :as assets]
    [lambdaisland.compass.model.session :as session]
    [lambdaisland.compass.model.user :as user]
-   [java-time.api :as time]
    [lambdaisland.compass.services.discord :as discord]
-   [lambdaisland.compass.util :as util]
-   [clojure.string :as str]))
+   [lambdaisland.compass.util :as util]))
 
 (defn GET-session-new [req]
   (if-not (:identity req)
@@ -60,8 +61,7 @@
   (let [local-date (time/local-date start-date)
         local-time (time/local-time start-time)
         local-date-time (time/local-date-time local-date local-time)
-        start    (time/zoned-date-time local-date-time db/event-time-zone)
-        ;; end      (time/zoned-date-time end-time db/event-time-zone)
+        start    (time/zoned-date-time local-date-time (config/event-time-zone))
         duration (str "PT" duration-time "M")]
     (cond-> {:db/id "session"
              :session/title title

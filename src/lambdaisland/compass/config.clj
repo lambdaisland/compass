@@ -38,3 +38,7 @@
 
 (defn reload! []
   (config/reload! config))
+
+(def event-time-zone
+  (memoize (fn []
+             (java.time.ZoneId/of (value :event/time-zone)))))

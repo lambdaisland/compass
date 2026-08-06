@@ -73,7 +73,7 @@
     (instance? java.util.Date value)
     (java.time.ZonedDateTime/ofInstant
      (.toInstant ^java.util.Date value)
-     (ZoneId/of (config/value :event/time-zone)))
+     (config/event-time-zone))
 
     (instance? datomic.query.EntityMap value)
     (->munged-entity value)
