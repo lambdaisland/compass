@@ -1,17 +1,18 @@
 (ns lambdaisland.compass.db
   (:require
    [clojure.walk :as walk]
-   [lambdaisland.compass.db.schema :as schema]
    [datomic.api :as d]
    [integrant.core :as ig]
    [integrant.repl.state :as state]
    [io.pedestal.log :as log]
+   [lambdaisland.compass.config :as config]
+   [lambdaisland.compass.db.schema :as schema]
    [lambdaisland.wagontrain :as wagontrain]
-   [potemkin.collections :as po-coll]))
+   [potemkin.collections :as po-coll])
+  (:import
+   (java.time ZoneId)))
 
 (declare transact)
-
-(def event-time-zone (java.time.ZoneId/of "Europe/Brussels"))
 
 (declare munge-to-db)
 
@@ -72,7 +73,7 @@
     (instance? java.util.Date value)
     (java.time.ZonedDateTime/ofInstant
      (.toInstant ^java.util.Date value)
-     event-time-zone)
+     (ZoneId/of (config/value :event/time-zone)))
 
     (instance? datomic.query.EntityMap value)
     (->munged-entity value)

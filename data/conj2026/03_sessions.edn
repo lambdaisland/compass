@@ -1,13 +1,494 @@
 {:tx-data
- [{:session/time #time/zdt "2024-09-18T11:05+02:00[Europe/Brussels]",
-   :session/image
-   "https://2024.heartofclojure.eu/img/speakers/anna-colom.png",
-   :session/title "Responsible Data and AI",
+ [{:session/external-id "7dd1f2a0-f9be-4220-896b-5c72c351fe4c",
+   :session/title "Early Registration",
+   :session/time #time/zdt "2026-09-30T08:30-04:00[America/New_York]",
+   :session/duration "PT60M",
+   :session/location :location.type/registration-desk,
+   :session/type :session.type/break,
+   :session/capacity 500,
    :session/description
-   "-TBD-\n\n\n## Anna Colom\n\nAnna is a senior lead, researcher and evaluator working at the intersections of digital technologies, democratic processes, justice and climate. She's currently active at The Data Tank, an organization championing a holistic approach to re-using data for the common good.\r\n\r\nBefore joining The Data Tank, she was the Public Participation and Research Lead at the Ada Lovelace Institute. Her role focused on ensuring public perspectives and experiences are embedded in Ada’s research in rigorous, inclusive and meaningful ways.\r\n\r\nPrior to joining Ada, Anna managed the research on democratic innovations at Democratic Society, including the evaluation of deliberative mini-publics across the European Union and the UK. She was Director of Innovations and Learning at Africa’s Voices Foundation and worked as a Senior Research Manager at BBC Media Action, working with teams across South Asia, and East and West Africa. Anna holds a PhD in Political Science from The Open University, where she has applied an intersectional lens to understanding how instant messaging mediates citizenship capabilities. She was formerly a journalist, documentary filmmaker and participatory video facilitator.",
-   :session/subtitle "Anna Colom",
-   :session/location :location.type/depot,
-   :session/external-id "3ULPRX",
-   :session/type :session.type/keynote,
-   :session/capacity 300,
-   :session/duration "PT45M"}]}
+   "Whether you're joining the workshop day or just checking in for the conference, stop by and get set up early."}
+  {:session/external-id "b214a221-5829-41d5-a6d9-a53e53ae0075",
+   :session/title "Morning Coffee",
+   :session/time #time/zdt "2026-09-30T08:30-04:00[America/New_York]",
+   :session/duration "PT60M",
+   :session/location :location.type/_206ab,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description ""}
+  {:session/time #time/zdt "2026-09-30T09:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/4d19-400o400o1-VFK8xEhqzxtmTBMGXmAMUR.png",
+   :session/title "Datomic Deep Dive",
+   :session/description
+   "You chose Datomic for production, and now you carry the weight of your past decisions. Or you know the basics of Datomic but don't yet feel confident taking it there. This advanced follow-up to the Amazing Day of Datomic is about the problems that only surface at scale: a schema migration that won't apply, a query that was fast in dev and times out in prod, latency that spikes every time a new index is adopted, and a partitioning schema you have to choose up front, before the data can tell you what's right. We'll work against a Datomic Pro database, troubleshooting problems together. You'll leave able to read what your system is telling you, with a clear sense of where to look when something is slow or wrong, and the confidence to make decisions.\n\n## João Nascimento Mello\n\nMello is a software engineer at Nubank who has worked across different parts of the company, helping teams find good solutions to hard problems and maybe liking them a little too much. He is also a dad of two, so most of his time outside work is already taken – and whatever is left usually goes to rest.",
+   :session/external-id "1268217",
+   :session/subtitle "João Nascimento Mello",
+   :session/location :location.type/w201ab,
+   :session/type :session.type/workshop,
+   :session/capacity 500,
+   :session/duration "PT180M"}
+  {:session/time #time/zdt "2026-09-30T09:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/b5b1-400o400o1-X45Xxb3gi8KRSe9dyx2WyE.jpg",
+   :session/title "Clojure Camp Coding Jam",
+   :session/description
+   "Write some code and learn from your peers. In this hands-on jam you'll team up - first in a mob session, then in a pairing session - to tackle a problem in Clojure, with prompts for both first-timers and seasoned hands. Bring a laptop and a willingness to think out loud; leave with new tools, tricks, and opinions from people who solve problems differently than you.\n\n## Rafal Dittwald\n\nRafal hasn't decided what he is yet, but he's spent the past several years: attempting to get multiple startups off the ground; mentoring hundreds of web development students; and writing many thousands of lines of code (mostly Clojure). Often, he encounters an innocuous question, like \"what is the best way to shuffle cards?\" and then can't help but spend an inordinate amount of time chasing the answers to these questions. Sometimes he gives talks about what he's found.",
+   :session/external-id "1263356",
+   :session/subtitle "Rafal Dittwald",
+   :session/location :location.type/w201cd,
+   :session/type :session.type/workshop,
+   :session/capacity 500,
+   :session/duration "PT180M"}
+  {:session/time #time/zdt "2026-09-30T09:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/6d09-400o400o1-wWKvp78brYhxCLeqquXVb4.png",
+   :session/title "Babashka: fast native Clojure scripting",
+   :session/description
+   "Babashka is a fast, native Clojure scripting runtime. It starts instantly and comes with batteries included, so you can write the scripts you'd normally write in bash. Keep writing the Clojure you already know.\r\n\r\nThis hands-on workshop covers the whole lifecycle of a babashka tool, from a quick script to a published, installable CLI app. We assume you know the basics of Clojure and won't explain the language itself.\r\n\r\nTopics include:\r\n\r\n- Setting up your dev environment\r\n- Managing projects with babashka tasks (bb.edn)\r\n- A tour of built-in libraries (fs, process, http-client, and more)\r\n- Writing and running tests\r\n- Building a CLI with subcommands and automatic help\r\n- Programming a terminal UI (TUI)\r\n- Producing a small web app\r\n- Publishing via GitHub or as an installable tool with bbin\r\n\r\nEvery concept comes with an exercise, building toward one culminating CLI app. There will be lots of interaction and fun!\n\n## Michiel Borkent\n\nMichiel Borkent, known online as @borkdude, is a passionate open source Clojure developer. He’s helping developers to write cleaner, faster, and more enjoyable code with popular tools like clj-kondo, babashka, SCI, nbb, and squint. When he’s not deep in parentheses, you’ll find him at the piano or enjoying a walk outdoors.\n\n## Rahul De\n\nI am primarily an SRE dedicated to making simpler tools to bridge the gap between Dev and Ops. As a die hard Clojure fan, I am fascinated to use its power and simplicity to make infra simple too; a place where it is rarely seen but can be of immense value. Mostly based in London, UK, I love to organise and attend meetups and conferences around increasing diversity in tech, functional programming and food.",
+   :session/external-id "1255061",
+   :session/subtitle "Michiel Borkent, Rahul De",
+   :session/location :location.type/w205ab,
+   :session/type :session.type/workshop,
+   :session/capacity 500,
+   :session/duration "PT180M"}
+  {:session/time #time/zdt "2026-09-30T09:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/daa7-400o400o1-hPTWNfeCBqpULyFHKn4GzT.jpg",
+   :session/title "Backseat Driver - Calva Tools for AI agents",
+   :session/description
+   "Learn how to power up your AI agent with Calva's Clojure tooling. Since Backseat Driver is a Calva extension, we will start by establishing how Calva supports REPL work and Clojure structural editing. Then we will go practical and hands-on, building some useful things. We will use a GitHub repository with all workshop materials, including slides, exercises, scripts, and some example prompts.\r\n\r\nExample topics:\r\n\r\n* Giving the agent access to Calva's REPL sessions\r\n* Native Copilot tools vs MCP (other harnesses)\r\n* The Backseat Driver toolbox: REPL, REPL log, structural editing\r\n* Calva's multi-user REPL, for parallelized agent work\r\n* Convincing the agent to use the tools\r\n* The Awesome Backseat Driver plugin marketplace\r\n\r\nPreparations. Arrive at the workshop with a working Calva development environment. You will also need an LLM subscription and an AI harness for VS Code, like Copilot, Cursor, ECA, etc. Preferably one that supports workspace-local MCP servers.\n\n## Peter Strömberg\n\nPeter Strömberg, a.k.a. PEZ, is by profession a frontend developer using primarily ClojureScript and Replicant. By night he turns into The Calva Guy, pondering how VS Code can better serve its users with Clojure tooling. With Joyride as the vehicle, he also tries to persuade VS Code users to adopt a more Emacs-like hacker attitude towards their editor. Peter is convinced that a developer environment without a Clojure REPL is a broken environment.",
+   :session/external-id "1263446",
+   :session/subtitle "Peter Strömberg",
+   :session/location :location.type/w205cd,
+   :session/type :session.type/workshop,
+   :session/capacity 500,
+   :session/duration "PT180M"}
+  {:session/external-id "bf19a5d5-e964-46e0-8970-121372c6559d",
+   :session/title "Lunch, not provided",
+   :session/time #time/zdt "2026-09-30T12:30-04:00[America/New_York]",
+   :session/duration "PT60M",
+   :session/location :location.type/off-site,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description ""}
+  {:session/time #time/zdt "2026-09-30T13:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/b6b1-400o400o1-GrY4UTo5VnBWhVuxER1xiu.png",
+   :session/title "Fast, Lean, Native Clojure",
+   :session/description
+   "Working with native libraries and off-heap memory has historically been awkward and cumbersome. With the advent of tools like Project Panama and GraalVM's Native Image, Clojure developers now have powerful tools for working within and alongside native libraries written in c, c++, rust, and more. Using a combination of instruction and hands-on learning, this workshop will guide participants in the best practices of leveraging the native ecosystem.\r\n\r\nWe will learn how to improve startup time, lower CPU and memory usage, create standalone binaries, call native libraries, manipulate off-heap memory, reach new platforms, and create native libraries for embedding Clojure in non JVM applications.\n\n## Adrian Smith\n\nAdrian is a software engineer and the creator of Easel, a pure clojure IDE in the spirit of Emacs. He got started programming by making tic-tac-toe for his TI-83 calculator. Since then, he's built web, mobile, and desktop applications using python, javascript, ruby, php, objective-c, and c++ before finally finding Clojure. He believes that programming should be for everyone and that you shouldn't need a CS degree to make a simple web, desktop, or mobile app.",
+   :session/external-id "1262039",
+   :session/subtitle "Adrian Smith",
+   :session/location :location.type/w201ab,
+   :session/type :session.type/workshop,
+   :session/capacity 500,
+   :session/duration "PT180M"}
+  {:session/time #time/zdt "2026-09-30T13:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/d15c-400o400o1-NrSvc221KczapFWeeBze5Z.jpg",
+   :session/title "Clojure Camp Coding Jam - Part II!",
+   :session/description
+   "Write some code and learn from your peers. In this hands-on jam you'll team up - first in a mob session, then in a pairing session - to tackle a problem in Clojure, with prompts for both first-timers and seasoned hands. Bring a laptop and a willingness to think out loud; leave with new tools, tricks, and opinions from people who solve problems differently than you.\n\n## Jordan Miller\n\nJordan Miller\r\nStaff Engineer @Nubank, Co-Founder of Clojure Camp, Host/Producer of Lost in Lambduhhhs Podcast, Co-Author Clojure Brain Teasers, \r\n\r\nL. Jordan Miller (she/her/altgirl) is a Staff Software Engineer at Nubank where she focuses on Datomic developer success. Known in the streets for her passion for spreadsheets she enjoys communicating to engineers who appreciate the finest of functions. International globetrotter and stimulation seeker she has no idea how she manages to juggle so many projects; she is co-author of Clojure Brain Teasers, co-founder of Clojure Camp and producer/host of the Lost In Lambduhhs podcast. Check out her linktree: https://linktr.ee/lambduhhh",
+   :session/external-id "1266604",
+   :session/subtitle "Jordan Miller",
+   :session/location :location.type/w201cd,
+   :session/type :session.type/workshop,
+   :session/capacity 500,
+   :session/duration "PT180M"}
+  {:session/time #time/zdt "2026-09-30T13:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/92cf-400o400o1-h5iwi1d9yNDVAazq1XvV4G.jpg",
+   :session/title "AI Tools & Practices Showcase",
+   :session/description
+   "This fast-paced session of attendee demos will be a showcase of tools and practices that are making a real difference for Clojure developers today. You will see editor tools, REPL integration, connections to external systems, managing agents, and more! All experience levels are welcome. Expand the horizon of what you can do with AI and Clojure and bring those ideas back to your own projects.\r\nThe format will consist of a series of short demos (10 minutes each), culminating in a speaker panel Q&A with the audience. Due to the rapid pace of the AI development scene, demos will be proposed and chosen by the attendees a few weeks before the event.\n\n## Eric Dallo\n\nSoftware Engineer at Nubank, Emacs fanatic, NixOS enthusiast, and maintainer of some open-source projects like clojure-lsp, emacs-lsp, clj-easy and others, focusing on the developer experience.\r\n",
+   :session/external-id "1261261",
+   :session/subtitle "Eric Dallo",
+   :session/location :location.type/w205abcd,
+   :session/type :session.type/workshop,
+   :session/capacity 500,
+   :session/duration "PT180M"}
+  {:session/external-id "8a72337e-3194-44a0-8dff-5db087ebc2bb",
+   :session/title "Meet and Mix",
+   :session/time #time/zdt "2026-09-30T19:00-04:00[America/New_York]",
+   :session/duration "PT180M",
+   :session/location :location.type/_206ab,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description
+   "Arrive during the first 30 minutes of the Meet and Mix and enjoy one complimentary drink (alcoholic or non-alcoholic).\n\nAfter that, there'll be a cash bar and a light buffet with snacks to accompany alcoholic drinks. Please note that this is an after-dinner activity, so come having already eaten.\n\nAt the Meet and Mix, networking becomes more than small talk: it’s a chance to make real connections.\n\nMeet new members of the community.\nConnect with well-known Clojure voices.\nExchange ideas, stories, and experiences.\nAnd turn those encounters into relationships that last long after the Conj.\n\nDon’t stay on the sidelines.\n\nCome mingle, find your people, and get closer to the heart of the Clojure community."}
+  {:session/external-id "2d2ef574-b8d9-4244-8130-539eb68eef46",
+   :session/title "Registration",
+   :session/time #time/zdt "2026-10-01T08:00-04:00[America/New_York]",
+   :session/duration "PT60M",
+   :session/location :location.type/registration-desk,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description ""}
+  {:session/external-id "b51b565f-875b-4f67-89c7-b47acd86c535",
+   :session/title "Morning Coffee",
+   :session/time #time/zdt "2026-10-01T08:00-04:00[America/New_York]",
+   :session/duration "PT60M",
+   :session/location :location.type/_206ab,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description ""}
+  {:session/external-id "0ccebc77-6148-4eee-872e-e31149ff70dc",
+   :session/title "Welcome - Alex Miller",
+   :session/time #time/zdt "2026-10-01T09:00-04:00[America/New_York]",
+   :session/duration "PT5M",
+   :session/location :location.type/w207abcd,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description ""}
+  {:session/time #time/zdt "2026-10-01T09:05-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/e9c3-400o400o1-SwfF1EF31Tj7FxrWa76PBj.jpg",
+   :session/title "In Context",
+   :session/description
+   "Building flexible systems means embracing the ever-changing shape of information as it flows throughout. How can we document and enforce our expectations without making things brittle? This talk examines some new features coming to Clojure that aim to address this challenge.\n\n## Rich Hickey\n\nRich Hickey, the author of Clojure and designer of Datomic, is a software developer with over 35 years of experience in various domains. ",
+   :session/external-id "1299890",
+   :session/subtitle "Rich Hickey",
+   :session/location :location.type/w207abcd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-01T09:55-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/ad41-400o400o1-D76WXrPyZ26wNPu3RPmgxx.png",
+   :session/title "Powering a 3D Game Engine with Clojure",
+   :session/description
+   "In this experience report, a 20-year veteran of C++ and C# game development recounts their experience building a real-time 3D game engine powered by Clojure: the motivation, surprising benefits, challenges, and lessons learned when using idiomatic Clojure for real-time 3D game development.\n\n## Jared Cone\n\nI've been making games for 20 years. I was the lead programmer and\r\nprincipal engineer for Rocket League, from prototype to production to 10 years as a live-service game. After a decade of admiring Clojure from afar I've finally taken the plunge by building a 3D game engine in Clojure to find out what the language can really do.",
+   :session/external-id "1248150",
+   :session/subtitle "Jared Cone",
+   :session/location :location.type/w207abcd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-01T10:45-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/cf34-400o400o1-s8t2rR1yJvCzh9cKutdeWE.png",
+   :session/title "Clojure in Academia",
+   :session/description
+   "What happens when you introduce Clojure and functional programming to students who aren’t looking for it?\r\nAt EPITA (Paris), we teach a course on functional programming using Clojure, focused on immutability, recursion, and lazy evaluation. Most students don’t fully “get it” by the end. A few do—and that difference is striking.\r\nThis talk is a candid look at that gap. Which ideas consistently fail to land? What clicks for the minority who connect with the model? How do constraints of a traditional curriculum shape the outcome?\r\nWe’ll also share the exercises and infrastructure we use to run the course at scale, and what they reveal about learning (and not learning) Clojure.\r\nAn honest account of teaching FP with Clojure: partial success, unexpected insights, and open questions.\n\n## Jim Newton\n\nJim 38 years as Lisp programmer, and assistant research professor, teaching mathematics and programming at an international, Paris based engineering school.",
+   :session/external-id "1228103",
+   :session/subtitle "Jim Newton",
+   :session/location :location.type/w207abcd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-01T11:35-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/0b87-400o400o1-XVTHUwsqhUhusXd6sahL6p.png",
+   :session/title "Would you believe it's jank?",
+   :session/description
+   "jank is the cutting-edge native Clojure dialect, built on LLVM, with seamless C++ interop. jank is unlocking rich interop with the native world, competitive performance, and an easy native embedding story.\r\n\r\nIn this talk, we'll cover how and where jank is innovating, the amazing things jank can do, and why having a rich native Clojure dialect matters. This will include topics like our unprecedented C++ interop, gorgeous error messages, impressive performance, easy binary distribution, and more.\r\n\r\nViewers will leave this talk inspired to use jank for game development, desktop GUI apps, scientific computing, and whatever they can dream.\n\n## Jeaye Wilkerson\n\nJeaye has a background in C++ systems programming, specifically with games and game engines. For the past two years, he's been focusing full-time on building jank so that the worlds of C++ and Clojure can be merged.",
+   :session/external-id "1242600",
+   :session/subtitle "Jeaye Wilkerson",
+   :session/location :location.type/w207abcd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/external-id "16b6d30f-2d60-48d4-81d8-cd9a57aa57a8",
+   :session/title "Lunch Meetup",
+   :session/time #time/zdt "2026-10-01T12:15-04:00[America/New_York]",
+   :session/duration "PT85M",
+   :session/location :location.type/off-site,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description
+   "Find your group in the Compass app, sign up, and head out for lunch together."}
+  {:session/time #time/zdt "2026-10-01T13:40-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/95d6-400o400o1-V89Bwoo1NkzDxF8RM4vwMm.png",
+   :session/title "Porting Ideas, Not Code",
+   :session/description
+   "Clojure changed how many developers think about data: immutable facts, temporal structure over time, and code as data. But what changes when these ideas move beyond the Clojure ecosystem?\r\n\r\nStardust explores how Clojure and Datomic concepts can be reimagined in a language-agnostic data platform for messy, real-world open data. It looks at what transfers cleanly, what requires new trade offs outside the JVM, and how real-world measurement reshapes system design. It’s not about preserving a stack, but about carrying forward ideas like simplicity, compatibility, and care for data across different languages and systems.\n\n## Delaney Gillilan\n\nDelaney has a rich and varied background from full stack game development, military systems of record, gambling and slot machines, to even a stint in the circus. He has a love for creating tools and engines for other creators to use and moves fast! ",
+   :session/external-id "1262514",
+   :session/subtitle "Delaney Gillilan",
+   :session/location :location.type/w207ab,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-01T13:40-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/6d2f-400o400o1-Y2ttK8PxRpNQvvwLoH4jni.jpg",
+   :session/title
+   "Reimagining the Spreadsheet with ClojureScript and SCI",
+   :session/description
+   "What if you could have a spreadsheet that combines:\r\n- the layout, styling and interactivity of a web page, \r\n- the reactivity of a spreadsheet, \r\n- and the expressiveness of Clojure? \r\n\r\nHow Clojure enables the next generation of spreadsheets.\n\n## Markus Holmström\n\nHaving worked many years at an investment bank in Zurich, I have seen firsthand the power spreadsheets give users and also their limits. \r\nMy current focus is to improve the powers and to remove the limits of the spreadsheet.",
+   :session/external-id "1263871",
+   :session/subtitle "Markus Holmström",
+   :session/location :location.type/w207cd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-01T14:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/6d65-400o400o1-BaPFdgGS1o6jBjCgbX7tLm.jpg",
+   :session/title "The Game That Deleted Its Frontend",
+   :session/description
+   "I built a multiplayer board-game table as a ClojureScript re-frame SPA. Thousands of games got played on it, and the client-side state handling was the part I never stopped fighting. So now my apps have no frontend code at all: the server owns every bit of state through a core.async.flow CQRS backbone, and streams the UI over a single SSE connection to Datastar.\r\n\r\nThe main idea you'll take home is routing data by what it needs: user actions go into an append-only event log (history, replay and undo come for free), live cursors go over a lossy broadcast that never touches the database.\r\n\n\n## Fabian Merkle\n\nI'm Fabian Merkle, a Clojure consultant in Dubai, six years full-time in Clojure and twelve as a developer. \r\n\r\nI work with early-stage startups across the US and Europe — fintech, gaming, ERP, EdTech. ",
+   :session/external-id "1263920",
+   :session/subtitle "Fabian Merkle",
+   :session/location :location.type/w207ab,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-01T14:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/3093-400o400o1-Rk9yGoJxzgxDnAGnnWDcXk.jpg",
+   :session/title
+   "From OutOfMemoryError to Root Cause: Analyzing Clojure Heap Dumps",
+   :session/description
+   "When a Clojure process runs out of memory, the JVM could give you a heap dump, but most Clojure developers have never opened one. This talk walks through my diagnostic process for finding memory leaks using Eclipse MAT, including how to map Java class names back to Clojure constructs and how to recognize the patterns that trip us up (memoized functions, go-loops capturing dynamic vars, unbounded registries growing during long-running REPL sessions). You will leave with a repeatable workflow for taking, opening, and analyzing heap dumps from any Clojure process. The talk concludes with an investigation whose fixes reduced memory usage of an internal test suite from up to 50GB to a couple of GB, plus a memory issue with clojure.core.cache that would be unfeasible to find without this heap dump analysis.\n\n## Santiago Cabrera\n\nLead Software Engineer at Nubank, where I've worked since June 2022 on the multi-service test infrastructure used across Nubank's Clojure services, a domain where memory profiling and REPL-driven development are daily concerns. I run Nubank's Engineering Excellence Tech Forum and recently spoke about Clojure at the BogotaJVM meetup, hosted at Oracle's offices for Java's 30th anniversary.",
+   :session/external-id "1232577",
+   :session/subtitle "Santiago Cabrera",
+   :session/location :location.type/w207cd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/external-id "bc797eb7-a7aa-41ac-ba7e-f4ae19944591",
+   :session/title "Coffee Break",
+   :session/time #time/zdt "2026-10-01T15:10-04:00[America/New_York]",
+   :session/duration "PT30M",
+   :session/location :location.type/_206ab,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description ""}
+  {:session/time #time/zdt "2026-10-01T15:40-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/3470-400o400o1-9aYY2c4D5CvgyoF4dUuDyP.jpg",
+   :session/title "Simplicity Ain't Free",
+   :session/description
+   "We've all watched \"Simplicity Ain't Easy\" and \"Simple Made Easy\" enough times to do the call-and-response, dictionary-definition slides and all. Personally, I've been deeply shaped by the ideas from Stu, Rich and others in the community. I love simplicity.\r\n\r\nAnd, while simplicity is one of Clojure's great gifts to software, it's not free. Finding the \"simples\" in a domain takes time, and composing them brings real costs. Sometimes an easy or expedient implementation — the complected, messy thing that works today — is what keeps our product or company alive long enough to improve tomorrow.\r\n\r\nDrawing on these evergreen talks and Richard Gabriel's \"Worse is Better\" essays, this talk asks: when should we decomplect, when should we choose ease, and is that choice even binary? We'll build a set of clues, considerations, and guiding principles to help us read trade-offs and context so we can deliver what we need today without cutting ourselves off from the path to Better.\n\n## Aaron Brooks\n\nAaron has been writing software for over 40 years and Clojure since its early days. He was part of the community before the first Clojure/conj, has given talks at Clojure conferences, and ran a Clojure meetup for more than a decade. He spent over 10 years leading Clojure training, adoption, consulting, and engineering at Viasat, worked at a Clojure startup, and now leads engineering operations at Supabase. The ideas in talks like \"Simple Made Easy\" and \"Simplicity Ain't Easy\" reshaped how he thinks about engineering — which is exactly why he wants to look hard at what simplicity costs, and how to apply it well.",
+   :session/external-id "1263325",
+   :session/subtitle "Aaron Brooks",
+   :session/location :location.type/w207ab,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-01T15:40-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/270d-400o400o1-wWuemtwSj9VVthYMijwBFJ.jpg",
+   :session/title
+   "Live Systems, Live Thinking: Materializing Production Traces into AI-Assisted REPL Flows",
+   :session/description
+   "REPL-driven development is often treated as a local expression-evaluation mechanism. But when production incidents span complex business flows, we. abandon our flow state for slow, diagnostics. What if your architecture could automatically materialize individual production incident profiles directly into your local REPL?\r\n\r\nThis talk explores an advanced debugging workflow that scales conversational programming across multi-service business states. We explore the architecture of an automated pipeline that queries a live, failing entity's history, attributes, and generates a local scratch namespace file populated with real parameters, commands, and events. Using state-flow monadic testing and local variable-capture macros, developers can interactively step through historical transitions and hot-patch code. Finally, we show how this single-entity precision unlocks a massive future: using AI assistants to safely execute and scale these REPL flows across dozens of edge cases simultaneously.\n\n## Juliana Prieto\n\nJuliana Prieto is a software engineer at Nu, working with Clojure on backend financial systems. She enjoys learning deeply, teaching others, and communicating technical ideas clearly. While she has a strong interest in frontend, product, and user experience, her current work is focused on backend systems, debugging workflows, and real-world business flows. She is especially curious about software architecture, feedback loops, and the way engineering practices shape how teams understand, change, and trust complex systems.",
+   :session/external-id "1263970",
+   :session/subtitle "Juliana Prieto",
+   :session/location :location.type/w207cd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-01T16:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/f005-400o400o1-YEPz56HyV9pVjgrFdvh6pW.jpg",
+   :session/title
+   "Building Simple Systems in the World of Natural Language Programming",
+   :session/description
+   "Apps are getting more complex, MVP scope is growing, and developers are being asked to build more than ever faster than ever. New information systems are also expected to be compatible with agentic features rather than creating friction. Most importantly, developers are required to be accountable for their work despite producing more code than ever. \r\n\r\nHow do you build reasonable systems with AI when the default mode of working with Agentic Coding leads to architectural drift and slop? Is there a way to bottom out AI decision making at a structural level? Can Markdown files ever be enough?\r\n\r\nIn this talk, I show you how to use ideas from software engineering, a small set of foundational rules, composable building blocks, and an immutable single source of truth to constrain AI agents and produce reliable behavior, based on our experience in production.\r\n\r\nYou'll come away from the talk understanding how to create successful software in the post-AI world.\r\n\n\n## Cameron Barre\n\nCameron Barre is a long time Clojure professional currently solving problems in the realm of AI assisted coding and building systems that integrate AI features as CTO of ObneyAI",
+   :session/external-id "1250010",
+   :session/subtitle "Cameron Barre",
+   :session/location :location.type/w207ab,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-01T16:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/8ee6-400o400o1-7tBMwwv5xBvmAoE9v54Lx2.png",
+   :session/title "What tipped the scales for Clojure",
+   :session/description
+   "For 15 years, Clojure's headwinds (smaller hiring pool, thinner library long tail, the inertia of moving off an incumbent stack) outweighed its ergonomic benefits (REPL-driven iteration, immutable data, image introspection, succinct DSLs) for most teams — the right call while humans typed. Agentic coding changes both sides of the scale at once: the AI absorbs most of the headwinds (the surface tax is paid by something that doesn't tire), while Clojure's ergonomics multiply a developer that iterates orders of magnitude faster than a human can. After starting a production AI product on TypeScript and Python (~90,000 lines) and rewriting it in ~12,000 lines of Clojure and ClojureScript with an AI agent as the primary pair, the rewrite paid for itself in months and has compounded gains daily ever since. You'll leave with a framework for re-running that calculation in your own setup — and a usable answer: don't let the agent dictate your language. The agent can handle yours.\n\n## Brendan Foote\n\nBrendan Foote co-founded JoinIn.ai, where a two-engineer team rewrote a production real-time AI meeting product from 90,000 lines of TypeScript and Python into 12,000 lines of Clojure and ClojureScript — the case study of this talk. He has been working in Clojure since 2013, when he read *The Joy of Clojure* and gave a \"Why Clojure?\" presentation in his Master's in Software Engineering program. He has spoken on Clojure at MSSE Barcamp events, including a talk on a production Clojure tool from a prior financial-services role — 87 lines of code that parsed 750MB of nightly XML and trivially parallelized the work. With 20+ years of engineering experience, he has been making the case for Clojure for over a decade, and is making it again — now as an applied lesson from rebuilding a production AI product with an agent as the primary pair.",
+   :session/external-id "1240615",
+   :session/subtitle "Brendan Foote",
+   :session/location :location.type/w207cd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/external-id "8b5b4a27-8d0e-4f41-b2c0-6d16104e2b08",
+   :session/title "Board Game Night",
+   :session/time #time/zdt "2026-10-01T19:00-04:00[America/New_York]",
+   :session/duration "PT180M",
+   :session/location :location.type/_206ab,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description
+   "Join us for Board Game Night. No experience (or obsession with board games) required. Come hang out, meet other developers, and have some fun."}
+  {:session/external-id "e982f4e2-999c-4c54-8107-326065511f79",
+   :session/title "Morning Coffee",
+   :session/time #time/zdt "2026-10-02T09:00-04:00[America/New_York]",
+   :session/duration "PT30M",
+   :session/location :location.type/_206ab,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description ""}
+  {:session/time #time/zdt "2026-10-02T09:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/082f-400o400o1-Qjyr1C17HnZKb5eRTdy5r.jpg",
+   :session/title "Making Simple Faster",
+   :session/description
+   "Clojure succeeded by delivering a profoundly simple computing model that changed how we manage state and complexity. Yet, over the last fifteen years, both our real-world production experience and the underlying JVM have evolved dramatically. This talk explores how we can leverage modern JVM capabilities to advance Clojure's core abstractions without compromising its core philosophy.\r\n\r\nWe share concrete research improvements to core language features, including a provably better protocol implementation and a novel compiler approach to vars that yields major startup performance gains. From this foundation, we make a call for deeper research into a modernized compiler and runtime.\n\n## Chris Nuernberger\n\n\"Chris attended the University of Colorado at Boulder earning a BS in computer science. Since then, his technical excellence has driven the development of many industry-leading products. Startups love him: with Anark, he brought advanced computer graphics and designer-developer interactions to the web. At SRC he deployed new lossless compression algorithms for GIS systems. At NVIDIA, he led an international team to develop the powerful and popular PhysX debugger. And, in recent years he has focused on applying neural networks and other data-intensive techniques to stubborn business problems, leaving a trail of happy customers in his wake. He has the distinction of both releasing software on CD-ROM, and managing cloud-native machine learning systems with high throughput and availability. Outside of work Chris enjoys his family, rock climbing, and pushing computers to perform beyond their limits.\"",
+   :session/external-id "1262755",
+   :session/subtitle "Chris Nuernberger",
+   :session/location :location.type/w207ab,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-02T09:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/d72b-400o400o1-Bg8dBZFeQFcgb4Yy952kPN.jpg",
+   :session/title "Production ClojureDart for iOS, Android, and macOS",
+   :session/description
+   "Over the past twelve months a tiny team has used ClojureDart (Clojure compiled to Dart, running on Flutter) to build more than a dozen production apps for iOS, Android, and macOS, most deployed internally and several bound for the app stores. The apps include a document scanner with on-device OpenCV, a transit tracker with realtime GTFS, a venture-capital deck triager with on-device LLM evaluation, a notes app with on-device sentence embeddings, a marketplace, an encyclopedia, a financial charting app, and several more. This experience report distills the patterns that survived the trip from prototype to production: a single-atom-plus-`:watch` architecture that replaces Riverpod and BLoC, a curated catalog of cljd-flutter pitfalls (each one a lost afternoon you don't have to spend), and a reusable scaffold for new apps. Attendees will leave with a grounded view of where ClojureDart is strong, where it still has sharp edges, and a checklist of decisions to make on day one.\n\n## Burin Choomnuan\n\nWith over two decades of experience in software development, Burin Choomnuan has evolved alongside the technology landscape, moving from Java to Ruby to Clojure, then on to ClojureScript, and most recently to ClojureDart for mobile and desktop work. Over the past year he has shipped a fleet of production ClojureDart apps for iOS, Android, and macOS, alongside Clojure backends and ClojureScript single-page apps that share a single mental model end-to-end.\r\n\r\nHis current interests are the convergence of functional programming with AI-assisted development, building maintainable agentic workflows in Clojure, and sharing the patterns and pitfalls a tiny team learns by shipping at pace. When he isn't coding, he's writing experience reports for fellow developers who appreciate the art of elegant, productive engineering.",
+   :session/external-id "1257073",
+   :session/subtitle "Burin Choomnuan",
+   :session/location :location.type/w207cd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-02T10:20-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/585e-400o400o1-HNcFDQw5asBdT3FPqFNq4t.jpg",
+   :session/title "Compiling Clojure in Parallel using Bazel",
+   :session/description
+   "Bazel is a fast and correct multi-language, monorepo build tool built by Google. We built https://github.com/griffinbank/rules_clojure to add Clojure support to Bazel, granting superpowers such as parallel compilation, parallel test execution and test caching. At Griffin, we reduced uberjar times from minutes to seconds, and CI times from hours to minutes. \r\n\r\nIn this talk we'll talk about the advantages and tradeoffs of using Bazel, the JVM classloader and Clojure compilation model, and the challenges of building parallel compilation of clojure sources. \n\n## Allen Rohner\n\nAllen has been using Clojure since the pre-1.0 days and has contributed to dozens of Clojure libraries. He has founded two venture-backed Clojure startups, CircleCI and Griffin Financial Technology. ",
+   :session/external-id "1261206",
+   :session/subtitle "Allen Rohner",
+   :session/location :location.type/w207ab,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-02T10:20-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/1a4e-400o400o1-EXCnYDKjxzpM34sT6j9Lpq.jpg",
+   :session/title "Where Did This div Come From?",
+   :session/description
+   "Fourteen years ago, Bret Victor argued that creators need an immediate connection to what they make. Clojure already lived it: the REPL, then Figwheel and shadow-cljs in the browser. But it stops at the rendered page: you can change the code and watch the page update, yet you can't point at something on it and ask which Clojure form made it. Render Hiccup to HTML and the div forgets it was ever Clojure code on a line. Three clicks deep? Grep and guesswork.\r\n\r\nThis talk builds the other half: a source inspector wiring your app, browser, and editor into one loop. Hover an element and the editor jumps to the Hiccup that made it. Put your cursor on a view and the element lights up, definition told apart from call site.\r\n\r\nIt's surprisingly little code. We build it live, end to end, so you can wire the same loop into your own server-rendered Hiccup app.\n\n## Patrick de Kruif\n\nPatrick de Kruif has built software in Clojure professionally for the past five years, and tinkered with it longer still as a side interest before that. His work is mostly web applications backed by databases, and pretty much everything around them. From schema and UI through to CI, deployment, and the devops that keeps it all running. He's happiest working on interactive systems, with a weakness for small, sharp tools over large frameworks.",
+   :session/external-id "1263299",
+   :session/subtitle "Patrick de Kruif",
+   :session/location :location.type/w207cd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-02T11:10-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/187b-400o400o1-EQPUNAGrxDs1knyjWpMhkP.jpg",
+   :session/title "The Code Was the Easy Part",
+   :session/description
+   "When I decided to contribute to Clojure core, the code felt like the obvious challenge. It isn't. Before writing a single line, there is a harder problem: understanding what is actually wrong, why the current behavior exists, what possibilities have already been considered or currently exist, and what reasons quietly rule most of them out. This talk is about what I learned from that process, through real contributions to Clojure core (some merged, some not): the code was hard, but that was the part I was ready for.\n\n## Arthur Fücher\n\nArthur Fücher is a programmer who loves meeting new people and having great conversations. He's the proud father of Laura and a passionate Magic: The Gathering player.\r\nArthur is the organizer and host of the Clojure BR community, where he works to grow the Clojure ecosystem by sharing content in Portuguese. He's also a member of the InnerSource Commons Foundation.\r\nHe has been working with Clojure for the past six years at Nubank, across a variety of business domains, and is currently focused on improving Developer Experience.",
+   :session/external-id "1263835",
+   :session/subtitle "Arthur Fücher",
+   :session/location :location.type/w207ab,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-02T11:10-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/c64c-400o400o1-7RDfwYeY8fEmJMdmRRfiTB.jpg",
+   :session/title "Applied Logic Programming",
+   :session/description
+   "\r\nAt Gateless we’ve been shipping mortgage underwriting automation with Clara Rules since 2021. This talk is about the lessons we’ve learning using Logic Programming in production, at scale, for over five years. This talk will cover a very brief introduction to rules development, but focus more on a case study in how we leveraged the paradigm and broken past roadblocks with advanced tooling. At one point every production release broke something, and no amount of testing would surface the answers. How would you ensure quality in a high stakes system with thousands of facts and rules?\r\n\r\nWe’ll give a brief introduction to the business problems we’ve been solving and make the case for Logic Programming. We’ll review our architecture as it pertains to the use of rules. Then we’ll dive deeper into our tooling, and how we use it to ensure quality. \n\n## Daniel Glauser\n\nDaniel has been working with Clojure for over fifteen years, and software for almost thirty years. Throughout his career he’s worked at large companies like NBC-Universal and Comcast, as well as a host of smaller startups. He’s currently a VP of Engineering at Gateless, a mortgage software company focused on automating underwriting of residential home loans. When he’s not working Daniel enjoys camping, photography, and videography.\n\n## Jose Gomez\n\nJose Gomez has been working in software for approximately fifteen years, and with Clojure for over ten years. Throughout his career he's worked at companies including Bristol Myers Squibb, Express Scripts, and Guaranteed Rate, as well as smaller startups and boutique consulting firms. He's currently a Senior Principal Software Engineer at Gateless, a mortgage software company focused on automating underwriting of residential home loans. Jose focuses on distributed systems and product engineering, and has contributed to open source work including Clara Rules and Futurama. When he's not working Jose enjoys building computers, playing online MMOs, and listening to an ever-growing audiobook collection.",
+   :session/external-id "1259441",
+   :session/subtitle "Daniel Glauser, Jose Gomez",
+   :session/location :location.type/w207cd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/external-id "f551f102-5581-4f38-b7ee-2ac2200137e1",
+   :session/title "Lunch, not provided",
+   :session/time #time/zdt "2026-10-02T11:50-04:00[America/New_York]",
+   :session/duration "PT90M",
+   :session/location :location.type/off-site,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description ""}
+  {:session/time #time/zdt "2026-10-02T13:20-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/515f-400o400o1-p61Tqcqyzihra23gvP7GAS.png",
+   :session/title
+   "Smuggling Clojure into Statically Compiled Video Games",
+   :session/description
+   "If you're anything like me, you got into programming to make video games. Eventually you found the Lispest Lisp, and now you can't imagine building a game without your REPL. But everyone knows a \"real\" game ships to Steam, PlayStation, and Nintendo, and for various wise reasons, existing Clojure implementations do not.\r\n\r\nBeing immune to wisdom, I lobotomized ClojureCLR and Lua and glued them together with a new runtime and a JIT-enabled bytecode compiler, keeping ClojureCLR's data structures. Silk is the first Clojure able to ship to Desktop, iOS, Android, Xbox, Nintendo, and PlayStation. It keeps eval, defmacro, and a live REPL on locked-down platforms without the runtime code generation every other Clojure needs to boot. As a fun side effect, it can compile static binaries, like Go, via a self-hosted compiler.\r\n\r\nVisit with some language hackery and join me at the end of this 10-year rabbit hole to uncover what it takes to smuggle Clojure into statically compiled video games.\n\n## James Tolton\n\nIndie game dev, content creator, and language hacker. Author of libapl-clj, libscryer-clj, and scrypy, designer of libpython-clj's user-facing API, and architect of the Silk programming language.",
+   :session/external-id "1263247",
+   :session/subtitle "James Tolton",
+   :session/location :location.type/w207ab,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-02T13:20-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/0734-400o400o1-QWB6KY5BgHn4x4bHLy5joB.jpg",
+   :session/title "A GIS DSL Across the JVM and the Browser",
+   :session/description
+   "A major U.S. city's zoning update needed maps and analyses beyond what worked well for conventional geospatial tools. The domain-specific language in this talk grew from that need: citywide regulatory analyses over many spatial operations spread across thousands of geospatial parcels, running on the JVM and in the browser from one codebase. Underneath sit small Clojure libraries that each port a familiar JVM idiom to the JS ecosystem: native interop described as data, deterministic resource disposal, and core.async.flow-style parallelism. The talk works the stack through the reimplementations, showing which Clojure feature does the work at each layer and where the abstractions have salient differences.\n\n## Will Cohen\n\nWill Cohen is an urban planner on the Zoning Reform team at the City of Boston's Planning Department, where he works on the city's zoning code, including legalizing accessory dwelling units. He has used Clojure since 2016.",
+   :session/external-id "1263921",
+   :session/subtitle "Will Cohen",
+   :session/location :location.type/w207cd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-02T14:10-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/7719-400o400o1-PyHBMw6Q2Rt1f5ivwZHbdM.jpg",
+   :session/title "Modeling a Fabric Stash with Datomic",
+   :session/description
+   "A fabric collection breaks the tidy assumptions data-modeling tutorials make. One bolt is a single solid color. Another is a cotton-linen blend in several colors. Some carry a fabric type, while many don't. This talk uses that genuinely messy domain to show why Datomic's attribute-based schema fits sparse, irregular data better than rigid relational tables. We'll walk through a real fabric stash schema covering fibers, structures, colors, and weights, modeled as enumerated values, with single- and multi-valued attributes side by side. From there, we watch it grow as new fabric types appear, without a migration. You'll leave with concrete techniques for modeling any irregular, real-world domain in Datomic, instead of forcing it into columns that don't fit.\n\n## Wendy Randolph\n\nWendy is a freelance software developer, community speaker, and conference host, passionate about functional programming and helping others break into tech. A career-changer and founding student of Clojure Camp, she has hosted Babashka Conf, Clojure Conj, and ElixirConf, and spoken at functional programming events around the world. Currently, she's building with Elixir professionally and staying active in Clojure. When not behind a computer or a microphone, she enjoys sewing, jazz dance, sports cars, and Disney.",
+   :session/external-id "1263994",
+   :session/subtitle "Wendy Randolph",
+   :session/location :location.type/w207ab,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-02T14:10-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/4eae-400o400o1-hYocqAceZHMGSQ1qsj3Gus.jpg",
+   :session/title "Teaching Automata Theory with Clojure",
+   :session/description
+   "Teaching the theory of computation often suffers from a disconnect between mathematical models and practical software engineering. This experience report details a classroom-tested approach refined over five years, showing how Clojure bridges that divide by enabling undergraduate CS students to build live, functional simulators for abstract machines, from basic regular expressions to finite automata and Turing machines. By shifting from dry, textbook theory to an experimental, data-driven methodology, this framework has dramatically enhanced engagement and deepened students’ architectural understanding of language semantics. Attendees will learn how Clojure’s core functional strengths turn intimidating theoretical concepts into tangible, executable code, leaving with a proven pedagogical blueprint that inspires and empowers the next generation of computer scientists and software developers.\n\n## Ariel Ortiz\n\nAriel Ortiz is a programming language enthusiast. Since 1994, he has been a full-time faculty member at Tecnológico de Monterrey in Mexico, where he has primarily been involved in teaching undergraduate computer science courses. His areas of interest include programming languages, compiler construction, and web development. He is an active member of the ACM’s special interest group on computer science education, SIGCSE. In 2010, he began teaching Clojure in his classes, but his experience teaching with Lisp-like languages started with Scheme over thirty years ago.",
+   :session/external-id "1263959",
+   :session/subtitle "Ariel Ortiz",
+   :session/location :location.type/w207cd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/external-id "98d97c67-5a38-4abd-bb7c-9626514b8180",
+   :session/title "Coffee Break",
+   :session/time #time/zdt "2026-10-02T14:50-04:00[America/New_York]",
+   :session/duration "PT40M",
+   :session/location :location.type/_206ab,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description ""}
+  {:session/time #time/zdt "2026-10-02T15:30-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/0fc5-400o400o1-XAfqgkLuvXDPWkbzoWron4.png",
+   :session/title "The Infrastructure & Growth of Clojars",
+   :session/description
+   "From this talk, you will learn about Clojars, a critical piece of infrastructure for the Clojure community. You'll learn specifically about:\r\n\r\n- the infrastructure that the Clojars system uses\r\n- the history of Clojars (how did we get here?)\r\n- some statistics about how the Clojars repository has grown over the years (both in usage and deployed libraries)\r\n- recent security improvements to reduce the risk of supply-chain attacks\r\n- some best practices to help defend against potential supply-chain attacks as a library consumer\r\n  \n\n## Toby Crawley\n\nToby is the lead maintainer of Clojars. He has been writing Clojure professionally since 2011, and has maintained Clojars since 2015.",
+   :session/external-id "1244725",
+   :session/subtitle "Toby Crawley",
+   :session/location :location.type/w207abcd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/time #time/zdt "2026-10-02T16:20-04:00[America/New_York]",
+   :session/image
+   "https://cdn.sessionize.com/image/e172-400o400o1-YsheEmBHCWiD2n1D9mZ5La.jpg",
+   :session/title "How to Make Things, and Why",
+   :session/description
+   "This is a talk about how to find flow, power, and joy in making software. It is about how to share the love of making with others, and how to nurture and protect communities of makers.\n\n## Stuart Halloway\n\nStuart Halloway is a Distinguished Engineer at Nubank. He is a Clojure committer, and the architect of the Datomic database. Stuart was a founder and President of Cognitect (formerly Relevance).\r\n\r\nStuart has spoken at a variety of industry events, including StrangeLoop, Clojure/conj, EuroClojure, ClojureWest, SpeakerConf, QCon, GOTO, OSCON, RailsConf, RubyConf, JavaOne, and NFJS.\r\n\r\nStuart has written a number of books and technical articles. Of these, he is most proud of Programming Clojure.",
+   :session/external-id "1275989",
+   :session/subtitle "Stuart Halloway",
+   :session/location :location.type/w207abcd,
+   :session/type :session.type/session,
+   :session/capacity 500,
+   :session/duration "PT40M"}
+  {:session/external-id "d555e417-53db-42f4-8de6-21bfa9c3344b",
+   :session/title "Closing Party",
+   :session/time #time/zdt "2026-10-02T19:00-04:00[America/New_York]",
+   :session/duration "PT180M",
+   :session/location :location.type/off-site,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description ""}]}

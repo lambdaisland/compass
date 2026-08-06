@@ -5,4 +5,4 @@
  :dynamic-routes?            false
  :tito/sync-interval-seconds 900 ;; every 15 minutes
  :image/fallback             "/hoc-logo-2024-avatar.png"
- }
+ :event/time-zone            "UTC"}

@@ -5,7 +5,8 @@
    [clojure.string :as str]
    [datomic.api :as d]
    [io.pedestal.log :as log]
-   [lambdaisland.compass.config :as config])
+   [lambdaisland.compass.config :as config]
+   [java-time-literals.core :as time-literals])
   (:import
    (java.io File)))
 
@@ -26,7 +27,9 @@
 (defn from-dir [path]
   (for [f (->> path io/file file-seq (filter File/.isFile)
                (filter #(str/ends-with? (str %) ".edn")) sort)
-        :let [form (try (edn/read-string (slurp f))
+        :let [form (try (edn/read-string
+                         {:readers {'time/zdt time-literals/parse-zoned-date-time}}
+                         (slurp f))
                         (catch Exception e
                           (log/error :migration/invalid-edn {:file (str f)}
                                      :exception e)))

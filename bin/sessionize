@@ -1,0 +1,157 @@
+#!/usr/bin/env bb
+
+(ns lambdaisland.compass.bin.sessionize
+  (:require
+   [babashka.curl :as curl]
+   [cheshire.core :as json]
+   [clojure.pprint :as pprint]
+   [clojure.string :as str]
+   [lambdaisland.cli :as cli])
+  (:import
+   (java.time.format DateTimeFormatter)
+   (java.time Duration LocalDateTime ZoneId ZonedDateTime)))
+
+(defmethod pprint/simple-dispatch ZonedDateTime [zdt]
+  (pprint/write-out (tagged-literal 'time/zdt (str zdt))))
+
+(defn local-date-time
+  "Convert a ZonedDateTime to a LocalDate string"
+  [^ZonedDateTime zdt]
+  (.format zdt (DateTimeFormatter/ofPattern "yyyy-MM-dd")))
+
+(defn kebab [s]
+  (-> s
+      str/lower-case
+      (str/replace #"[^a-z0-9]+" "-")
+      (str/replace #"^-|-$" "")))
+
+(defn calculate-duration
+  "Calculate ISO 8601 duration between two ZonedDateTimes"
+  [^ZonedDateTime start ^ZonedDateTime end]
+  (let [minutes (.toMinutes (Duration/between start end))]
+    (str "PT" minutes "M")))
+
+(defn fetch-data
+  "Fetch the 'All' view from Sessionize API"
+  [endpoint-id]
+  (assert endpoint-id)
+  (let [url (str "https://sessionize.com/api/v2/" endpoint-id "/view/All")
+        resp (curl/get url {:headers {"Accept" "application/json"}})]
+    (json/parse-string (:body resp) true)))
+
+(defn parse-time
+  "Parse an ISO datetime string (without timezone), and add a timezone"
+  [s timezone]
+  (.atZone (LocalDateTime/parse s) timezone))
+
+(defn speaker-name [speaker]
+  (:fullName speaker))
+
+(defn speaker-bio [speaker]
+  (:bio speaker))
+
+(defn speaker-avatar [speaker]
+  (:profilePicture speaker))
+
+(defn safe-keyword
+  "Like [[clojure.core/keyword]], but adds an extra underscore if the name part
+  doesn't start with a letter"
+  [ns-part name-part]
+  (keyword ns-part
+           (if (re-find #"^[a-zA-Z]" name-part)
+             name-part
+             (str "_" name-part))))
+
+(defn build-sessions
+  [sessions speakers rooms categories timezone]
+  (let [speaker-by-id       (into {} (map (fn [s] [(:id s) s]) speakers))
+        room-by-id          (into {} (map (fn [r] [(:id r) r]) rooms))
+        category-by-item-id (into {} (mapcat (fn [c] (map (juxt :id :name) (:items c))) categories))]
+    (for [s     sessions
+          :let  [session-speakers (keep speaker-by-id (:speakers s))
+                 room-name        (:name (get room-by-id (:roomId s)))
+                 category-name    (some->> (:categoryItems s) first (get category-by-item-id))
+                 start-time       (parse-time (:startsAt s) timezone)
+                 end-time         (parse-time (:endsAt s) timezone)]
+          :when (:startsAt s)]
+      (cond-> {:session/external-id (:id s)
+               :session/title       (:title s)
+               :session/time        start-time
+               :session/duration    (calculate-duration start-time end-time)
+               :session/location    (safe-keyword "location.type" (kebab room-name))
+               :session/type        (if category-name
+                                      (safe-keyword "session.type" (kebab category-name))
+                                      :session.type/break)
+               :session/capacity    500}
+        (:description s)
+        (assoc :session/description (:description s))
+
+        (seq session-speakers)
+        (assoc :session/subtitle (str/join ", " (map speaker-name session-speakers)))
+
+        (seq session-speakers)
+        (assoc :session/image (speaker-avatar (first session-speakers)))
+
+        :->
+        (update :session/description
+                (fn [desc]
+                  (let [speaker-info (str/join "\n\n"
+                                               (for [sp session-speakers]
+                                                 (str "## " (speaker-name sp) "\n\n" (speaker-bio sp))))]
+                    (cond
+                      (and desc (seq speaker-info)) (str desc "\n\n" speaker-info)
+                      (seq speaker-info)            speaker-info
+                      :else                         (or desc "")))))))))
+
+(defn build-locations [rooms categories]
+  (for [r rooms]
+    {:location/name (:name r)
+     :db/ident      (safe-keyword "location.type" (kebab (:name r)))}))
+
+(defn build-session-types [categories]
+  (let [all-types (for [c categories
+                        i (:items c)]
+                    [(:name i) (str "var(--" (kebab (:name i)) "-color)")])]
+    (for [[name color] (conj (vec all-types) ["Break" "var(--break-color)"])]
+      {:session.type/name  name
+       :session.type/color color
+       :db/ident           (safe-keyword "session.type" (kebab name))})))
+
+(defn write-edn [path data]
+  (clojure.java.io/make-parents path)
+  (binding [*print-namespace-maps* false]
+    (spit path
+          (with-out-str
+            (pprint/pprint {:tx-data (vec data)}))))
+  (println "Wrote" path))
+
+(def flags
+  ["--data-dir <path>" {:doc      "Directory to write EDN files to"
+                        :required true
+                        :key      :data-dir}
+   "--timezone <zone-name>" {:doc "Time zone that sessions are in"
+                             :default "UTC"}])
+
+(defn import
+  "Import location/session-type/session info from sessionize"
+  [{:keys [endpoint-id data-dir timezone] :as opts}]
+  (println "Fetching data from Sessionize for endpoint:" endpoint-id)
+  (let [timezone (ZoneId/of timezone)
+        {:keys [sessions speakers rooms categories]} (fetch-data endpoint-id)]
+
+    (println "Found"
+             (count sessions) "sessions,"
+             (count speakers) "speakers,"
+             (count rooms) "rooms,"
+             (count categories) "categories")
+
+    (write-edn (str data-dir "/01_locations.edn") (build-locations rooms categories))
+    (write-edn (str data-dir "/02_session_types.edn") (build-session-types categories))
+    (write-edn (str data-dir "/03_sessions.edn") (build-sessions sessions speakers rooms categories timezone))
+
+    (println "Done!")))
+
+(cli/dispatch*
+ {:name    "sessionize"
+  :commands ["import <endpoint-id>" #'import]
+  :flags   flags})

@@ -1,3 +1,14 @@
 {:tx-data
- [{:location/name "Het Depot"
-   :db/ident      :location.type/depot}]}
+ [{:location/name "Registration Desk",
+   :db/ident :location.type/registration-desk}
+  {:location/name "W207ABCD", :db/ident :location.type/w207abcd}
+  {:location/name "W207AB", :db/ident :location.type/w207ab}
+  {:location/name "W207CD", :db/ident :location.type/w207cd}
+  {:location/name "W206ABCD", :db/ident :location.type/w206abcd}
+  {:location/name "W201AB", :db/ident :location.type/w201ab}
+  {:location/name "W201CD", :db/ident :location.type/w201cd}
+  {:location/name "W205AB", :db/ident :location.type/w205ab}
+  {:location/name "W205CD", :db/ident :location.type/w205cd}
+  {:location/name "W205ABCD", :db/ident :location.type/w205abcd}
+  {:location/name "206AB", :db/ident :location.type/_206ab}
+  {:location/name "Off-site", :db/ident :location.type/off-site}]}
