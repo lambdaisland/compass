@@ -23,7 +23,7 @@
             (comp munge-to-db (if (fn? tx)
                                 tx
                                 (constantly tx))))))
-       @(requiring-resolve 'lambdaisland.compass.db.migrations/all)))
+       ((requiring-resolve 'lambdaisland.compass.db.migrations/all))))
 
 (defmethod ig/init-key :compass/db [_ {:keys [url password]}]
   (let [url (if password (str url "&password=" password) url)]

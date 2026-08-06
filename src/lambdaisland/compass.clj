@@ -84,7 +84,10 @@
                             :default :prod
                             :parse   keyword}
    "--start <ig-key>" {:doc   "Which integrant component(s) to start"
-                       :parse read-string}])
+                       :parse read-string}
+   "--data-dir <path>" {:doc "Directory with event-specific migrations and CSS"
+                        :coll? true
+                        :key :data-dirs}])
 
 (defn run
   "Launch the Compass application"

@@ -1,0 +1,13 @@
+{:tx-data
+ [{:session/time #time/zdt "2024-09-18T11:05+02:00[Europe/Brussels]",
+   :session/image
+   "https://2024.heartofclojure.eu/img/speakers/anna-colom.png",
+   :session/title "Responsible Data and AI",
+   :session/description
+   "-TBD-\n\n\n## Anna Colom\n\nAnna is a senior lead, researcher and evaluator working at the intersections of digital technologies, democratic processes, justice and climate. She's currently active at The Data Tank, an organization championing a holistic approach to re-using data for the common good.\r\n\r\nBefore joining The Data Tank, she was the Public Participation and Research Lead at the Ada Lovelace Institute. Her role focused on ensuring public perspectives and experiences are embedded in Ada’s research in rigorous, inclusive and meaningful ways.\r\n\r\nPrior to joining Ada, Anna managed the research on democratic innovations at Democratic Society, including the evaluation of deliberative mini-publics across the European Union and the UK. She was Director of Innovations and Learning at Africa’s Voices Foundation and worked as a Senior Research Manager at BBC Media Action, working with teams across South Asia, and East and West Africa. Anna holds a PhD in Political Science from The Open University, where she has applied an intersectional lens to understanding how instant messaging mediates citizenship capabilities. She was formerly a journalist, documentary filmmaker and participatory video facilitator.",
+   :session/subtitle "Anna Colom",
+   :session/location :location.type/depot,
+   :session/external-id "3ULPRX",
+   :session/type :session.type/keynote,
+   :session/capacity 300,
+   :session/duration "PT45M"}]}

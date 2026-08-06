@@ -43,7 +43,7 @@
    [:user-group/user-count :long "Number of people in this group"]
    [:user-group/users :ref "Reference points to the user" :many]
 
-   [:session/code :string "Corresponding Pretalx code, to prevent the import from creating duplicates" :identity]
+   [:session/external-id :string "Stable session identifier, to prevent the import from creating duplicates" :identity]
    [:session/title :string "Title of the talk/workshop/activity"]
    [:session/subtitle :string "Subtitle of the session, for talks/workshops = speaker names"]
    [:session/description :string "Full description or abstract"]

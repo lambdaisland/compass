@@ -35,3 +35,6 @@
 
 (defn values []
   (config/values config))
+
+(defn reload! []
+  (config/reload! config))

@@ -1,0 +1,4 @@
+{:tx-data
+ [{:session.type/name  "Talk"
+   :session.type/color "var(--talk-color)"
+   :db/ident           :session.type/talk}]}

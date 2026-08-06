@@ -1,37 +1,16 @@
 (ns lambdaisland.compass.db.migrations
   (:require
-   [lambdaisland.compass.db.data :as data]
-   [datomic.api :as d]))
+   [clojure.edn :as edn]
+   [clojure.java.io :as io]
+   [clojure.string :as str]
+   [datomic.api :as d]
+   [io.pedestal.log :as log]
+   [lambdaisland.compass.config :as config])
+  (:import
+   (java.io File)))
 
-(def all
-  [{:label :add-locations
-    :tx-data #(data/locations)}
-
-   {:label :add-session-types
-    :tx-data #(data/session-types)}
-
-   #_{:label :add-initial-schedule
-      :tx-data #(data/load-schedule "compass/schedule.edn")}
-
-   {:label :add-live-set
-    :tx-data [{:session.type/name  "Live Set"
-               :session.type/color "var(--workshop-color)"
-               :db/ident           :session.type/live-set}]}
-
-   #_{:label :add-updated-schedule
-      :tx-data #(data/load-schedule "compass/schedule_20240909.edn")}
-
-   {:label :update-locations
-    :tx-data
-    [[:db/retractEntity :location.type/depot-main-stage]
-     [:db/retractEntity :location.type/hal5-zone-a]
-     [:db/retractEntity :location.type/hal5-zone-b]
-     [:db/retractEntity :location.type/hal5-hoc-cafe]
-     {:db/ident :location.type/hal5
-      :location/name "Hal 5 - Workshop Zone"}
-     {:location/name "Hal 5 - Community Space"}]}
-
-   {:label :cap-capacity-fn
+(def built-in
+  [{:label :cap-capacity-fn
     :tx-data
     [{:db/ident :compass.fn/cap-capacity
       :db/fn (d/function {:lang "clojure"
@@ -42,20 +21,24 @@
                                                             [?e :session/capacity ?c]
                                                             [(< ?cap ?c)]]
                                                           db cap)]
-                                   [:db/add sid :session/capacity cap])})}]}
+                                   [:db/add sid :session/capacity cap])})}]}])
 
-   {:label :cap-capacity-250
-    :tx-data
-    [[:compass.fn/cap-capacity 250]]}
+(defn from-dir [path]
+  (for [f (->> path io/file file-seq (filter File/.isFile)
+               (filter #(str/ends-with? (str %) ".edn")) sort)
+        :let [form (try (edn/read-string (slurp f))
+                        (catch Exception e
+                          (log/error :migration/invalid-edn {:file (str f)}
+                                     :exception e)))
+              _ (when-not (:tx-data form)
+                  (log/warn :tx-data/missing {:file (str f)}
+                            :message "Missing :tx-data, ignoring migration file"))]
+        :when (:tx-data form)]
+    (if (:label form)
+      form
+      (assoc form :label (keyword (str/replace (File/.getName f) #"\.edn$" ""))))))
 
-   {:label :add-other-location
-    :tx-data
-    [{:location/name "Other location (see description)"}]}
-
-   {:label :workshop-capacity-cap
-    :tx-data
-    [{:session/code "XXE9RM" :session/capacity 30}
-     {:session/code "7CHPV8" :session/capacity 30}
-     {:session/code "W8JQNR" :session/capacity 30}
-     {:session/code "R8UFRM" :session/capacity 30}
-     {:session/code "RYJ78V" :session/capacity 30}]}])
+(defn all []
+  (apply concat
+         built-in
+         (map from-dir (config/value :data-dirs))))

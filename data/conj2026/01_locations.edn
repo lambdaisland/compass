@@ -1,0 +1,3 @@
+{:tx-data
+ [{:location/name "Het Depot"
+   :db/ident      :location.type/depot}]}
