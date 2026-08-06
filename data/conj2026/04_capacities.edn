@@ -1,0 +1,136 @@
+{:tx-data
+ [;; Early Registration | Break | Registration Desk
+  {:session/external-id "7dd1f2a0-f9be-4220-896b-5c72c351fe4c"
+   :session/capacity 350}
+  ;; Morning Coffee | Break | 206AB
+  {:session/external-id "b214a221-5829-41d5-a6d9-a53e53ae0075"
+   :session/capacity 350}
+  ;; Datomic Deep Dive | Workshop | W201AB
+  {:session/external-id "1268217"
+   :session/capacity 63}
+  ;; Clojure Camp Coding Jam | Workshop | W201CD
+  {:session/external-id "1263356"
+   :session/capacity 63}
+  ;; Babashka: fast native Clojure scripting | Workshop | W205AB
+  {:session/external-id "1255061"
+   :session/capacity 80}
+  ;; Backseat Driver - Calva Tools for AI agents | Workshop | W205CD
+  {:session/external-id "1263446"
+   :session/capacity 72}
+  ;; Lunch, not provided | Break | Off-site
+  {:session/external-id "bf19a5d5-e964-46e0-8970-121372c6559d"
+   :session/capacity 350}
+  ;; Fast Lean Native Clojure | Workshop | W201AB
+  {:session/external-id "1262039"
+   :session/capacity 63}
+  ;; Clojure Camp Coding Jam - Part II! | Workshop | W201CD
+  {:session/external-id "1266604"
+   :session/capacity 63}
+  ;; AI Tools & Practices Showcase | Workshop | W205ABCD
+  {:session/external-id "1261261"
+   :session/capacity 152}
+  ;; Meet and Mix | Break | 206AB
+  {:session/external-id "8a72337e-3194-44a0-8dff-5db087ebc2bb"
+   :session/capacity 240}
+  ;; Registration | Break | Registration Desk
+  {:session/external-id "2d2ef574-b8d9-4244-8130-539eb68eef46"
+   :session/capacity 350}
+  ;; Morning Coffee | Break | 206AB
+  {:session/external-id "b51b565f-875b-4f67-89c7-b47acd86c535"
+   :session/capacity 240}
+  ;; Welcome - Alex Miller | Break | W207ABCD
+  {:session/external-id "0ccebc77-6148-4eee-872e-e31149ff70dc"
+   :session/capacity 350}
+  ;; In Context | Session | W207ABCD
+  {:session/external-id "1299890"
+   :session/capacity 350}
+  ;; Powering a 3D Game Engine with Clojure | Session | W207ABCD
+  {:session/external-id "1248150"
+   :session/capacity 350}
+  ;; Clojure in Academia | Session | W207ABCD
+  {:session/external-id "1228103"
+   :session/capacity 350}
+  ;; Would you believe it's jank? | Session | W207ABCD
+  {:session/external-id "1242600"
+   :session/capacity 350}
+  ;; Lunch Meetup | Break | Off-site
+  {:session/external-id "16b6d30f-2d60-48d4-81d8-cd9a57aa57a8"
+   :session/capacity 350}
+  ;; Porting Ideas Not Code | Session | W207AB
+  {:session/external-id "1262514"
+   :session/capacity 250}
+  ;; Reimagining the Spreadsheet with ClojureScript and SCI | Session | W207CD
+  {:session/external-id "1263871"
+   :session/capacity 250}
+  ;; The Game That Deleted Its Frontend | Session | W207AB
+  {:session/external-id "1263920"
+   :session/capacity 250}
+  ;; From OutOfMemoryError to Root Cause: Analyzing Clojure Heap Dumps | Session | W207CD
+  {:session/external-id "1232577"
+   :session/capacity 250}
+  ;; Coffee Break | Break | 206AB
+  {:session/external-id "bc797eb7-a7aa-41ac-ba7e-f4ae19944591"
+   :session/capacity 350}
+  ;; Simplicity Ain't Free | Session | W207AB
+  {:session/external-id "1263325"
+   :session/capacity 250}
+  ;; Live Systems Live Thinking: Materializing Production Traces into AI-Assisted REPL Flows | Session | W207CD
+  {:session/external-id "1263970"
+   :session/capacity 250}
+  ;; Building Simple Systems in the World of Natural Language Programming | Session | W207AB
+  {:session/external-id "1250010"
+   :session/capacity 250}
+  ;; What tipped the scales for Clojure | Session | W207CD
+  {:session/external-id "1240615"
+   :session/capacity 250}
+  ;; Board Game Night | Break | 206AB
+  {:session/external-id "8b5b4a27-8d0e-4f41-b2c0-6d16104e2b08"
+   :session/capacity 350}
+  ;; Morning Coffee | Break | 206AB
+  {:session/external-id "e982f4e2-999c-4c54-8107-326065511f79"
+   :session/capacity 350}
+  ;; Making Simple Faster | Session | W207AB
+  {:session/external-id "1262755"
+   :session/capacity 250}
+  ;; Production ClojureDart for iOS Android and macOS | Session | W207CD
+  {:session/external-id "1257073"
+   :session/capacity 250}
+  ;; Compiling Clojure in Parallel using Bazel | Session | W207AB
+  {:session/external-id "1261206"
+   :session/capacity 250}
+  ;; Where Did This div Come From? | Session | W207CD
+  {:session/external-id "1263299"
+   :session/capacity 250}
+  ;; The Code Was the Easy Part | Session | W207AB
+  {:session/external-id "1263835"
+   :session/capacity 250}
+  ;; Applied Logic Programming | Session | W207CD
+  {:session/external-id "1259441"
+   :session/capacity 250}
+  ;; Lunch, not provided | Break | Off-site
+  {:session/external-id "f551f102-5581-4f38-b7ee-2ac2200137e1"
+   :session/capacity 350}
+  ;; Smuggling Clojure into Statically Compiled Video Games | Session | W207AB
+  {:session/external-id "1263247"
+   :session/capacity 250}
+  ;; A GIS DSL Across the JVM and the Browser | Session | W207CD
+  {:session/external-id "1263921"
+   :session/capacity 250}
+  ;; Modeling a Fabric Stash with Datomic | Session | W207AB
+  {:session/external-id "1263994"
+   :session/capacity 250}
+  ;; Teaching Automata Theory with Clojure | Session | W207CD
+  {:session/external-id "1263959"
+   :session/capacity 250}
+  ;; Coffee Break | Break | 206AB
+  {:session/external-id "98d97c67-5a38-4abd-bb7c-9626514b8180"
+   :session/capacity 350}
+  ;; The Infrastructure & Growth of Clojars | Session | W207ABCD
+  {:session/external-id "1244725"
+   :session/capacity 350}
+  ;; How to Make Things, and Why | Session | W207ABCD
+  {:session/external-id "1275989"
+   :session/capacity 350}
+  ;; Closing Party | Break | Off-site
+  {:session/external-id "d555e417-53db-42f4-8de6-21bfa9c3344b"
+   :session/capacity 300}]}
