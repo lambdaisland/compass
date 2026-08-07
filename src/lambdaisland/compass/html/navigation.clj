@@ -86,7 +86,11 @@
   [c/avatar {:height "2rem"}]
   [:.discord-button :flex :justify-center :py-3
    [:>a
-    {:background-color "#7289da"}
+    :flex :items-center
+    {:gap "0.5rem"
+     :font-weight "bold"
+     :font-size t/--font-size-1
+     :background-color "#7289da"}
     [:&:hover {:background-color "#7289da"}]]
    [#{:a :a:visited} {:color t/--gray-2}]]
   [:a:visited {:color t/--link}]
@@ -107,7 +111,12 @@
     [:ul
      (when-not user
        [:li.discord-button
-        [auth/discord-button {:text "Sign in with Discord"}]])
+        [:a {:href "#"
+             :hx-target "#modal"
+             :hx-get (url-for :login/index)
+             :hx-boost "false"}
+         [graphics/discord {:style {:height "2rem" :width "2rem" :--_logo-color t/--gray-0}}]
+         "Sign in with Discord"]])
      (when user
        (if-let [ticket (user/assigned-ticket user)]
          [:li "Ti.to ticket " [:strong (:tito.ticket/reference ticket)]]
@@ -116,7 +125,7 @@
                :on-click "document.body.classList.toggle('menu-open')"}
            [graphics/ticket-icon]
            [:strong "Claim your Ti.to ticket for full access"]
-          [:div.notifier-dot]]]))
+           [:div.notifier-dot]]]))
 
      [:li
       [:a

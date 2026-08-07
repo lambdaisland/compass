@@ -33,6 +33,8 @@
    [:profile-link/type :string "`mastodon`, `linkedin`, `personal-site`, etc."]
    [:profile-link/href :string "http/mailto URL"]
 
+   [:privacy-policy/accepted-at :instant "When the user accepted the privacy policy"]
+
    [:discord/id :string "Unique user id on discord, a 'snowflake', i.e. uint64 encoded as string" :identity]
    [:discord/access-token :string "Discord OAuth2 access-token"]
    [:discord/expires-at :instant "Expiration timestamp for the OAuth2 token"]

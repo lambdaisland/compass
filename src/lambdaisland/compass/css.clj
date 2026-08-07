@@ -36,8 +36,8 @@
             (str/replace #"\.clj$" "")))
        :reload)))
   (spit-styles))
-#_
-(defonce install-watcher
-  (when-let [watch! (try (requiring-resolve 'lambdaisland.launchpad.watcher/watch!) (catch Exception _))]
-    (watch!
-     {"src" #'on-watcher-event})))
+
+#_(defonce install-watcher
+    (when-let [watch! (try (requiring-resolve 'lambdaisland.launchpad.watcher/watch!) (catch Exception _))]
+      (watch!
+       {"src" #'on-watcher-event})))

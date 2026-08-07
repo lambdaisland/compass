@@ -56,10 +56,8 @@
     head]
    [:body
     (if (get-in request [:query-params "show-login-dialog"])
-      [:dialog {:open true :style {:z-index 1}}
-       [auth/popup "/"]]
-      [:dialog#modal {}
-       "keepme"])
+      [:dialog#modal {:style {:z-index 1}} [auth/popup "/"]]
+      [:dialog#modal {} "keepme"])
     [:div#app
      {;; Have HTMX handle normal links
       :hx-boost true

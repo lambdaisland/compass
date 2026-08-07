@@ -16,8 +16,9 @@
 
 (defn GET-discord-redirect
   "Kick off the Discord OAuth flow, by saving the necessary OAuth state on our
-  side, and then redirecting to Discord."
-  [{:keys [query-params]}]
+  side, and then redirecting to Discord. Preserves any consent values already
+  in the session (set by POST /login/consent)."
+  [{:keys [query-params session]}]
   (let [state (random-uuid)]
     (-> (uri/uri oauth/discord-oauth-endpoint)
         (uri/assoc-query*
@@ -28,11 +29,32 @@
           :state         state})
         str
         response/redirect
-        (update :session assoc :oauth/state-id state :oauth/redirect-url (get query-params "redirect_url" "/")))))
+        (assoc :session (-> (or session {})
+                            (assoc :oauth/state-id state
+                                   :oauth/redirect-url (get query-params "redirect_url" "/")))))))
+
+(defn POST-login-consent
+  "Store consent values in the session, then redirect to the Discord OAuth flow.
+  Requires both consent checkboxes to be checked."
+  [{:keys [form-params] :as req}]
+  (let [privacy? (= "on" (get form-params "consent-privacy"))
+        discord? (= "on" (get form-params "consent-discord"))]
+    (if (and privacy? discord?)
+      (let [next-url (get form-params "next" "/")
+            redirect-url (if (= "/" next-url)
+                           "/oauth2/discord/redirect"
+                           (str "/oauth2/discord/redirect?redirect_url=" next-url))]
+        (-> (response/redirect redirect-url)
+            (assoc :session {:oauth/consent-privacy? true
+                             :oauth/consent-discord? true
+                             :oauth/profile-public? (= "on" (get form-params "profile-public"))})))
+      (-> (response/redirect "/?show-login-dialog=true")
+          (assoc :session {})))))
 
 (defn user-tx [user-uuid
                {:keys [access_token refresh_token expires_in] :as body}
-               {:keys [id email username global_name] :as user-info}]
+               {:keys [id email username global_name] :as user-info}
+               {:keys [profile-public? consent-privacy? consent-discord?] :as _consent}]
   #_(def user-info user-info)
   (let [existing-user (db/entity [:user/uuid user-uuid])
         avatar-id (:avatar user-info)
@@ -54,7 +76,11 @@
        avatar-url
        (assoc :public-profile/avatar-url avatar-url)
        email
-       (assoc :discord/email email))]))
+       (assoc :discord/email email)
+       (not existing-user)
+       (assoc :public-profile/hidden? (not (boolean profile-public?)))
+       consent-privacy?
+       (assoc :privacy-policy/accepted-at (java.util.Date.)))]))
 
 (defn GET-discord-callback [{:keys [query-params session]}]
   (let [{:strs [code state]}  query-params
@@ -70,11 +96,19 @@
       (-> (response/redirect "/" {:flash [:p "Discord OAuth2 invalid state."]})
           (assoc :session {}))
 
+      (not (and (:oauth/consent-privacy? session)
+                (:oauth/consent-discord? session)))
+      (-> (response/redirect "/?show-login-dialog=true")
+          (assoc :session {}))
+
       :else
       (let [{:keys [id] :as user-info} (discord/fetch-user-info (:access_token body))
             user-uuid                  (:user/uuid (d/entity (db/db) [:discord/id id]) (random-uuid))
-            {:keys [status]}           (discord/join-server (:access_token body))]
-        @(db/transact (user-tx user-uuid body user-info))
+            {:keys [status]}           (discord/join-server (:access_token body))
+            consent                    {:profile-public? (:oauth/profile-public? session)
+                                        :consent-privacy? (:oauth/consent-privacy? session)
+                                        :consent-discord? (:oauth/consent-discord? session)}]
+        @(db/transact (user-tx user-uuid body user-info consent))
         {:status  302
          :headers {"Location" (:oauth/redirect-url session "/")}
          :flash   [:p "Welcome to Compass, " (:global_name user-info) "!"
@@ -100,13 +134,15 @@
       {:get {:handler GET-discord-redirect}}]
      ["/callback"
       {:get {:handler GET-discord-callback}}]]]
-   ["/login"
-    {:name :login/index
-     :get {:handler GET-login}}]
+    ["/login"
+     {:name :login/index
+      :get {:handler GET-login}}
+     ["/consent"
+      {:post {:handler POST-login-consent}}]]
    ["/logout"
     {:name :logout/index
      :get {:handler (fn [req]
                       (assoc
-                       (response/redirect "/")
-                       :flash "Thank you for using Compass! Please come again."
-                       :session {}))}}]])
+                        (response/redirect "/")
+                        :flash "Thank you for using Compass! Please come again."
+                        :session {}))}}]])

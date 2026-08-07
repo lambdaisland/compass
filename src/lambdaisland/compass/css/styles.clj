@@ -5,8 +5,7 @@
    [lambdaisland.ornament :as o]))
 
 (o/defrules resets
-  [
-   [:p {:max-inline-size "inherit"}]
+  [[:p {:max-inline-size "inherit"}]
    [#{:ul :ol} :list-none :m-0 :p-0]
    [:body :overflow-x-hidden :w-screen]
    [#{:h1 :h2 :h3 :h4 :h5}

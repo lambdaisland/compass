@@ -3,6 +3,7 @@
   (:require
    [lambdaisland.compass.routes.admin :as admin]
    [lambdaisland.compass.routes.contacts :as contacts]
+   [lambdaisland.compass.routes.documents :as documents]
    [lambdaisland.compass.routes.filters :as filters]
    [lambdaisland.compass.routes.meta :as meta]
    [lambdaisland.compass.routes.oauth :as oauth]
@@ -16,6 +17,7 @@
    (profiles/routes)
    (contacts/routes)
    (oauth/routes)
+   (documents/routes)
    (filters/routes)
    (ticket/routes)
    (admin/routes)

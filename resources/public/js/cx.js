@@ -24,9 +24,39 @@ function ensure_show_modal() {
   document.getElementById("modal").addEventListener('htmx:afterSwap', showModal)
 }
 
+// cx-enabled-by: Element is disabled until all referenced checkboxes are checked.
+// Attribute value is a space-separated list of CSS selectors pointing to
+// checkbox <input> elements. When every one of them is checked, the disabled
+// attribute is removed from the target element.
+function handle_cx_enabled_by(el) {
+  let selector = el.getAttribute('cx-enabled-by');
+  let checkboxes = document.querySelectorAll(selector);
+
+  function updateEnabled() {
+    let allChecked = Array.from(checkboxes).every(cb => cb.checked);
+    el.toggleAttribute('disabled', !allChecked);
+    el.toggleAttribute('cx-disabled', !allChecked);
+  }
+
+  updateEnabled();
+  checkboxes.forEach(cb => {
+    cb.removeEventListener('change', updateEnabled);
+    cb.addEventListener('change', updateEnabled);
+  });
+}
+
+function ensure_cx_enabled_by() {
+  document.querySelectorAll('[cx-enabled-by]').forEach(handle_cx_enabled_by);
+}
+
 function apply_handlers() {
-  ensure_cx_toggle()
-  ensure_show_modal()
+  ensure_cx_toggle();
+  ensure_show_modal();
+  ensure_cx_enabled_by();
+  var modal = document.getElementById("modal");
+  if (modal && modal.firstElementChild) {
+    modal.showModal();
+  }
 }
 
 function handle_response_errors(err) {
