@@ -157,7 +157,19 @@
       [:a {:href "https://github.com/heartofclojure/heartofclojure-site-2024/wiki/Attendee-Guide-2024"
            :target "_blank"}
        [graphics/book-open-icon]
-       "Attendee Guide"]]]
+       "Attendee Guide"]]
+     (when (user/admin? user)
+       [:<>
+        [:li
+         [:hr]]
+        [:li
+         [:a {:href (url-for :admin/livestreams), :on-click "document.body.classList.toggle('menu-open')"}
+          [graphics/shield-check-icon]
+          "Manage Livestreams"]]
+        [:li
+         [:a {:href (url-for :admin/users), :on-click "document.body.classList.toggle('menu-open')"}
+          [graphics/shield-check-icon]
+          "Manage Users"]]])]
     [:div.bottom
      [:p "Proudly made by the " [:a {:href "https://gaiwan.co" :target "_blank"} "Gaiwan Team"] " and contributors."]
      [:p [:a {:href "https://github.com/GaiwanTeam/compass" :target "_blank"} [graphics/github-icon] "GaiwanTeam/compass"]]]

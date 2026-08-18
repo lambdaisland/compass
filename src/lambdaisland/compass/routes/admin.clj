@@ -64,10 +64,28 @@
   (response/redirect "/admin/livestreams"
                      {:flash [:p "Livestream " stream-id " deleted."]}))
 
+(defn POST-livestreams-update [{{:keys [stream-id]} :path-params
+                                {:strs [allowed-ticket-slugs]} :form-params}]
+  (try
+    (mux/update-allowed-ticket-slugs!
+     stream-id
+     (into #{}
+           (comp (map str/trim) (remove str/blank?))
+           (str/split (or allowed-ticket-slugs "") #",")))
+    (response/redirect "/admin/livestreams"
+                       {:flash [:p "Livestream " stream-id " updated."]})
+    (catch clojure.lang.ExceptionInfo e
+      (log/error :mux/update-stream-failed {} :exception e)
+      {:status 422
+       :html/body [livestreams-html/admin-index (mux/streams) nil (ex-message e)]})))
+
 (defn routes []
   ["/admin" {:middleware [wrap-admin-only]}
-   ["/users" {:get {:handler #'GET-users}}]
+   ["/users" {:name :admin/users
+              :get {:handler #'GET-users}}]
    ["/users/sync" {:post {:handler #'POST-users-sync}}]
-   ["/livestreams" {:get {:handler #'GET-livestreams}
+   ["/livestreams" {:name :admin/livestreams
+                     :get {:handler #'GET-livestreams}
                      :post {:handler #'POST-livestreams}}]
-   ["/livestreams/:stream-id/delete" {:post {:handler #'POST-livestreams-delete}}]])
+   ["/livestreams/:stream-id/delete" {:post {:handler #'POST-livestreams-delete}}]
+   ["/livestreams/:stream-id/update" {:post {:handler #'POST-livestreams-update}}]])
