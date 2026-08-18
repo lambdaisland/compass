@@ -39,7 +39,7 @@
 
 (defn a-auth [props & children]
   (if (:user props)
-    (into [:a props] children)
+    (into [:a (dissoc props :user)] children)
     (into
      [:a {:hx-target "#modal"
           :hx-get (str (url-for :login/index) "?next=" (:href props))
@@ -123,6 +123,12 @@
        {:href (url-for :sessions/index), :on-click "document.body.classList.toggle('menu-open')"}
        [graphics/sessions-icon]
        "Sessions & Activities"]]
+     [:li
+      [a-auth
+       {:user user
+        :href (url-for :streams/index)
+        :on-click "document.body.classList.toggle('menu-open')"}
+       "Livestreams"]]
      [:li
       [:a
        {:href (url-for :session/new), :on-click "document.body.classList.toggle('menu-open')"}

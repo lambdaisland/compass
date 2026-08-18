@@ -4,6 +4,7 @@
    [lambdaisland.compass.routes.admin :as admin]
    [lambdaisland.compass.routes.contacts :as contacts]
    [lambdaisland.compass.routes.filters :as filters]
+   [lambdaisland.compass.routes.livestreams :as livestreams]
    [lambdaisland.compass.routes.meta :as meta]
    [lambdaisland.compass.routes.oauth :as oauth]
    [lambdaisland.compass.routes.profiles :as profiles]
@@ -17,6 +18,7 @@
    (contacts/routes)
    (oauth/routes)
    (filters/routes)
+   (livestreams/routes)
    (ticket/routes)
    (admin/routes)
    ["/fail" {:get {:handler (fn [_] (throw (ex-info "fail" {:fail 1})))}}]])
