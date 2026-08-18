@@ -2,6 +2,7 @@
   (:require
    [charred.api :as charred]
    [clojure.test :refer [deftest is]]
+   [hato.client :as hato]
    [lambdaisland.compass.config :as config]
    [lambdaisland.compass.services.mux :as mux])
   (:import
@@ -43,6 +44,40 @@
                          [{:id "Not URL safe" :title "Title"
                            :playback-id "playback"
                            :allowed-ticket-slugs []}]))))
+
+(deftest signed-playback-id
+  (is (= "signed-id"
+         (mux/signed-playback-id
+          {:playback_ids [{:id "public-id" :policy "public"}
+                          {:id "signed-id" :policy "signed"}]})))
+  (is (nil? (mux/signed-playback-id {:playback_ids [{:id "public-id" :policy "public"}]}))))
+
+(deftest create-mux-live-stream!-success
+  (with-redefs [config/value {:mux/token-id "id" :mux/token-secret "secret"}
+                hato/post (fn [url _opts]
+                           (is (= mux/live-streams-url url))
+                           {:status 201
+                            :body (charred/write-json-str
+                                   {:data {:id "live-stream-id"
+                                          :stream_key "stream-key"
+                                          :playback_ids [{:id "signed-id" :policy "signed"}]}})})]
+    (let [live-stream (mux/create-mux-live-stream! "Main Stage")]
+      (is (= "live-stream-id" (:id live-stream)))
+      (is (= "signed-id" (mux/signed-playback-id live-stream))))))
+
+(deftest create-mux-live-stream!-missing-credentials
+  (with-redefs [config/value {}]
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo #"token"
+                          (mux/create-mux-live-stream! "Main Stage")))))
+
+(deftest create-mux-live-stream!-api-error
+  (with-redefs [config/value {:mux/token-id "id" :mux/token-secret "secret"}
+                hato/post (fn [_url _opts]
+                           {:status 422
+                            :body (charred/write-json-str
+                                   {:error {:messages ["Live streams are unavailable on the free plan"]}})})]
+    (is (thrown-with-msg? clojure.lang.ExceptionInfo #"free plan"
+                          (mux/create-mux-live-stream! "Main Stage")))))
 
 (deftest signed-playback-token
   (let [generator (doto (KeyPairGenerator/getInstance "RSA")

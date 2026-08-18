@@ -47,7 +47,8 @@
  :aliases
  {:dev
   {:extra-paths ["dev" ".clj-kondo"]
-   :extra-deps  {clj-kondo/clj-kondo {:mvn/version "2026.08.03"}}}
+   :extra-deps  {clj-kondo/clj-kondo         {:mvn/version "2026.08.03"}
+                 org.clojure/tools.namespace {:mvn/version "1.5.0"}}}
 
   :prod
   {:extra-deps

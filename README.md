@@ -49,90 +49,58 @@ To get started you need to set up a discord bot, and then create a
 
 ## Mux livestreams
 
-Mux live streams are created outside Compass with a signed playback policy.
-Configure their playback IDs and Ti.to release access in environment-specific
-configuration:
+Livestreams are managed from Compass itself, at `/admin/livestreams`
+(requires a crew ticket, see [Admin access](#admin-access) below). Creating a
+stream there creates a signed live stream through the Mux API and stores its
+id, playback ID, and allowed Ti.to release slugs in the database — there is no
+`:mux/streams` config to hand-edit.
+
+Compass still needs a few Mux-related config values, since these are
+credentials rather than data managed through the UI:
 
 ```clj
-{:mux/streams
- [{:id "main-stage"
-   :title "Main Stage"
-   :playback-id "signed-playback-id"
-   :allowed-ticket-slugs #{"streaming" "regular-conference"}}]
+{:mux/token-id "..."
+ :mux/token-secret "..."
  :mux/signing-key-id "signing-key-id"
  :mux/signing-private-key "base64-encoded-private-key"
  :mux/playback-token-ttl-seconds 43200}
 ```
 
-Keep `:mux/signing-private-key` in `config.local.edn`, an environment variable,
-or system credentials. Never commit it.
+- `:mux/token-id` / `:mux/token-secret` — a Mux API access token with Video
+  write permission, used by the admin UI to create live streams.
+- `:mux/signing-key-id` / `:mux/signing-private-key` — the URL-signing key
+  used by Compass to generate playback tokens for viewers. Separate from the
+  API token above, and from the stream key used by OBS.
+
+Keep all of these in `config.local.edn`, environment variables, or system
+credentials. Never commit them.
 
 ### Creating a stream
 
-`bin/create-mux-stream` creates a signed live stream through the Mux API and
-adds its signed playback ID and ticket access rules to `:mux/streams` in
-`config.local.edn`. It requires Babashka and a Mux API access token with Video
-write permission.
+Open `/admin/livestreams` and fill in the form: a URL-safe Compass stream ID
+(e.g. `main-stage`), a display title, and the Ti.to release slugs that should
+have access. Optionally check "Create as Mux test stream" — Mux live
+streaming, including test streams, requires a Pay As You Go or higher plan;
+the Free plan supports on-demand video only. Test streams display a
+watermark, stop after five active minutes, and delete their recorded asset
+after 24 hours.
 
-Mux API access tokens consist of two values: a token ID and token secret. These
-are separate from the URL-signing key used by Compass to generate playback
-tokens, and from the stream key used by OBS. Supply the API credentials as
-environment variables:
+Submitting the form creates a Mux live stream with a signed playback policy
+(and configures its recorded asset the same way), then shows the OBS server,
+secret stream key, and combined ingest URL once. Use those values in OBS
+under **Settings → Stream → Custom**: the server is
+`rtmps://global-live.mux.com:443/app`, with the stream key entered separately
+in the Stream Key field. Treat that key and the combined URL as secrets — Mux
+does not show the stream key again after creation.
 
-```sh
-export MUX_TOKEN_ID="..."
-export MUX_TOKEN_SECRET="..."
-```
+Deleting a stream from `/admin/livestreams` removes it from Compass but does
+not delete the underlying Mux resource; do that from the Mux dashboard if
+needed.
 
-Alternatively, put them in the ignored `config.local.edn` file:
+### Admin access
 
-```clj
-{:mux/token-id "..."
- :mux/token-secret "..."}
-```
-
-Run the script with a URL-safe Compass stream ID, display title, and one or
-more allowed Ti.to release slugs:
-
-```sh
-bin/create-mux-stream main-stage "Main Stage" streaming regular-conference
-```
-
-All arguments are optional. Running `bin/create-mux-stream` without arguments
-uses `main-stage`, `Main Stage`, and `streaming` respectively.
-
-Mux live streaming, including test streams, requires a Pay As You Go or higher
-plan. The Free plan supports on-demand video only. On an eligible paid plan,
-pass `--test` before the other arguments to create a test stream that does not
-incur live-stream usage charges:
-
-```sh
-bin/create-mux-stream --test
-bin/create-mux-stream --test main-stage "Main Stage" streaming
-```
-
-Mux test streams display a watermark, stop after five active minutes, and
-delete their recorded asset after 24 hours. Create another test stream when the
-five-minute limit has been reached.
-
-The script performs the following operations:
-
-1. Creates a Mux live stream with a signed playback policy.
-2. Configures its recorded asset to use signed playback as well.
-3. Copies the current local configuration to `config.local.edn.bak`.
-4. Adds the stream to `:mux/streams`, replacing any local entry with the same
-   Compass stream ID.
-5. Prints the Mux resource and playback IDs, followed by the OBS server, secret
-   stream key, and combined ingest URL.
-
-Use the printed values in OBS under **Settings → Stream → Custom**. The server
-is `rtmps://global-live.mux.com:443/app`; enter the stream key separately in
-the Stream Key field. Treat that key and the combined URL as secrets.
-
-Each invocation creates a new remote Mux stream, even when the Compass stream
-ID already exists locally. Replaced Mux streams are not deleted automatically.
-The script exits without changing `config.local.edn` when authentication or
-stream creation fails.
+`/admin/*` routes require the signed-in user to have a Ti.to ticket whose
+release slug is `crew`.
 
 ## Roadmap
 
