@@ -1,5 +1,7 @@
 (ns lambdaisland.compass.services.mux
   (:require
+   [buddy.core.keys :as keys]
+   [buddy.sign.jws :as jws]
    [charred.api :as charred]
    [clojure.string :as str]
    [hato.client :as hato]
@@ -7,8 +9,6 @@
    [lambdaisland.compass.db :as db])
   (:import
    (java.nio.charset StandardCharsets)
-   (java.security KeyFactory PrivateKey Signature)
-   (java.security.spec PKCS8EncodedKeySpec)
    (java.time Instant)
    (java.util Base64)))
 
@@ -127,21 +127,25 @@
 (defn delete-stream! [id]
   @(db/transact [[:db/retractEntity [:livestream/id id]]]))
 
-(defn- base64-url [bytes]
-  (.encodeToString (.withoutPadding (Base64/getUrlEncoder)) bytes))
+(defn update-allowed-ticket-slugs! [id allowed-ticket-slugs]
+  (let [stream (find-stream id)]
+    (when-not stream
+      (throw (ex-info (str "No livestream with id " id) {:id id})))
+    (let [new-slugs (set allowed-ticket-slugs)
+          retractions (map (fn [slug] [:db/retract [:livestream/id id] :livestream/allowed-ticket-slugs slug])
+                            (:allowed-ticket-slugs stream))
+          additions (map (fn [slug] [:db/add [:livestream/id id] :livestream/allowed-ticket-slugs slug])
+                         new-slugs)]
+      @(db/transact (into (vec retractions) additions)))))
 
-(defn- decode-signing-key [encoded-key]
+(defn- decode-signing-key
+  "Parse a base64-encoded PEM private key. Accepts both PKCS#1
+  (`BEGIN RSA PRIVATE KEY`) and PKCS#8 (`BEGIN PRIVATE KEY`) forms."
+  [encoded-key]
   (when (str/blank? encoded-key)
     (throw (ex-info "Missing Mux signing private key" {})))
-  (let [pem (String. (.decode (Base64/getDecoder) encoded-key)
-                     StandardCharsets/UTF_8)
-        der (-> pem
-                (str/replace #"-----BEGIN PRIVATE KEY-----" "")
-                (str/replace #"-----END PRIVATE KEY-----" "")
-                (str/replace #"\s" "")
-                ((fn [value] (.decode (Base64/getDecoder) value))))]
-    (.generatePrivate (KeyFactory/getInstance "RSA")
-                      (PKCS8EncodedKeySpec. der))))
+  (let [pem (String. (.decode (Base64/getDecoder) encoded-key) StandardCharsets/UTF_8)]
+    (keys/str->private-key pem)))
 
 (defonce ^:private signing-key-cache (atom nil))
 
@@ -153,12 +157,6 @@
         (reset! signing-key-cache {:encoded-key encoded-key
                                    :private-key private-key})
         private-key))))
-
-(defn- sign-rs256 [^PrivateKey private-key signing-input]
-  (let [signature (Signature/getInstance "SHA256withRSA")]
-    (.initSign signature private-key)
-    (.update signature (.getBytes signing-input StandardCharsets/UTF_8))
-    (base64-url (.sign signature))))
 
 (defn playback-token
   ([playback-id]
@@ -173,17 +171,10 @@
      (when-not (and (integer? ttl) (pos? ttl))
        (throw (ex-info "Mux playback token TTL must be a positive integer"
                        {:ttl ttl})))
-     (let [header (base64-url (.getBytes
-                               (charred/write-json-str
-                                {"alg" "RS256" "typ" "JWT" "kid" key-id})
-                               StandardCharsets/UTF_8))
-           claims (base64-url (.getBytes
-                               (charred/write-json-str
-                                {"sub" playback-id
-                                 "aud" "v"
-                                 "exp" (+ (.getEpochSecond now) ttl)
-                                 "kid" key-id})
-                               StandardCharsets/UTF_8))
-           signing-input (str header "." claims)]
-       (str signing-input "."
-            (sign-rs256 (signing-key encoded-key) signing-input))))))
+     (let [claims (charred/write-json-str
+                   {"sub" playback-id
+                    "aud" "v"
+                    "exp" (+ (.getEpochSecond now) ttl)
+                    "kid" key-id})]
+       (jws/sign claims (signing-key encoded-key)
+                {:alg :rs256 :header {:kid key-id :typ "JWT"}})))))

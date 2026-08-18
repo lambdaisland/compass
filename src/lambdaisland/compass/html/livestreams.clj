@@ -72,7 +72,14 @@
         [:td id]
         [:td title]
         [:td playback-id]
-        [:td (str/join ", " (sort allowed-ticket-slugs))]
+        [:td
+         [:form {:method "post" :action (str "/admin/livestreams/" id "/update")}
+          [:input {:type "hidden" :name "__anti-forgery-token" :value anti-forgery/*anti-forgery-token*}]
+          [:input {:type "text"
+                   :name "allowed-ticket-slugs"
+                   :value (str/join ", " (sort allowed-ticket-slugs))
+                   :placeholder "streaming, regular-conference"}]
+          [:button {:type "submit"} "Save"]]]
         [:td
          [:form {:method "post" :action (str "/admin/livestreams/" id "/delete")}
           [:input {:type "hidden" :name "__anti-forgery-token" :value anti-forgery/*anti-forgery-token*}]
