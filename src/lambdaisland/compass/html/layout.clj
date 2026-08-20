@@ -9,6 +9,7 @@
    [ring.middleware.anti-forgery :as anti-forgery]))
 
 (require 'lambdaisland.compass.css.components)
+(def start-time (System/currentTimeMillis))
 
 (o/defrules layout
   [:body
@@ -16,30 +17,27 @@
    [:#app {:max-width "80rem" :margin "0 auto"}
     [:>main :px-2 :py-3]]])
 
-(def start-time (System/currentTimeMillis))
-
 (o/defstyled flash-box :div
   :my-3
   :px-3 :py-2
   {:background-color t/--green-1
-   :color t/--blue-12
-   :border-radius t/--radius-2
-   :border-color t/--green-2
-   :border-width "1px"
-   :font-weight "600"
-   :opacity 0.5
-   :animation "fade-to-pale linear 0.5s forwards"
-   })
+   :color            t/--blue-12
+   :border-radius    t/--radius-2
+   :border-color     t/--green-2
+   :border-width     "1px"
+   :font-weight      "600"
+   :opacity          0.5
+   :animation        "fade-to-pale linear 0.5s forwards"})
 
 (o/defrules fade-flash-box
   (garden.stylesheet/at-keyframes
    :fade-to-pale
    [:to {:opacity 1}]))
 
-(defn base-layout [{:keys [head body flash user request] :as opts}]
+(defn base-layout* [{:keys [head body flash user request] :as opts}]
   [:html
    [:head
-    [:title "Compass | Heart of Clojure 2024"]
+    [:title (config/value :compass/page-title)]
     [:meta {:charset "UTF-8"}]
     [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
     [:link {:rel "stylesheet" :href "/fonts/open-sans/open-sans.css"}]
@@ -70,10 +68,25 @@
       :hx-disinherit "hx-target hx-select"
       ;; CSRF
       :hx-headers (charred/write-json-str {"x-csrf-token" anti-forgery/*anti-forgery-token*})}
-     [nav/menu-panel user]
-     [:main
-      [nav/nav-bar user]
-      (when flash
-        [flash-box flash])
-      body
-      #_[:pre (with-out-str (clojure.pprint/pprint request))]]]]])
+     body]]])
+
+(defn base-layout [{:keys [body user flash] :as opts}]
+  [base-layout*
+   (assoc opts :body
+          [:<>
+           [nav/menu-panel user]
+           [:main
+            [nav/nav-bar user]
+            (when flash
+              [flash-box flash])
+            body]])])
+
+(defn no-nav-layout [{:keys [body user flash] :as opts}]
+  [base-layout*
+   (assoc opts :body
+          [:<>
+           [:main
+            [nav/site-name-no-nav]
+            (when flash
+              [flash-box flash])
+            body]])])

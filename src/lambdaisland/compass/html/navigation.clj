@@ -1,12 +1,12 @@
 (ns lambdaisland.compass.html.navigation
   (:require
+   [lambdaisland.compass.config :as config]
    [lambdaisland.compass.css.tokens :as t :refer :all]
    [lambdaisland.compass.html.auth :as auth]
    [lambdaisland.compass.html.components :as c]
    [lambdaisland.compass.html.graphics :as graphics]
    [lambdaisland.compass.http.routing :refer [url-for]]
    [lambdaisland.compass.model.user :as user]
-   [lambdaisland.compass.model.assets :as assets]
    [lambdaisland.ornament :as o]))
 
 (o/defrules notifier-dot
@@ -31,11 +31,25 @@
   ([user]
    [:<>
     [graphics/compass-logo]
-    [:h1 [:a {:href (url-for :sessions/index)} "Compass"]]
+    [:h1 [:a {:href (url-for :sessions/index)} (config/value :compass/site-name)]]
     [:button {:cx-toggle "menu-open" :cx-target "body"}
      [graphics/hamburger]
      (when (and user (not (user/assigned-ticket user)))
        [:div.notifier-dot])]]))
+
+(o/defstyled site-name-no-nav :nav
+  "Variant of [[nav-bar]] but without the sidebar button"
+  :flex :items-center
+  :bg-surface-1
+  :mb-5
+  [:h1 :font-size-7 :mr-auto :ml-2]
+  [:svg :grow-0 :shrink-0
+   {:width  t/--font-size-5
+    :height t/--font-size-5}]
+  ([]
+   [:<>
+    [graphics/compass-logo]
+    [:h1 [:a {:href (url-for :sessions/index)} (config/value :compass/site-name)]]]))
 
 (defn a-auth [props & children]
   (if (:user props)
@@ -111,12 +125,7 @@
     [:ul
      (when-not user
        [:li.discord-button
-        [:a {:href "#"
-             :hx-target "#modal"
-             :hx-get (url-for :login/index)
-             :hx-boost "false"}
-         [graphics/discord {:style {:height "2rem" :width "2rem" :--_logo-color t/--gray-0}}]
-         "Sign in with Discord"]])
+        [auth/discord-button {:text "Sign in with Discord"}]])
      (when user
        (if-let [ticket (user/assigned-ticket user)]
          [:li "Ti.to ticket " [:strong (:tito.ticket/reference ticket)]]
@@ -180,8 +189,8 @@
           [graphics/shield-check-icon]
           "Manage Users"]]])]
     [:div.bottom
-     [:p "Proudly made by the " [:a {:href "https://gaiwan.co" :target "_blank"} "Gaiwan Team"] " and contributors."]
-     [:p [:a {:href "https://github.com/GaiwanTeam/compass" :target "_blank"} [graphics/github-icon] "GaiwanTeam/compass"]]]
+     [:p "A " [:a {:href "https://magpie.software" :target "_blank"} "Magpie"] " production."]
+     [:p [:a {:href "https://github.com/lambdaisland/compass" :target "_blank"} [graphics/github-icon] "lambdaisland/compass"]]]
     ]))
 
 (o/defrules toggle-menu-button)

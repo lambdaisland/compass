@@ -36,9 +36,24 @@
 (defn values []
   (config/values config))
 
+(defn source [k]
+  (config/source config k))
+
 (defn reload! []
   (config/reload! config))
 
 (def event-time-zone
   (memoize (fn []
              (java.time.ZoneId/of (value :event/time-zone)))))
+
+(comment
+  (reload!)
+  (source :discord/client-id)
+  (value :discord/client-id))
+
+(defonce install-watcher
+  (when-let [watch! (try (requiring-resolve 'lambdaisland.launchpad.watcher/watch!) (catch Exception _))]
+    (watch!
+     {"resources/compass/config.edn" (fn [_] (reload!))
+      "resources/compass/dev.edn" (fn [_] (reload!))
+      "config.local.edn" (fn [_] (reload!))})))

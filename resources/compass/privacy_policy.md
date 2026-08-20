@@ -108,6 +108,6 @@ We may update this policy occasionally to reflect changes in software or regulat
 
 ## 10. Contact Us
 
-If you have general questions about this platform\'s privacy practices (not about your specific event data), you can reach us at `contact` at `magpie.software`.
+If you have general questions about this platform's privacy practices (not about your specific event data), you can reach us at `contact` at `magpie.software`.
 
 *For questions regarding your specific event data, please contact the event organizer directly.*

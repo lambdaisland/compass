@@ -3,6 +3,7 @@
    [clojure.string :as str]
    [lambdaisland.compass.db :as db]
    [lambdaisland.compass.html.layout :as layout]
+   [lambdaisland.compass.http.response :as res]
    [lambdaisland.compass.http.routing :as routing]
    [lambdaisland.hiccup :as hiccup]
    [reitit.ring :as ring]))
@@ -31,6 +32,8 @@
           route-data    (:data (ring/get-match req))
           head          (or (:html/head res)
                             (:html/head route-data))
+          hide-nav?     (or (:html/hide-nav? res)
+                            (:html/hide-nav? route-data))
           layout-fn     (first (filter some?
                                        [(:html/layout res)
                                         (:html/layout route-data)
@@ -46,11 +49,12 @@
         (-> res
             (assoc :status (or (:status res) 200)
                    :body (hiccup/render (if layout-fn
-                                          (layout-fn {:head head
-                                                      :body body
-                                                      :flash (:flash req)
-                                                      :user (:identity req)
-                                                      :request req})
+                                          (layout-fn {:head      head
+                                                      :body      body
+                                                      :flash     (:flash req)
+                                                      :user      (:identity req)
+                                                      :hide-nav? hide-nav?
+                                                      :request   req})
                                           body)))
             (assoc-in [:headers "content-type"] "text/html; charset=utf-8"))
         res))))
@@ -89,17 +93,25 @@
           (and hx-request? (:hx/trigger resp))
           (-> resp
               (assoc
-               :status (:status resp 200)
-               :body (:body resp ""))
+                :status (:status resp 200)
+                :body (:body resp ""))
               (assoc-in [:headers "hx-trigger"] (:hx/trigger resp)))
 
           (:location resp)
           (-> resp
               (assoc
-               :status (:status resp 302)
-               :body (:body resp ""))
+                :status (:status resp 302)
+                :body (:body resp ""))
               (assoc-in [:headers (if hx-request? "hx-redirect" "location")]
                         (routing/url-for (:location resp))))
 
           :else
           resp)))))
+
+(defn wrap-welcome-page [handler]
+  (fn [{:keys [identity uri] :as req}]
+    (if (and identity
+             (not= (routing/url-for :welcome/page) uri)
+             (not (:privacy-policy/accepted-at identity)))
+      (res/redirect (routing/url-for :welcome/page))
+      (handler req))))

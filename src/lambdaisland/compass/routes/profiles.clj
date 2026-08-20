@@ -1,5 +1,5 @@
 (ns lambdaisland.compass.routes.profiles
-  "We need a page/route for user's profile"
+  "User profile settings"
   (:require
    [clj.qrgen :as qr]
    [clojure.java.io :as io]
@@ -13,11 +13,9 @@
    [lambdaisland.compass.http.routing :refer [url-for]]
    [lambdaisland.compass.model.assets :as assets]
    [lambdaisland.compass.model.attendees :as attendees]
-
    [ring.util.response :as ring-response]))
 
 (defn GET-profile [{:keys [params] :as req}]
-  ;; (log/debug :debug {:req req})
   {:html/body
    [h/profile-detail
     (if-let [profile-id (get-in req [:path-params :user-uuid])]
@@ -40,45 +38,39 @@
 
 (defn index->link-data
   [{:keys [user-id] :as params} idx]
-  (let [user-id (parse-long user-id)
+  (let [user-id               (parse-long user-id)
         private-profile-links (set (db/q '[:find [?e ...]
                                            :in $ ?p
                                            :where [?p :private-profile/links ?e]]
                                          (db/db) user-id))
-        ;;_ (tap> {:private-links private-profile-links})
-        public-profile-links (set (db/q '[:find [?e ...]
-                                          :in $ ?p
-                                          :where [?p :public-profile/links ?e]]
-                                        (db/db) user-id))
-        ;; _ (tap> {:public-links public-profile-links})
-        link-id-key (keyword (str "link-id-" idx))
-        href-key (keyword (str "link-ref-" idx))
-        type-key (keyword (str "link-type-" idx))
-        private-link-key (keyword (str "private-" idx))
-        public-link-key (keyword (str "public-" idx))
-        link-id-val (link-id-key params)
-        link-id-val (when link-id-val (parse-long link-id-val))
-        href-val (href-key params)
-        type-val (type-key params)
-        private-link-val (private-link-key params)
-        public-link-val (public-link-key params)
-        profile-data {:db/id (if link-id-val
-                               link-id-val
-                               (str "temp-" idx))
-                      :profile-link/user user-id
-                      :profile-link/type type-val
-                      :profile-link/href href-val}]
-    (tap> {:cond1 [link-id-val (private-profile-links link-id-val) (nil? private-link-val)]
-           :cond2 [link-id-val (nil? (private-profile-links link-id-val)) private-link-val]
-           :cond3 [link-id-val (public-profile-links link-id-val) (nil? public-link-val)]
-           :cond4 [link-id-val (nil? (public-profile-links link-id-val)) public-link-val]})
+        public-profile-links  (set (db/q '[:find [?e ...]
+                                           :in $ ?p
+                                           :where [?p :public-profile/links ?e]]
+                                         (db/db) user-id))
+        link-id-key           (keyword (str "link-id-" idx))
+        href-key              (keyword (str "link-ref-" idx))
+        type-key              (keyword (str "link-type-" idx))
+        private-link-key      (keyword (str "private-" idx))
+        public-link-key       (keyword (str "public-" idx))
+        link-id-val           (link-id-key params)
+        link-id-val           (when link-id-val (parse-long link-id-val))
+        href-val              (href-key params)
+        type-val              (type-key params)
+        private-link-val      (private-link-key params)
+        public-link-val       (public-link-key params)
+        profile-data          {:db/id             (if link-id-val
+                                                    link-id-val
+                                                    (str "temp-" idx))
+                               :profile-link/user user-id
+                               :profile-link/type type-val
+                               :profile-link/href href-val}]
     (cond-> [profile-data]
       ;; new profile-link
       (and (nil? link-id-val) private-link-val)
       (conj [:db/add user-id :private-profile/links (str "temp-" idx)])
       (and (nil? link-id-val) public-link-val)
       (conj [:db/add user-id :public-profile/links (str "temp-" idx)])
-      ;; existing proflie-link
+      ;; existing profile-link
       (and link-id-val (private-profile-links link-id-val) (nil? private-link-val))
       (conj [:db/retract user-id :private-profile/links link-id-val])
       (and link-id-val (nil? (private-profile-links link-id-val)) private-link-val)
@@ -87,8 +79,6 @@
       (conj [:db/retract user-id :public-profile/links link-id-val])
       (and link-id-val (nil? (public-profile-links link-id-val)) public-link-val)
       (conj [:db/add user-id :public-profile/links link-id-val]))))
-;; (params->profile-data params)
-;; (parse-link-data params "public")
 
 (defn parse-link-data [params variant]
   (map vector
@@ -157,7 +147,7 @@
 (defn POST-save-profile
   "Save profile to DB
 
-  The typical params is like:
+  Shape of params:
   {:name \"Arne\"
    :tityle \"CEO of Gaiwan\"
    :image {:content-type :filename :size :tempfile}}"

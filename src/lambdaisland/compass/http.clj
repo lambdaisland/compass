@@ -109,6 +109,7 @@
                      (assoc-in (h r) [:headers "Max-Age"] "0")))
                  [ring-defaults/wrap-defaults ring-default-config]
                  middleware/wrap-identity
+                 middleware/wrap-welcome-page
                  middleware/wrap-render
                  middleware/wrap-hx-responses
                  #_handler

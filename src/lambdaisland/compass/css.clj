@@ -24,7 +24,7 @@
          (o/defined-garden))))
 
 (defn on-watcher-event [e]
-  (println "File changed, reloading css")
+  #_(println "File changed, reloading css")
   (when (.isFile (io/file (str (:path e))))
     (when (.endsWith (str (:path e)) ".clj")
       (require
@@ -37,7 +37,7 @@
        :reload)))
   (spit-styles))
 
-#_(defonce install-watcher
-    (when-let [watch! (try (requiring-resolve 'lambdaisland.launchpad.watcher/watch!) (catch Exception _))]
-      (watch!
-       {"src" #'on-watcher-event})))
+(defonce install-watcher
+  (when-let [watch! (try (requiring-resolve 'lambdaisland.launchpad.watcher/watch!) (catch Exception _))]
+    (watch!
+     {"src" #'on-watcher-event})))

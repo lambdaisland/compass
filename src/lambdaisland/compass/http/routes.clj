@@ -10,7 +10,8 @@
    [lambdaisland.compass.routes.oauth :as oauth]
    [lambdaisland.compass.routes.profiles :as profiles]
    [lambdaisland.compass.routes.sessions :as sessions]
-   [lambdaisland.compass.routes.ticket :as ticket]))
+   [lambdaisland.compass.routes.ticket :as ticket]
+   [lambdaisland.compass.routes.welcome :as welcome]))
 
 (defn routing-table []
   [(meta/routes)
@@ -23,7 +24,7 @@
    (livestreams/routes)
    (ticket/routes)
    (admin/routes)
-   ["/fail" {:get {:handler (fn [_] (throw (ex-info "fail" {:fail 1})))}}]])
+   (welcome/routes)])
 
 ;; - Sessions
 ;;   - Talk

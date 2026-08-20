@@ -2,6 +2,7 @@
   (:require
    [clojure.string :as str]
    [lambdaisland.compass.html.auth :as auth-html]
+   [lambdaisland.compass.http.routing :refer [url-for]]
    [ring.util.response :as response]))
 
 (defn redirect
@@ -33,12 +34,11 @@
 (defn wrap-requires-auth
   "Middleware that shows the login dialog if the user is not logged in"
   [handler]
-  (fn [req]
-    (if (not (:identity req))
+  (fn [{:keys [identity] :as req}]
+    (if identity
+      (handler req)
       (if (get-in req [:headers "hx-request"])
         (requires-auth (if (= :get (:request-method req))
                          (:uri req)
                          "/"))
-        ;; TODO: this query-param should make the dialog pop-up immediately
-        (redirect (str "/?show-login-dialog=true")))
-      (handler req))))
+        (redirect (str "/?show-login-dialog=true"))))))
