@@ -21,7 +21,7 @@
 
   ;; Logging
   io.pedestal/pedestal.log       {:mvn/version "0.8.1"}
-  ch.qos.logback/logback-classic {:mvn/version "1.6.1"}
+  ch.qos.logback/logback-classic {:mvn/version "1.6.3"}
 
   ;; DB
   com.datomic/peer            {:mvn/version "1.0.7705"
