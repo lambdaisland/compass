@@ -47,6 +47,61 @@ To get started you need to set up a discord bot, and then create a
  {"release-slug" "role-id"}}
 ```
 
+## Mux livestreams
+
+Livestreams are managed from Compass itself, at `/admin/livestreams`
+(requires a crew ticket, see [Admin access](#admin-access) below). Creating a
+stream there creates a signed live stream through the Mux API and stores its
+id, playback ID, and allowed Ti.to release slugs in the database — there is no
+`:mux/streams` config to hand-edit.
+
+Compass still needs a few Mux-related config values, since these are
+credentials rather than data managed through the UI:
+
+```clj
+{:mux/token-id "..."
+ :mux/token-secret "..."
+ :mux/signing-key-id "signing-key-id"
+ :mux/signing-private-key "base64-encoded-private-key"
+ :mux/playback-token-ttl-seconds 43200}
+```
+
+- `:mux/token-id` / `:mux/token-secret` — a Mux API access token with Video
+  write permission, used by the admin UI to create live streams.
+- `:mux/signing-key-id` / `:mux/signing-private-key` — the URL-signing key
+  used by Compass to generate playback tokens for viewers. Separate from the
+  API token above, and from the stream key used by OBS.
+
+Keep all of these in `config.local.edn`, environment variables, or system
+credentials. Never commit them.
+
+### Creating a stream
+
+Open `/admin/livestreams` and fill in the form: a URL-safe Compass stream ID
+(e.g. `main-stage`), a display title, and the Ti.to release slugs that should
+have access. Optionally check "Create as Mux test stream" — Mux live
+streaming, including test streams, requires a Pay As You Go or higher plan;
+the Free plan supports on-demand video only. Test streams display a
+watermark, stop after five active minutes, and delete their recorded asset
+after 24 hours.
+
+Submitting the form creates a Mux live stream with a signed playback policy
+(and configures its recorded asset the same way), then shows the OBS server,
+secret stream key, and combined ingest URL once. Use those values in OBS
+under **Settings → Stream → Custom**: the server is
+`rtmps://global-live.mux.com:443/app`, with the stream key entered separately
+in the Stream Key field. Treat that key and the combined URL as secrets — Mux
+does not show the stream key again after creation.
+
+Deleting a stream from `/admin/livestreams` removes it from Compass but does
+not delete the underlying Mux resource; do that from the Mux dashboard if
+needed.
+
+### Admin access
+
+`/admin/*` routes require the signed-in user to have a Ti.to ticket whose
+release slug is `crew`.
+
 ## Roadmap
 
 See [[notes.txt]] for a basic outline of what we have planned. We will
@@ -69,4 +124,3 @@ bin/launchpad dev --go
 Copyright &copy; 2024 Arne Brasseur and Contributors
 
 Licensed under the term of the Mozilla Public License 2.0, see LICENSE.
-

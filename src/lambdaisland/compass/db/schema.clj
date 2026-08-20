@@ -86,7 +86,13 @@
 
    [:tito.release/id :long "Unique id of the registration (ticket type)" :identity]
    [:tito.release/title :string "Human readable name of the ticket type, e.g. `Early Bird`"]
-   [:tito.release/slug :string "URL slug for the ticket type"]])
+   [:tito.release/slug :string "URL slug for the ticket type"]
+
+   [:livestream/id :string "URL-safe Compass stream id/slug, e.g. `main-stage`" :identity]
+   [:livestream/title :string "Display title of the livestream"]
+   [:livestream/mux-id :string "Mux live stream id"]
+   [:livestream/playback-id :string "Mux signed playback id"]
+   [:livestream/allowed-ticket-slugs :string "Ti.to release slugs granted access to this livestream" :many]])
 
 (defn inflate-schema [s]
   (for [[ident type doc & flags] s]

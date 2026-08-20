@@ -39,7 +39,7 @@
 
 (defn a-auth [props & children]
   (if (:user props)
-    (into [:a props] children)
+    (into [:a (dissoc props :user)] children)
     (into
      [:a {:hx-target "#modal"
           :hx-get (str (url-for :login/index) "?next=" (:href props))
@@ -133,6 +133,12 @@
        [graphics/sessions-icon]
        "Sessions & Activities"]]
      [:li
+      [a-auth
+       {:user user
+        :href (url-for :streams/index)
+        :on-click "document.body.classList.toggle('menu-open')"}
+       "Livestreams"]]
+     [:li
       [:a
        {:href (url-for :session/new), :on-click "document.body.classList.toggle('menu-open')"}
        [graphics/plus-icon]
@@ -160,7 +166,19 @@
       [:a {:href "https://github.com/heartofclojure/heartofclojure-site-2024/wiki/Attendee-Guide-2024"
            :target "_blank"}
        [graphics/book-open-icon]
-       "Attendee Guide"]]]
+       "Attendee Guide"]]
+     (when (user/admin? user)
+       [:<>
+        [:li
+         [:hr]]
+        [:li
+         [:a {:href (url-for :admin/livestreams), :on-click "document.body.classList.toggle('menu-open')"}
+          [graphics/shield-check-icon]
+          "Manage Livestreams"]]
+        [:li
+         [:a {:href (url-for :admin/users), :on-click "document.body.classList.toggle('menu-open')"}
+          [graphics/shield-check-icon]
+          "Manage Users"]]])]
     [:div.bottom
      [:p "Proudly made by the " [:a {:href "https://gaiwan.co" :target "_blank"} "Gaiwan Team"] " and contributors."]
      [:p [:a {:href "https://github.com/GaiwanTeam/compass" :target "_blank"} [graphics/github-icon] "GaiwanTeam/compass"]]]

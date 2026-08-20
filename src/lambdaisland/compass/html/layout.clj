@@ -50,6 +50,8 @@
     [:link {:rel "icon" :href "/favicon_v1.ico"}]
 
     [:script {:src "/js/htmx-1.9.12.js"}]
+    [:script {:defer true
+              :src "https://cdn.jsdelivr.net/npm/@mux/mux-player@3.13.2"}]
     [:script {:src "/js/cx.js"}]
     (when (config/value :live.js?)
       [:script {:src "/js/live.js#css"}])

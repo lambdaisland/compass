@@ -19,3 +19,9 @@
 
 (defn conn []
   (:compass/db @(jit integrant.repl.state/system)))
+
+
+(comment
+  (reset)
+
+  ,)

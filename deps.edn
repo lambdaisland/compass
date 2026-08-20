@@ -39,6 +39,10 @@
   potemkin/potemkin                     {:mvn/version "0.4.9"} ; def-map-type
   mvxcvi/puget                          {:mvn/version "1.3.4"}
 
+  ;; Crypto / JWT (parses PEM keys, PKCS#1 and PKCS#8, and signs JWS/JWT)
+  buddy/buddy-core {:mvn/version "1.12.0-430"}
+  buddy/buddy-sign {:mvn/version "3.6.1-359"}
+
   ;; Markdown
   markdown-to-hiccup/markdown-to-hiccup {:mvn/version "0.6.2"}
   com.drewnoakes/metadata-extractor     {:mvn/version "2.21.0"}
