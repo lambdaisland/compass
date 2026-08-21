@@ -37,5 +37,5 @@
    [:<>
     [:a.top
      [graphics/cross {:class "btn close-button" :on-click "window.modal.close()"}]]
-    [:p "You can authenticate using Discord to make full use of the Compass app. This will also give you access to our Discord server where you can chat with speakers and attendees."]
+    [:p "You can authenticate using Discord to make full use of the Confpass app. This will also give you access to our Discord server where you can chat with speakers and attendees."]
     [discord-button {:next-url next-url}]]))
