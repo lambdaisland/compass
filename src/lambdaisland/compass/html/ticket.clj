@@ -12,8 +12,8 @@
    [:<>
     (when error-message
       [:p {:style "color: red;"} error-message])
-    [:h2 "Ti.to Checkin"]
-    [:p "Claim your conference ticket!"]
+    [:h2 "Ticket Check"]
+    [:p "Claim your Ti.to conference ticket!"]
     [:p "This will unlock full access to both Confpass and Discord"]
     [:form {:method "post"}
      [:label {:for "reference"} [:span "Reference code on your Ti.to ticket"]
