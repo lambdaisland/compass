@@ -1,4 +1,6 @@
 {:port                           8099
+ :compass/page-title             "Confpass.me"
+ :compass/site-name              "Confpass.me"
  :tito/event-slug                "heart-of-clojure/2024"
  :uploads/dir                    "uploads"
  :http/asset-path                "/uploads"

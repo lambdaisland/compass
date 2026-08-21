@@ -1,6 +1,9 @@
 (ns lambdaisland.compass.http.middleware
+  "Assorted Ring middleware"
   (:require
    [clojure.string :as str]
+   [datomic.math :as math]
+   [io.pedestal.log :as log]
    [lambdaisland.compass.db :as db]
    [lambdaisland.compass.html.layout :as layout]
    [lambdaisland.compass.http.response :as res]
@@ -115,3 +118,18 @@
              (not (:privacy-policy/accepted-at identity)))
       (res/redirect (routing/url-for :welcome/page))
       (handler req))))
+
+(defn wrap-log-request [handler {:as opts}]
+  (fn [req]
+    (let [start (System/nanoTime)
+          res   (handler req)
+          end   (System/nanoTime)]
+      (log/debug :http/request (into {}
+                                     (remove (comp nil? val))
+                                     {:method       (:request-method req)
+                                      :uri          (:uri req)
+                                      :status       (:status res)
+                                      :ms           (double (/ (long (math/round (/ (- end start) 1e3))) 1000))
+                                      :content-type (get-in req [:headers "content-type"])
+                                      :size         (get-in req [:headers "content-length"])}))
+      res)))

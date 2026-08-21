@@ -1,6 +1,4 @@
 {:compass/origin               "http://localhost:8099"
- :compass/page-title           "Confpass.me"
- :compass/site-name            "Confpass.me"
  :datomic/url                  "datomic:mem://compass"
  :http/show-exception-details? true
  :live.js?                     true

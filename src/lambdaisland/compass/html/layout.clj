@@ -45,7 +45,7 @@
     [:link {:rel "stylesheet" :href "/css/open-props-normalize.min.css"}]
     [:link {:rel "stylesheet" :href "/css/buttons.css"}]
     [:link {:rel "stylesheet" :href (str "/css/styles.css?t=" start-time)}]
-    [:link {:rel "icon" :href "/favicon_v1.ico"}]
+    [:link {:rel "icon" :href (config/value :compass/favicon-href "/favicon_v1.ico")}]
 
     [:script {:src "/js/htmx-1.9.12.js"}]
     [:script {:defer true

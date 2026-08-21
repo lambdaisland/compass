@@ -107,6 +107,7 @@
                  (fn [h]
                    (fn [r]
                      (assoc-in (h r) [:headers "Max-Age"] "0")))
+                 [middleware/wrap-log-request {}]
                  [ring-defaults/wrap-defaults ring-default-config]
                  middleware/wrap-identity
                  middleware/wrap-welcome-page

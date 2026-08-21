@@ -30,8 +30,11 @@
       (system-creds/add-provider nil)
       cli/add-provider))
 
-(defn value [k]
-  (config/get config k))
+(defn value
+  ([k]
+   (config/get config k))
+  ([k fallback]
+   (or (config/get config k) fallback)))
 
 (defn values []
   (config/values config))
