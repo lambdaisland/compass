@@ -17,4 +17,5 @@
 
 (defn admin? [user]
   (when-let [ticket (assigned-ticket user)]
-    (= "crew" (:tito.release/slug (:tito.ticket/release ticket)))))
+    (some #{(:tito.release/slug (:tito.ticket/release ticket))}
+          (config/value :tito/admin-slugs))))
