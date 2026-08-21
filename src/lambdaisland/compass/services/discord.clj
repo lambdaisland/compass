@@ -61,20 +61,9 @@
                        (str "/guilds/"  (config/value :discord/server-id)
                             "/members/" user-id
                             "/roles/"   role-id))))]
-    (every? (fn [slug]
-              (if-let [response (add-role! slug)]
-                (<= 200 (:status response) 299)
-                true))
-            (cond-> [slug]
-              (#{"crew"
-                 "sponsor"
-                 "speaker"
-                 "diversity-ticket"
-                 "early-bird"
-                 "regular-conference"
-                 "late-conference"
-                 "student"} slug)
-              (conj "regular-ticket")))))
+    (if-let [response (add-role! slug)]
+      (<= 200 (:status response) 299)
+      true)))
 
 (defn create-session-thread
   "Create private thread for session in channel configured by `:discord/session-channel-id`."
