@@ -4,7 +4,6 @@
   (:require
    [charred.api :as charred]
    [clojure.java.io :as io]
-   [garden.stylesheet :as gs]
    [lambdaisland.ornament :as o]))
 
 (o/import-tokens! (charred/read-json (io/resource "open-props.tokens.json")) {:include-values? false})
@@ -47,7 +46,7 @@
     --highlight-yellow   --yellow-2
     --highlight          --hoc-pink-1}]
 
-  (gs/at-media
+  [:at-media
    {:prefers-color-scheme 'dark}
    [":where(html)"
     {--talk-color         --blue-9
@@ -55,4 +54,4 @@
      --office-hours-color --red-9
      --activity-color     --red-9
      --highlight-yellow   --teal-12
-     --highlight          --hoc-pink-4}]))
+     --highlight          --hoc-pink-4}]])

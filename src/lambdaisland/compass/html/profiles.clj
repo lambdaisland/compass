@@ -61,30 +61,31 @@
       [:div.actions
        [edit-profile-btn user]])]))
 
-(o/defstyled row :tr.link-row
+(o/defstyled row :li.link-row
+  :p-0
+  :flex :gap-2
   ([{:keys [variant] :as link}]
    [:<>
-    [:td
-     (when (:db/id link)
-       [:input {:type "hidden" :name (str variant "-link-id[]") :value (:db/id link)}])
-     (let [link-type (:profile-link/type link)]
-       [:select {:name (str variant "-link-type[]")}
-        [:option {:value "email" :selected (= link-type "email")} "Email"]
-        [:option {:value "mastodon" :selected (= link-type "mastodon")} "Mastodon"]
-        [:option {:value "linkedin" :selected (= link-type "linkedin")} "LinkedIn"]
-        [:option {:value "personal-site" :selected (= link-type "personal-site")} "Personal Site"]
-        [:option {:value "other" :selected (= link-type "other")} "Other"]])]
-    [:td
-     [:input
-      {:type "text"
-       :name (str variant "-link-ref[]")
-       :value (str (:profile-link/href link))}]]]))
+    (when (:db/id link)
+      [:input {:type "hidden" :name (str variant "-link-id[]") :value (:db/id link)}])
+    (let [link-type (:profile-link/type link)]
+      [:select {:name (str variant "-link-type[]")}
+       [:option {:value "email" :selected (= link-type "email")} "Email"]
+       [:option {:value "mastodon" :selected (= link-type "mastodon")} "Mastodon"]
+       [:option {:value "linkedin" :selected (= link-type "linkedin")} "LinkedIn"]
+       [:option {:value "personal-site" :selected (= link-type "personal-site")} "Personal Site"]
+       [:option {:value "other" :selected (= link-type "other")} "Other"]])
+    [:input
+     {:type "text"
+      :name (str variant "-link-ref[]")
+      :value (str (:profile-link/href link))}]]))
 
 (def always-show ["email" "mastodon"])
 
 (o/defstyled links-table :div
   :flex-col :gap-1
-  [:.add-link {:align-self "center"}]
+  [:ul :flex-col :gap-1]
+  [:.add-link {:align-self "start"}]
   ([links {:keys [caption variant]}]
    (let [link-map (into {} (map (juxt :profile-link/type :profile-link/href)) links)
          link-vals (concat
@@ -96,19 +97,15 @@
        [row {:profile-link/type "other"
              :profile-link/href ""
              :variant variant}]]
-      [:table
-       #_[:thead
-          [:tr
-           [:th {:colspan 2} caption]]]
-       [:tbody
-        (for [[t h] link-vals]
-          [row {:profile-link/type t
-                :profile-link/href h
-                :variant variant}])]]
+      [:ul.link-container
+       (for [[t h] link-vals]
+         [row {:profile-link/type t
+               :profile-link/href h
+               :variant variant}])]
       [:input.add-link
        {:value "+ Add Link"
         :type "button"
-        :on-click "let form = this.parentElement; form.querySelector('tbody').append(form.querySelector('template').content.cloneNode(true))"}]])))
+        :on-click "let form = this.parentElement; form.querySelector('.link-container').append(form.querySelector('template').content.cloneNode(true))"}]])))
 
 (o/defstyled profile-form :div#form.form-card-styling
   [c/image-frame :w-100px {t/--arc-thickness "7%"}]

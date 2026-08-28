@@ -41,10 +41,15 @@
      (when bio
        [:textarea (m/md->hiccup bio)])]]))
 
+(o/css contact-detail)
+
 (o/defstyled contact-detail :div
-  [:.heading :flex :justify-between :mb-3]
-  [:.control :flex :items-center
-   [:button :ml-4]]
+  [:.heading :flex :justify-between :mb-3 :gap-2
+   [:at-media {:max-width "30rem"}
+    :flex-col]]
+  [:.control :flex :items-center :gap-2
+   [:at-media {:max-width "20rem"}
+    :flex-col]]
   [:.contact-list :w-full :ga-4]
   [:.remove-btn :cursor-pointer :border-none {:background-color t/--surface-3}]
   [:.remove-btn
