@@ -12,16 +12,12 @@
 
 (o/defstyled close-dialog-button :button
   ([]
-   [:<> {:id "close-dialog"
-         :hx-get (str (url-for :sessions/index))
-         :hx-push-url (str (url-for :sessions/index))
-         :hx-target "body"
-         :hx-swap "outerHTML"}
+   [:<> {:id "close-dialog" :on-click "window.modal.close()"}
     [graphics/cross]
     [:script
      "document.addEventListener('keydown', function(event) {
-      if (event.key === 'Escape') { // check if ESC is pressed 
-        document.getElementById('close-dialog').click(); // click the button 
+      if (event.key === 'Escape') { // check if ESC is pressed
+        document.getElementById('close-dialog').click(); // click the button
       }});"]]))
 
 (o/defstyled toggle-button :label

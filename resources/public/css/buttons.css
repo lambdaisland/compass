@@ -142,12 +142,3 @@
 	cursor: pointer;
 	margin-inline-end: var(--size-relative-6)
 }
-
-@media (prefers-color-scheme:dark) {
-	:where([disabled]),
-	:where([type=reset]),
-	:where([type=submit]),
-	:where(form button:not([type=button])) {
-		--_bg: var(--surface-1)
-	}
-}

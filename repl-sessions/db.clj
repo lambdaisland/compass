@@ -14,9 +14,18 @@
  (db/transact [[:db/retractEntity 17592186045468]]))
 (user/conn)
 
+(db/q
+ '[:find
+   [(pull ?e [*]) ...]
+   :where
+   [?e :discord/email  "arne.brasseur@gmail.com"]]
+ (db/db))
+
+(db/entity [:user/email "arne.brasseur@gmail.com"])
+
 ;; Test transact participants
 
-(def req {:identity {:user/email "ddd"}
+(def req {:identity {:user/email ""}
           :path-params {:id "17592186045438"}})
 
 (def session-eid 17592186045438)
@@ -33,7 +42,7 @@
       curr-participants (:session/participants session)
       signup (:session/signup session)
       new-signup (inc signup)]
-        ;;TODO 
+        ;;TODO
         ;; Write some code to handle the case that :db/cas throws exception at race condition
   (prn :session-eid session-eid)
   (prn :capacity capacity)

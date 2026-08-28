@@ -7,7 +7,7 @@
 
 (defn contact-data
   "return the exported version of the contact
-  
+
   the input eid is the contact's eid"
   [eid]
   (db/pull '[:public-profile/name

@@ -16,11 +16,25 @@
     :width "0.6rem"
     :height "0.6rem"}])
 
+(o/defstyled nav-bar-logo :div
+  [:&.full-size-logo :mr-auto
+   {:margin-top t/--size-3}
+   [:svg {:height :auto
+          :width t/--size-fluid-9}] ]
+  [:h1 :font-size-7 :mr-auto :ml-2]
+  ([]
+   (if-let [logo-path (config/value :compass/full-size-logo-svg)]
+     [:<> {:class "full-size-logo"}
+      [:a {:href (url-for :sessions/index)}
+       [:lambdaisland.hiccup/unsafe-html (slurp logo-path)]]]
+     [:<>
+      [graphics/compass-logo]
+      [:h1 [:a {:href (url-for :sessions/index)} (config/value :compass/site-name)]]])))
+
 (o/defstyled nav-bar :nav
   :flex :items-center
   :bg-surface-1
   :mb-5
-  [:h1 :font-size-7 :mr-auto :ml-2]
   [:svg :grow-0 :shrink-0
    {:width  t/--font-size-5
     :height t/--font-size-5}]
@@ -30,8 +44,7 @@
     :right "-0.2rem"}]
   ([user]
    [:<>
-    [graphics/compass-logo]
-    [:h1 [:a {:href (url-for :sessions/index)} (config/value :compass/site-name)]]
+    [nav-bar-logo]
     [:button {:cx-toggle "menu-open" :cx-target "body"}
      [graphics/hamburger]
      (when (and user (not (user/assigned-ticket user)))
@@ -47,9 +60,7 @@
    {:width  t/--font-size-5
     :height t/--font-size-5}]
   ([]
-   [:<>
-    [graphics/compass-logo]
-    [:h1 [:a {:href (url-for :sessions/index)} (config/value :compass/site-name)]]]))
+   [nav-bar-logo]))
 
 (defn a-auth [props & children]
   (if (:user props)
@@ -142,10 +153,10 @@
        [graphics/sessions-icon]
        "Sessions & Activities"]]
      [:li
-      [a-auth
-       {:user user
-        :href (url-for :streams/index)
+      [:a
+       {:href (url-for :streams/index)
         :on-click "document.body.classList.toggle('menu-open')"}
+       [graphics/live-stream-icon]
        "Livestreams"]]
      [:li
       [:a
@@ -169,13 +180,13 @@
            :hx-target "#modal"
            :on-click "document.body.classList.toggle('menu-open')"}
        [graphics/scan-icon] "Add Contact"]]
-     [:li
-      [:hr]]
-     [:li
-      [:a {:href "https://github.com/heartofclojure/heartofclojure-site-2024/wiki/Attendee-Guide-2024"
-           :target "_blank"}
-       [graphics/book-open-icon]
-       "Attendee Guide"]]
+     #_[:li
+        [:hr]]
+     #_[:li
+        [:a {:href "https://github.com/heartofclojure/heartofclojure-site-2024/wiki/Attendee-Guide-2024"
+             :target "_blank"}
+         [graphics/book-open-icon]
+         "Attendee Guide"]]
      (when (user/admin? user)
        [:<>
         [:li

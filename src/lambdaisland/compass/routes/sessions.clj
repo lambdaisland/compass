@@ -68,8 +68,8 @@
              :session/time start
              :session/duration duration
              :session/description description
-             :session/type (or (some-> type parse-long) :session.type/activity)
-             :session/location (or (some-> location parse-long) :location.type/hal5-long-table)
+             :session/type (or (some-> type parse-long) (config/value :session.type/default))
+             :session/location (or (some-> location parse-long) (config/value :location.type/default))
              :session/organized (parse-long organizer-id)
              :session/capacity (parse-long capacity)}
 

@@ -6,7 +6,8 @@
    [lambdaisland.compass.model.assets :as assets]
    [clojure.string :as str]
    [java-time.api :as time]
-   [lambdaisland.compass.db :as db]))
+   [lambdaisland.compass.db :as db]
+   [lambdaisland.compass.config :as config]))
 
 (defn participating?
   "If user participates this session"
@@ -73,13 +74,13 @@
     sessions
 
     :talks
-    (filter (comp #{:session.type/talk :session.type/keynote}
+    (filter (comp (set (config/value :session.type/talk-types))
                   :db/ident
                   :session/type)
             sessions)
 
     :activities
-    (remove (comp #{:session.type/talk :session.type/keynote}
+    (remove (comp (set (config/value :session.type/talk-types))
                   :db/ident
                   :session/type)
             sessions)))

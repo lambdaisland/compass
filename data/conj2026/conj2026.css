@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Outfit:wght@100..900&display=swap');
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+:where(html) {
+  --black: #000;
+  --white: #fff;
+  --conj-gray-1: #e3e1de;
+  --conj-gray-2: #ebe8e6;
+  --conj-gray-3: #f5f2f0;
+  --conj-green-1: #89d034;
+  --conj-green-2: #c1e580;
+  --conj-green-3: #ccea9f;
+  --conj-green-darker: #6fae29;
+  --conj-dark-blue-1: #0f1e3a;
+  --conj-dark-blue-2: #1a2d4a;
+  --conj-dark-blue-3: #1c2e52;
+  --conj-dark-blue-4: #1e3058;
+  --conj-faded-blue-1: #62768f;
+  --conj-faded-blue-2: #94a0b4;
+  --conj-faded-blue-3: #9bb4c1;
+  --conj-purple-darker: #5d368e;
+  --conj-purple-1: #683ca0;
+  --conj-purple-2: #9d66b9;
+  --conj-purple-3: #ba81c7;
+}
+
+html {
+  color-scheme: dark;
+  --link: var(--conj-green-1);
+  --link-visited: var(--conj-purple-3);
+
+  --text-1: var(--conj-gray-3);
+  --text-2: var(--conj-gray-1);
+
+  --surface-1: var(--conj-dark-blue-1);
+  --surface-2: var(--conj-dark-blue-2);
+  --surface-3: var(--conj-dark-blue-3);
+  --surface-4: var(--gray-6);
+
+  --brand: var(--conj-green-darker);
+  --scrollthumb-color: var(--gray-6);
+  --shadow-strength: 10%;
+  --shadow-color: 220 40% 2%;
+  --highlight: var(--brand);
+
+  --session-color: var(--conj-green-darker);
+  --workshop-color: var(--conj-purple-1);
+  --break-color: var(--gray-7);
+  --activity-color: var(--conj-green-1);
+
+}
+
+@media (prefers-color-scheme: light) {
+  html {
+    color-scheme: light;
+
+    --link: var(--conj-green-darker);
+    --link-visited: var(--conj-purple-darker);
+    --text-1: var(--conj-dark-blue-1);
+    --text-2: var(--gray-7);
+
+    --surface-1: var(--white);
+    --surface-2: var(--conj-gray-3);
+    --surface-3: var(--conj-gray-2);
+    --surface-4: var(--conj-gray-1);
+
+    --scrollthumb-color: var(--conj-dark-blue-1);
+    --brand: var(--conj-green-1);
+    --highlight: var(--brand);
+
+    --session-color: var(--conj-faded-blue-3);
+    --workshop-color: var(--conj-purple-3);
+    --break-color: var(--gray-3);
+    --activity-color: var(--conj-green-3);
+
+  }
+}
+.lambdaisland_compass_html_navigation__menu_panel a {
+  color: var(--link);
+}
+
+.lambdaisland_compass_html_components__toggle_button .btn {
+  text-shadow: none;
+}
+
+.btn, button, input:is([type=button], [type=submit], [type=reset]),
+input[type=file]::-webkit-file-upload-button,
+input[type=file]::file-selector-button {
+  --_bg-dark: var(--gray-10);
+  --_border: var(--conj-dark-blue-4);
+  --_accent: light-dark(var(--black), var(--white));
+  font-family: "IBM Plex Mono", "Fira Code", "Courier New", monospace;
+  font-weight: 600 !important;
+  border-radius: var(--size-1);
+  color: light-dark(var(--black), var(--white));
+}
+textarea, select, input:not([type="button"], [type="submit"], [type="reset"]) {
+  background-color: var(--white);
+  color: var(--black);
+  font-family: "IBM Plex Mono", "Fira Code", "Courier New", monospace;
+  border: 1px solid var(--conj-dark-blue-4);
+}

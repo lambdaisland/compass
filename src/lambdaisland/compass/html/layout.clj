@@ -1,4 +1,5 @@
 (ns lambdaisland.compass.html.layout
+  "HTML layout, with HTMX setup"
   (:require
    [charred.api :as charred]
    [lambdaisland.compass.config :as config]
@@ -6,7 +7,9 @@
    [lambdaisland.compass.html.auth :as auth]
    [lambdaisland.compass.html.navigation :as nav]
    [lambdaisland.ornament :as o]
-   [ring.middleware.anti-forgery :as anti-forgery]))
+   [ring.middleware.anti-forgery :as anti-forgery]
+   [clojure.java.io :as io]
+   [clojure.string :as str]))
 
 (require 'lambdaisland.compass.css.components)
 (def start-time (System/currentTimeMillis))
@@ -34,6 +37,15 @@
    :fade-to-pale
    [:to {:opacity 1}]))
 
+(def custom-styles
+  (spit "resources/public/css/custom.css"
+        (->> :data-dirs
+             config/value
+             (mapcat (comp file-seq io/file))
+             (filter #(str/ends-with? (str %) ".css"))
+             (map slurp)
+             (str/join "\n"))))
+
 (defn base-layout* [{:keys [head body flash user request] :as opts}]
   [:html
    [:head
@@ -45,6 +57,7 @@
     [:link {:rel "stylesheet" :href "/css/open-props-normalize.min.css"}]
     [:link {:rel "stylesheet" :href "/css/buttons.css"}]
     [:link {:rel "stylesheet" :href (str "/css/styles.css?t=" start-time)}]
+    [:link {:rel "stylesheet" :href (str "/css/custom.css?t=" start-time)}]
     [:link {:rel "icon" :href (config/value :compass/favicon-href "/favicon_v1.ico")}]
 
     [:script {:src "/js/htmx-1.9.12.js"}]

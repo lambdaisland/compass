@@ -3,18 +3,14 @@
    [lambdaisland.compass.css.tokens :as t]
    [lambdaisland.ornament :as o]))
 
-(o/defstyled connect-ticket-form :section
-  [:label :block]
-  [#{:h2 :p :label} {:margin-bottom t/--size-3}]
-  [:label :flex :flex-col
-   [:span :font-semibold]]
+(o/defstyled connect-ticket-form :section.form-card-styling
   ([error-message ref email]
    [:<>
     (when error-message
       [:p {:style "color: red;"} error-message])
     [:h2 "Ticket Check"]
     [:p "Claim your Ti.to conference ticket!"]
-    [:p "This will unlock full access to both Confpass and Discord"]
+    [:p "This will unlock full access to both Confpass.me and Discord"]
     [:form {:method "post"}
      [:label {:for "reference"} [:span "Reference code on your Ti.to ticket"]
       [:input#reference (cond-> {:type "text" :required true :name "reference" :maxlength 6 :placeholder "ABCD-1"}

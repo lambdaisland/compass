@@ -225,7 +225,8 @@
     :max-width "34rem"}
    :p-4  :mt-2 :mb-6 :ml-2
    [:>p :font-semibold]
-   [:.datetime :font-size-7 :font-bold]]
+   [:.datetime :font-size-7 :font-bold]
+   [:a {:color t/--text-2 :text-decoration "underline"}]]
   [:.three-box #_{:background t/--activity-color}
    :relative :my-4 :p-4 :gap-4 :lg:flex-row :flex-col
    [:>div :border-8 :font-semibold :p-4 :text-center :flex-grow
@@ -281,10 +282,10 @@
         " → "
         (fmt-dur duration)]]
       (when (and duration time)
-       [:a {:hx-boost "false"
-            :href (url-for :session/add-to-calendar {:id (:db/id session)})
-            :download (str (str/replace title #"\s+" "_") ".ics")}
-        "Add to calendar (downloads ICS file)"])]
+        [:a {:hx-boost "false"
+             :href (url-for :session/add-to-calendar {:id (:db/id session)})
+             :download (str (str/replace title #"\s+" "_") ".ics")}
+         "Add to calendar (downloads ICS file)"])]
 
      [:div.description.site-copy
       [:div (m/component (m/md->hiccup description))]]
@@ -363,19 +364,7 @@
 
 ;; Create / edit
 
-(o/defstyled session-form :div
-  [#{:label :input} :block]
-  [:label
-   :mb-1 :mt-2
-   {:font-size t/--font-size-3
-    :font-weight t/--font-weight-6}]
-  [#{:input :textarea :select} ["&:not([type=checkbox])" :w-full :mb-3]]
-  [:label
-   :justify-start
-   :items-center
-   ["&:has([type=checkbox])"
-    :flex
-    :gap-3]]
+(o/defstyled session-form :div.form-card-styling
   [:div.date-time :flex :gap-2]
   ([user session session-types]
    (def session session)
@@ -389,66 +378,73 @@
            {:method "POST" :action (url-for :session/save)})
          (assoc :enctype "multipart/form-data"))
      [:input {:type "hidden" :name "organizer-id" :value (:db/id user)}]
-     [:label {:for "title"} "Name of Your Activity"]
-     [:input (cond-> {:id "title" :name "title" :type "text"
-                      :required true :min-length 2}
-               session
-               (assoc :value (:session/title session)))]
-     (when (user/admin? user)
-       [:<>
-        [:label {:for "subtitle"} "Subtitle (optional)"]
-        [:input (cond-> {:id "subtitle" :name "subtitle" :type "text"
-                         :min-length 10}
-                  session
-                  (assoc :value (:session/subtitle session)))]])
-     [:label {:for "start-time"} "Day and Start Time"]
-     [:div.date-time
-      [:input {:id "start-date" :name "start-date" :type "date"
-               :value (if session
-                        (str (time/local-date (:session/time session)))
-                        (str (java.time.LocalDate/now)))}]
-      [:input (cond->
-                  {:id "start-time" :name "start-time" :type "time" :required true :step 60}
+     [:label {:for "title"}
+      [:span "Name of Your Activity"]
+      [:input (cond-> {:id "title" :name "title" :type "text"
+                       :required true :min-length 2}
                 session
-                (assoc :value
-                       (str (time/local-time (:session/time session)))))]]
-     [:label {:for "duration-time"} "Duration in minutes"]
-     [:input
-      {:id "duration-time" :name "duration-time"
-       :type "number"
-       :value (if session
-                (session/duration (:session/duration session))
-                45)}]
+                (assoc :value (:session/title session)))]]
+     (when (user/admin? user)
+       [:<>
+        [:label {:for "subtitle"}
+         [:span "Subtitle (optional)"]
+         [:input (cond-> {:id "subtitle" :name "subtitle" :type "text"
+                          :min-length 10}
+                   session
+                   (assoc :value (:session/subtitle session)))]]])
+     [:label {:for "start-time"}
+      [:span "Day and Start Time"]
+      [:div.date-time
+       [:input {:id "start-date" :name "start-date" :type "date"
+                :value (if session
+                         (str (time/local-date (:session/time session)))
+                         (str (java.time.LocalDate/now)))}]
+       [:input (cond->
+                   {:id "start-time" :name "start-time" :type "time" :required true :step 60}
+                 session
+                 (assoc :value
+                        (str (time/local-time (:session/time session)))))]]]
+     [:label {:for "duration-time"}
+      [:span "Duration in minutes"]
+      [:input
+       {:id "duration-time" :name "duration-time"
+        :type "number"
+        :value (if session
+                 (session/duration (:session/duration session))
+                 45)}]]
 
      (when (user/admin? user)
        [:<>
-        [:label {:for "type"} "Type"]
-        [:select {:id "type" :name "type"}
-         (for [{n :session.type/name id :db/id} session-types]
-           [:option (cond-> {:value id}
-                      (= id (:db/id (:session/type session)))
-                      (assoc :selected "selected"))
-            n])]])
+        [:label {:for "type"}
+         [:span "Type"]
+         [:select {:id "type" :name "type"}
+          (for [{n :session.type/name id :db/id} session-types]
+            [:option (cond-> {:value id}
+                       (= id (:db/id (:session/type session)))
+                       (assoc :selected "selected"))
+             n])]]])
 
-     [:label {:for "location"} "Location"]
+     [:label {:for "location"}
+      [:span "Location"]
+      [:select {:id "location" :name "location"}
+       (for [{:location/keys [name] :db/keys [id]} (q/all-locations)]
+         [:option (cond-> {:value id}
+                    (= id (get-in session [:session/location :db/id]))
+                    (assoc :selected "selected"))
+          name])]]
 
-     [:select {:id "location" :name "location"}
-      (for [{:location/keys [name] :db/keys [id]} (q/all-locations)]
-        [:option (cond-> {:value id}
-                   (= id (get-in session [:session/location :db/id]))
-                   (assoc :selected "selected"))
-         name])]
+     [:label {:for "capacity"}
+      [:span "How many people can you accomodate?"]
+      [:input (cond-> {:id "capacity" :name "capacity" :type "number"
+                       :min 2 :value 5 :required true}
+                session
+                (assoc :value (:session/capacity session)))]]
 
-     [:label {:for "capacity"} "How many people can you accomodate?"]
-     [:input (cond-> {:id "capacity" :name "capacity" :type "number"
-                      :min 2 :value 5 :required true}
-               session
-               (assoc :value (:session/capacity session)))]
-
-     [:label {:for "description"} "Description (supports Markdown)"]
-     [:textarea {:id "description" :name "description"}
-      (when session
-        (:session/description session))]
+     [:label {:for "description"}
+      [:span "Description (supports Markdown)"]
+      [:textarea {:id "description" :name "description"}
+       (when session
+         (:session/description session))]]
 
      #_[:label {:for "ticket"}
         [:input {:id "ticket" :name "ticket-required?" :type "checkbox"
@@ -462,12 +458,13 @@
 
      (when session
        [session-image+guage session user])
-     [:label {:for "image"} "Activity Image"]
-     [:input {:id "image" :name "image" :type "file" :accept "image/png, image/jpeg, image/gif, image/webp, image/svg+xml"}]
+     [:label {:for "image"}
+      [:span "Activity Image"]
+      [:input {:id "image" :name "image" :type "file" :accept "image/png, image/jpeg, image/gif, image/webp, image/svg+xml"}]]
 
      [:input {:type "submit" :value (if session
-                                      "Save"
-                                      "Create")}]]]))
+                                      "Update Activity"
+                                      "Create Activity")}]]]))
 
 (o/defstyled session-list+filters :div
   ([{:keys [user sessions filters]}]

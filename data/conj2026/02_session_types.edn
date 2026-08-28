@@ -7,4 +7,7 @@
    :db/ident :session.type/workshop}
   {:session.type/name "Break",
    :session.type/color "var(--break-color)",
-   :db/ident :session.type/break}]}
+   :db/ident :session.type/break}
+  {:session.type/name "Activity",
+   :session.type/color "var(--activity-color)",
+   :db/ident :session.type/activity}]}

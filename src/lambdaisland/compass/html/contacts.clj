@@ -59,14 +59,14 @@
    [c/image-frame :w-50px {--arc-thickness "7%"} :mx-2]]
   [:.profile-name :font-semibold]
   [:.email :font-size-3 {:color t/--text-2}]
-
+  [:.instructions :p-5 [:p  :text-center {:font-size t/--font-size-4}]]
   ([{:public-profile/keys [name]
      :user/keys [uuid] :as user}]
    [:<>
     [:div.heading
      [:h2 "Your Contacts"]
      [:div.control
-      [:button {:on-click "downloadEDN(event)"}
+      [:button {:on-click "downloadEDN(event)" :title "Download as EDN file"}
        "Export Contacts"]
       [:button {:hx-target "#modal"
                 :hx-get (url-for :contact/qr)}
@@ -77,18 +77,24 @@
        :style {:display "none"}
        :hx-trigger "contact-deleted from:body"}]
      [:div.contact-list
-      (for [c (:user/contacts user)]
-        [:div.contact
-         [c/image-frame {:profile/image (user/avatar-css-value c)}]
-         [:div.details
-          [:div.profile-name [:a {:href (url-for :profile/show {:user-uuid (:user/uuid c)})}
-                              (if (:private-profile/name c)
-                                (:private-profile/name c)
-                                (:public-profile/name c))]]
-          [:div.bio (when (:private-profile/bio c)
-                      (m/component (m/md->hiccup (:private-profile/bio c))))]]
-         [:button.remove-btn {:hx-delete (url-for :contact/link {:id (:db/id c)})}
-          [graphics/person-remove] "Remove"]])]]
+      (if-let [contacts (seq (:user/contacts user))]
+        (for [c contacts]
+          [:div.contact
+           [c/image-frame {:profile/image (user/avatar-css-value c)}]
+           [:div.details
+            [:div.profile-name [:a {:href (url-for :profile/show {:user-uuid (:user/uuid c)})}
+                                (if (:private-profile/name c)
+                                  (:private-profile/name c)
+                                  (:public-profile/name c))]]
+            [:div.bio (when (:private-profile/bio c)
+                        (m/component (m/md->hiccup (:private-profile/bio c))))]]
+           [:button.remove-btn {:hx-delete (url-for :contact/link {:id (:db/id c)})}
+            [graphics/person-remove] "Remove"]])
+        [:div.instructions
+         [:p "Keep track of the people meet!"]
+         [:p "Add social media links or other contact information in your own "
+          [:a {:href (url-for :profile/edit)} "Contact Card"]
+          ", then scan the QR code to connect and exchange contacts."]])]]
     [:div#edn {:style {:display "none"}}
      (for [c (:user/contacts user)]
        (let [eid (:db/id c)
@@ -117,7 +123,7 @@
 
 (comment
   (require '[lambdaisland.compass.db :as db])
-  
+
   (def eid 17592186045516)
   (queries/contact-data eid)
   (def user  (db/entity eid))

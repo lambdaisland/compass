@@ -26,11 +26,6 @@
   {:html/body [h/profile-form
                (:identity req)]})
 
-(defn GET-private-name [{:keys [params] :as req}]
-  {:html/body [h/private-name
-               (:identity req)
-               params]})
-
 (defn GET-link [{:keys [params] :as req}]
   {:html/body [h/links-table
                {}
@@ -104,7 +99,6 @@
 
 (defn params->profile-data
   [{:keys [user-id hidden?
-           private-name-switch
            bio_public name_public
            bio_private name_private
            rows-count
@@ -132,10 +126,10 @@
       (conj [:db/add user-id :public-profile/avatar-url
              (assets/add-to-content-addressed-storage (:content-type image) (:tempfile image))])
 
-      (= "on" private-name-switch)
+      (= "on" hidden?)
       (conj [:db/add user-id  :public-profile/hidden? true])
 
-      (not= "on" private-name-switch)
+      (not= "on" hidden?)
       (conj [:db/retract user-id :public-profile/hidden? true])
 
       (and (str/blank? name_private) (:private-profile/name user))
@@ -171,9 +165,6 @@
     ["/edit"
      {:name :profile/edit
       :get {:handler GET-profile-form}}]
-    ["/edit/private-name"
-     {:name :profile/private-name
-      :get {:handler GET-private-name}}]
     ["/edit/link"
      {:name :profile/add-link
       :get {:handler GET-link}}]

@@ -34,4 +34,28 @@
 
     [:ul :py-2 [:li :py-1 :list-disc :list-inside]]
     [:ol :py-2 [:li :py-1 :list-decimal :list-inside]]]
+
+   [:.form-card-styling
+    :flex-col :gap-4
+    {:background-color t/--surface-2
+     :padding t/--size-3
+     :border-radius t/--size-3}
+    [:form :flex-col :gap-3]
+    [:label
+     :flex-col :gap-1
+     {:font-size t/--font-size-3
+      :font-weight t/--font-weight-6}
+     #_["&:has([type=checkbox])"
+        :flex
+        :gap-3]]
+    ["[type=submit]" {:align-self "end"
+                      :background-color t/--highlight}]
+
+    ;; [:label.checkbox [#_optional :span caption]
+    ;;  [:span
+    ;;   [:input {:type "checkbox"}]
+    ;;   [:span "Explanation"]]]
+    [:.checkbox [:>span:last-child
+                 :flex-row :gap-2 :font-normal :items-center]]
+    ]
    ])

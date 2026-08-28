@@ -1,28 +1,33 @@
-{:port                           8099
- :dynamic-routes?                false
+{:port            8099
+ :dynamic-routes? false
 
  ;; :datomic/url "datomic:sql://compass?jdbc:postgresql://localhost:5432/datomic?user=datomic"
 
  ;; :compass/origin       "https://conj2026.confpass.me"
  ;; :compass/favicon-href "/favicon_conj2026.ico"
  ;; :data-dirs       ["/srv/compass/app/data/conj2026"]
- :compass/page-title             "Confpass.me"
- :compass/site-name              "Confpass.me"
- :event/time-zone                "UTC"
+ :compass/page-title "Confpass.me"
+ :compass/site-name  "Confpass.me"
+ :event/time-zone    "UTC"
 
- :http/asset-path                "/uploads"
- :uploads/dir                    "uploads"
- :image/fallback                 "/hoc-logo-2024-avatar.png"
+ :http/asset-path "/uploads"
+ :uploads/dir     "uploads"
+ :image/fallback  "/hoc-logo-2024-avatar.png"
 
  :mux/playback-token-ttl-seconds 43200
 
- :tito/admin-slugs               ["crew"]
- :tito/event-slug                "heart-of-clojure/2024"
- :tito/sync-interval-seconds     900 ;; every 15 minutes
+ :tito/admin-slugs           ["crew"]
+ :tito/event-slug            "heart-of-clojure/2024"
+ :tito/sync-interval-seconds 900 ;; every 15 minutes
+
+ :session.type/default :session.type/session
+ :session.type/talk-types #{:session.type/session}
+ :location.type/default :location.type/off-site
 
  ;; :discord/client-id    ""
  ;; :discord/public-key   ""
  ;; :discord/server-id    ""
+ ;; :discord/session-channel-id ""
  ;; :discord/ticket-roles {"tito-slug" "discord-role-id"}
 
  }
