@@ -30,4 +30,7 @@
  ;; :discord/session-channel-id ""
  ;; :discord/ticket-roles {"tito-slug" "discord-role-id"}
 
+ ;; :mux/token-id
+ ;; :mux/secret-key
+
  }

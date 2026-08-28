@@ -53,11 +53,11 @@
 (defn find-stream [stream-id]
   (first (filter #(= stream-id (:id %)) (streams))))
 
-(defn- basic-authorization [token-id token-secret]
+(defn- basic-authorization [token-id secret-key]
   (str "Basic "
        (.encodeToString
         (Base64/getEncoder)
-        (.getBytes (str token-id ":" token-secret) StandardCharsets/UTF_8))))
+        (.getBytes (str token-id ":" secret-key) StandardCharsets/UTF_8))))
 
 (defn create-mux-live-stream!
   "Create a live stream on Mux with a signed playback policy. Returns the Mux
@@ -65,14 +65,14 @@
   ex-info on failure."
   [title & {:keys [test?]}]
   (let [token-id (config/value :mux/token-id)
-        token-secret (config/value :mux/token-secret)]
+        secret-key (config/value :mux/secret-key)]
     (when (str/blank? token-id)
       (throw (ex-info "Missing Mux API token id (:mux/token-id)" {})))
-    (when (str/blank? token-secret)
-      (throw (ex-info "Missing Mux API token secret (:mux/token-secret)" {})))
+    (when (str/blank? secret-key)
+      (throw (ex-info "Missing Mux API token secret (:mux/secret-key)" {})))
     (let [response (hato/post
                     live-streams-url
-                    {:headers {"Authorization" (basic-authorization token-id token-secret)
+                    {:headers {"Authorization" (basic-authorization token-id secret-key)
                                "Content-Type" "application/json"
                                "Accept" "application/json"}
                      :body (charred/write-json-str

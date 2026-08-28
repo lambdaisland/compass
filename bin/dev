@@ -12,8 +12,8 @@
 
 (def init
   (merge
-   {:mux-token-id (System/getenv "MUX_TOKEN_ID")
-    :mux-secret-key (System/getenv "MUX_SECRET_KEY")}
+   {:mux/token-id (System/getenv "MUX_TOKEN_ID")
+    :mux/secret-key (System/getenv "MUX_SECRET_KEY")}
    (when (.exists (io/file "config.local.edn"))
      (read-string (slurp "config.local.edn")))))
 
@@ -22,7 +22,7 @@
   [opts]
   (su/spawn "ssh" "root@compass.heartofclojure.eu" "nc" "localhost" "5555"))
 
-(defn- mux-request [{:keys [mux-token-id mux-secret-key]} req]
+(defn- mux-request [{mux-token-id :mux/token-id mux-secret-key :mux/secret-key :as opts} req]
   (assert (and mux-token-id mux-secret-key))
   (let [{:keys [status body] :as response}
         (curl/request

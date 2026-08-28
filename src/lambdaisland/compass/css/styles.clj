@@ -2,7 +2,8 @@
   "Top level CSS rules"
   (:require
    [lambdaisland.compass.css.tokens :as t]
-   [lambdaisland.ornament :as o]))
+   [lambdaisland.ornament :as o]
+   [garden.stylesheet :as gs]))
 
 (o/defrules resets
   [[:p {:max-inline-size "inherit"}]
@@ -58,4 +59,9 @@
     [:.checkbox [:>span:last-child
                  :flex-row :gap-2 :font-normal :items-center]]
     ]
+
+
+   ;; dark/light utilities
+   (gs/at-media {:prefers-color-scheme 'dark} [:.light-theme-only {:display "none"}])
+   (gs/at-media {:prefers-color-scheme 'light} [:.dark-theme-only {:display "none"}])
    ])

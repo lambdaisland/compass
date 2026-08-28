@@ -124,8 +124,8 @@
    [:path
     #_{:fill t/--text-1}
     #_{:color t/--text-1}]]
-  [:.bottom :mt-auto :w-full :mb-3 :text-center
-   [:p  :m-2]]
+  [:.bottom :mt-auto :w-full :text-center
+   {:padding (str "0 " t/--size-10)}]
   ([user]
    [:<>
     [:div.bar
@@ -200,8 +200,11 @@
           [graphics/shield-check-icon]
           "Manage Users"]]])]
     [:div.bottom
-     [:p "A " [:a {:href "https://magpie.software" :target "_blank"} "Magpie"] " production."]
-     [:p [:a {:href "https://github.com/lambdaisland/compass" :target "_blank"} [graphics/github-icon] "lambdaisland/compass"]]]
+     [:a {:target "_blank" :href "https://magpie.software"}
+      [:img.light-theme-only {:alt "A Magpie Production"
+                              :src "https://magpie.software/images/magpie-production.webp"}]
+      [:img.dark-theme-only {:alt "A Magpie Production"
+                             :src "https://magpie.software/images/magpie-production-dark.webp"}]]]
     ]))
 
 (o/defrules toggle-menu-button)

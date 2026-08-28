@@ -41,7 +41,7 @@ html {
   --surface-4: var(--gray-6);
 
   --brand: var(--conj-green-darker);
-  --scrollthumb-color: var(--gray-6);
+  --scrollthumb-color: var(--highlight);
   --shadow-strength: 10%;
   --shadow-color: 220 40% 2%;
   --highlight: var(--brand);
@@ -86,20 +86,44 @@ html {
   text-shadow: none;
 }
 
-html :where(.btn, button, input:is([type=button], [type=submit], [type=reset]),
-input[type=file]::-webkit-file-upload-button,
-input[type=file]::file-selector-button) {
+:where(.btn, button, input:is([type=button], [type=submit], [type=reset])),
+:where(input[type=file])::-webkit-file-upload-button,
+:where(input[type=file])::file-selector-button {
   --_bg-dark: var(--gray-10);
+  --_text: var(--white);
   --_border: var(--conj-dark-blue-4);
   --_accent: light-dark(var(--black), var(--white));
   font-family: "IBM Plex Mono", "Fira Code", "Courier New", monospace;
   font-weight: 600 !important;
   border-radius: var(--size-1);
-  color: light-dark(var(--black), var(--white));
 }
 textarea, select, input:not([type="button"], [type="submit"], [type="reset"]) {
   background-color: var(--white);
   color: var(--black);
   font-family: "IBM Plex Mono", "Fira Code", "Courier New", monospace;
   border: 1px solid var(--conj-dark-blue-4);
+}
+
+.lambdaisland_compass_html_navigation__nav_bar, .lambdaisland_compass_html_navigation__site_name_no_nav {
+  padding-left: var(--size-3);
+  padding-right: var(--size-3);
+  padding-top: var(--size-4);
+  padding-bottom: var(--size-10);
+  background: linear-gradient(var(--surface-1) 0%, var(--surface-1) 70%, var(--brand) 70%, var(--surface-1) 100%);
+}
+
+body #app {
+  max-width: inherit;
+}
+
+body #app > main {
+  padding: 0 0 var(--size-3) 0;
+  margin: 0;
+}
+
+main > * + * {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding-left: var(--size-3);
+  padding-right: var(--size-3);
 }
