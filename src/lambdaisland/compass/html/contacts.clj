@@ -115,7 +115,7 @@
           // Create a temporary anchor element to download the CSV
           var a = document.createElement('a');
           a.href = url;
-          a.download = 'data.edn';
+          a.download = 'confpass_contacts.edn';
           document.body.appendChild(a);
           a.click();
 
