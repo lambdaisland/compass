@@ -32,5 +32,8 @@
 
  ;; :mux/token-id
  ;; :mux/secret-key
+ ;; :mux/signing-key-id
+ ;; :mux/signing-private-key
+ ;; :mux/playback-token-ttl-seconds ;; optional
 
  }

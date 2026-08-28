@@ -62,8 +62,8 @@
     (when created-stream
       [:div {:style "border: 1px solid; padding: 1em; margin-bottom: 1em;"}
        [:p "Livestream " [:strong (:title created-stream)] " created."]
-       [:p "OBS server: " [:code (:rtmps-url created-stream)]]
-       [:p "OBS stream key (shown once, copy it now): " [:code (:stream-key created-stream)]]])
+       [:p "Stream URL: " [:code (:rtmps-url created-stream)]]
+       [:p "Stream key (shown once, copy it now): " [:code (:stream-key created-stream)]]])
     [:table
      [:thead
       [:tr [:th "ID"] [:th "Title"] [:th "Playback ID"] [:th "Allowed ticket slugs"] [:th]]]

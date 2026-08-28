@@ -93,16 +93,65 @@
 (defn mux-delete-stream [{:keys [stream-id] :as opts}]
   (mux-request opts {:method :delete :path (str "/video/v1/live-streams/" stream-id)}))
 
+(defn list-signing-keys
+  "List all signing keys that exist, requires system token"
+  [opts]
+  (let [keys (:data
+              (mux-request
+               opts
+               {:method :get
+                :path (str "/system/v1/signing-keys")}))]
+    (pprint/print-table
+     (for [{:keys [id created_at]} keys]
+       (array-map
+        :id id
+        :created-at (java.util.Date. (* (read-string created_at) 1000)))))))
+
+(defn create-signing-key
+  "Create a new signing key, requires system token
+
+  The result can be copy-pasted into your config"
+  [opts]
+  (let [{:keys [private_key id]} (:data (mux-request
+                                         opts
+                                         {:method :post
+                                          :path (str "/system/v1/signing-keys")
+                                          :body
+                                          {}}))]
+    (println ":mux/signing-key-id" (pr-str id))
+    (println ":mux/signing-private-key" (pr-str private_key))))
+
+(defn remove-signing-key
+  "Delete signing key by key id, requires system token"
+  [{:keys [key-id] :as opts}]
+  (prn
+   (mux-request
+    opts
+    {:method :delete
+     :path (str "/system/v1/signing-keys/" key-id)
+     :body
+     {}})))
+
 (def commands
   ["prod-repl" #'prod-repl
-   "mux" {:commands ["stream" {:commands ["ls" #'mux-ls
-                                          "create" #'mux-new-stream
-                                          "add-playback-id <stream-id>" #'mux-add-playback-id
-                                          "rm-playback-id <stream-id> <playback-id>" #'mux-rm-playback-id
-                                          "rm <stream-id>" #'mux-delete-stream]}
+   "mux" {:commands ["stream"
+                     {:commands
+                      ["ls" #'mux-ls
+                       "create" #'mux-new-stream
+                       "add-playback-id <stream-id>" #'mux-add-playback-id
+                       "rm-playback-id <stream-id> <playback-id>" #'mux-rm-playback-id
+                       "rm <stream-id>" #'mux-delete-stream]}
 
-                     "assets" {:commands ["ls" #'mux-ls-assets
-                                          "clean" #'mux-clean-assets]}]}])
+                     "signing-keys"
+                     {:commands
+                      ["ls" #'list-signing-keys
+                       "create" #'create-signing-key
+                       "rm <key-id>" #'remove-signing-key]}
+
+                     "assets"
+                     {:commands
+                      ["ls" #'mux-ls-assets
+                       "clean" #'mux-clean-assets]}]}])
 
 (def flags
   ["-v, --verbose" "Increase verbosity"

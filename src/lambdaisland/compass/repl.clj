@@ -35,9 +35,44 @@
 (defn unassign-ticket [user]
   @(db/transact [[:db/retract (:db/id (u/assigned-ticket user)) :tito.ticket/assigned-to (:db/id user)]]))
 
-(comment
+(defn make-dummy-ticket [{:keys [release code email name]}]
+  (let [release-id (db/q '[:find ?r .
+                           :in $ ?s
+                           :where [?r :tito.release/slug ?s]]
+                         (db/db) release)]
+    @(db/transact
+      [{:tito.ticket/reference (str code "-1")
+        :tito.ticket/name      name
+        :tito.ticket/email     email
+        :tito.ticket/release   release-id
+        :tito.ticket/state     "complete"
+        :tito.ticket/registration
+        {:tito.registration/reference code
+         :tito.registration/email     email
+         :tito.registration/name      name
+         :tito.registration/state     "complete"}}])))
 
-  (user "arne.brasseur@gmail.com")
+
+(comment
+  (db/q '[:find (pull ?e [*])
+          :where [?e :tito.ticket/id]]
+        (db/db))
+
+  (db/q '[:find (pull ?e [*])
+          :where [?e :tito.registration/id]]
+        (db/db))
+  (db/q '[:find (pull ?e [*])
+          :where [?e :tito.release/id]]
+        (db/db))
+
+  (make-dummy-ticket {:release "comp-ticket"
+                      :code "DUMM"
+                      :email "arne@arnebrasseur.net"
+                      :name "Arne"})
+
+  (map datomic.api/touch
+       (:tito.ticket/_assigned-to
+        (user "arne.brasseur@gmail.com")))
 
   (into {}
         (:tito.ticket/release

@@ -39,7 +39,7 @@
        [:input {:type "checkbox"
                 :id "incognito"
                 :name "incognito"}]
-       [:span "Incognito mode, don't show my name and avatar on sessions I participate in."]]]
+       [:span "Incognito mode, don't show my name and avatar on sessions I participate in. (optional)"]]]
      [:section
       [:label
        [:input {:type "checkbox"

@@ -76,7 +76,7 @@
    [:tito.registration/state :string "State the order is in, one of complete, incomplete"]
 
    [:tito.ticket/id :long "Ti.to ticket unique id" :identity]
-   [:tito.ticket/reference :string "Ti.to ticket referecen code, same as registration ref code + sequential number, e.g. A4FB-2" :identity]
+   [:tito.ticket/reference :string "Ti.to ticket reference code, same as registration ref code + sequential number, e.g. A4FB-2" :identity]
    [:tito.ticket/name :string "Name assigned to the ticket"]
    [:tito.ticket/email :string "Email assigned to the ticket"]
    [:tito.ticket/registration :ref "The registration (order) this ticket is part of"]

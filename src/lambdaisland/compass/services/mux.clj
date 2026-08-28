@@ -133,7 +133,7 @@
       (throw (ex-info (str "No livestream with id " id) {:id id})))
     (let [new-slugs (set allowed-ticket-slugs)
           retractions (map (fn [slug] [:db/retract [:livestream/id id] :livestream/allowed-ticket-slugs slug])
-                            (:allowed-ticket-slugs stream))
+                           (:allowed-ticket-slugs stream))
           additions (map (fn [slug] [:db/add [:livestream/id id] :livestream/allowed-ticket-slugs slug])
                          new-slugs)]
       @(db/transact (into (vec retractions) additions)))))
@@ -162,10 +162,10 @@
   ([playback-id]
    (playback-token playback-id (Instant/now)))
   ([playback-id ^Instant now]
-   (let [key-id (config/value :mux/signing-key-id)
+   (let [key-id      (config/value :mux/signing-key-id)
          encoded-key (config/value :mux/signing-private-key)
-         ttl (or (config/value :mux/playback-token-ttl-seconds)
-                 default-token-ttl-seconds)]
+         ttl         (or (config/value :mux/playback-token-ttl-seconds)
+                         default-token-ttl-seconds)]
      (when (str/blank? key-id)
        (throw (ex-info "Missing Mux signing key ID" {})))
      (when-not (and (integer? ttl) (pos? ttl))
@@ -177,4 +177,4 @@
                     "exp" (+ (.getEpochSecond now) ttl)
                     "kid" key-id})]
        (jws/sign claims (signing-key encoded-key)
-                {:alg :rs256 :header {:kid key-id :typ "JWT"}})))))
+                 {:alg :rs256 :header {:kid key-id :typ "JWT"}})))))

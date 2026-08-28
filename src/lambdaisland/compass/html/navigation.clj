@@ -91,10 +91,12 @@
    :width      t/--size-fluid-10
    :right      0
    :max-width  "100vw"
+   :min-height "100vh"
    :transform  "translate(100%, 0)"}
   [:svg {:width  t/--font-size-5
          :height t/--font-size-5}]
   [:.bar :flex :justify-between :p-3 :mb-2 :border-b-4 :border-surface-3]
+  [:>ul {:flex 1}]
   [:li :font-size-3 :my-4
    [:>hr :my-6]
    #_[:svg [:path :w-5 :h-5]]
