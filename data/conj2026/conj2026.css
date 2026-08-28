@@ -86,9 +86,9 @@ html {
   text-shadow: none;
 }
 
-.btn, button, input:is([type=button], [type=submit], [type=reset]),
+html :where(.btn, button, input:is([type=button], [type=submit], [type=reset]),
 input[type=file]::-webkit-file-upload-button,
-input[type=file]::file-selector-button {
+input[type=file]::file-selector-button) {
   --_bg-dark: var(--gray-10);
   --_border: var(--conj-dark-blue-4);
   --_accent: light-dark(var(--black), var(--white));

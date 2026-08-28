@@ -12,7 +12,9 @@
    :border-radius t/--radius-2
    :color t/--gray-0
    :text-align "center"
-   :--_ink-shadow "none"}
+   :--_ink-shadow "none"
+   :font-family t/--font-sans
+   }
   [:&:hover {:text-decoration "none"}]
   [graphics/discord {:height "2rem" :width "2rem" :--_logo-color t/--gray-0}]
   ([{:keys [next-url text]}]
