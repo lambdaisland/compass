@@ -64,6 +64,7 @@
 (o/defstyled row :li.link-row
   :p-0
   :flex :gap-2
+  [:>* {:max-width "50%"}]
   ([{:keys [variant] :as link}]
    [:<>
     (when (:db/id link)
