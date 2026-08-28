@@ -41,8 +41,6 @@
      (when bio
        [:textarea (m/md->hiccup bio)])]]))
 
-(o/css contact-detail)
-
 (o/defstyled contact-detail :div
   [:.heading :flex :justify-between :mb-3 :gap-2
    [:at-media {:max-width "30rem"}
