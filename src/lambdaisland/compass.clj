@@ -10,11 +10,11 @@
    [clojure.java.io :as io]
    [clojure.pprint :as pprint]
    [clojure.string :as str]
-   [lambdaisland.compass.config :as config]
    [integrant.core :as ig]
    [integrant.repl :as ig-repl]
    [io.pedestal.log :as log]
-   [lambdaisland.cli :as cli]))
+   [lambdaisland.cli :as cli]
+   [lambdaisland.compass.config :as config]))
 
 (require
  'lambdaisland.compass.db

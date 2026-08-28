@@ -5,6 +5,9 @@
    [lambdaisland.ornament :as o]
    [garden.stylesheet :as gs]))
 
+;; Make sure we get girouette overrides
+(require 'lambdaisland.compass.css)
+
 (o/defrules resets
   [[:p {:max-inline-size "inherit"}]
    [#{:ul :ol} :list-none :m-0 :p-0]

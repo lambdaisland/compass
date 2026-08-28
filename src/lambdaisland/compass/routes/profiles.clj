@@ -158,9 +158,9 @@
 
 (defn routes []
   [["/profile"
+    {:middleware [[response/wrap-requires-auth]]}
     [""
      {:name :profile/index
-      :middleware [[response/wrap-requires-auth]]
       :get        {:handler GET-profile}}]
     ["/edit"
      {:name :profile/edit
@@ -169,16 +169,12 @@
      {:name :profile/add-link
       :get {:handler GET-link}}]
     ["/save"
-     {:middleware [[response/wrap-requires-auth]]
-      :post       {:handler POST-save-profile}}]]
+     {:post       {:handler POST-save-profile}}]]
    ["/uploads/:filename"
-    {:middleware [[response/wrap-requires-auth]]
-     :get        {:handler file-handler}}]
+    {:get        {:handler file-handler}}]
    ["/user/:user-uuid"
     {:name :profile/show
-     :middleware [[response/wrap-requires-auth]]
      :get        {:handler GET-profile}}]
    ["/me"
     {:name :profile/me
-     :middleware [[response/wrap-requires-auth]]
      :get        {:handler GET-profile}}]])
