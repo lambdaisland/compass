@@ -81,17 +81,14 @@ html {
   color: var(--link);
 }
 
-.lambdaisland_compass_html_components__toggle_button .btn {
-  text-shadow: none;
-}
-
 :where(.btn, button, input:is([type=button], [type=submit], [type=reset])),
 :where(input[type=file])::-webkit-file-upload-button,
 :where(input[type=file])::file-selector-button {
   --_bg-dark: var(--gray-10);
-  --_text: light-dark(var(--black),var(--white))
+  --_text: light-dark(var(--black),var(--white));
   --_border: var(--conj-dark-blue-4);
   --_accent: light-dark(var(--black), var(--white));
+  --_ink-shadow: none;
   font-family: "IBM Plex Mono", "Fira Code", "Courier New", monospace;
   font-weight: 600 !important;
   border-radius: var(--size-1);

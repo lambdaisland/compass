@@ -114,6 +114,7 @@
 (defn wrap-welcome-page [handler]
   (fn [{:keys [identity uri] :as req}]
     (if (and identity
+             (not= (routing/url-for :documents/privacy-policy) uri)
              (not= (routing/url-for :welcome/page) uri)
              (not (:privacy-policy/accepted-at identity)))
       (res/redirect (routing/url-for :welcome/page))

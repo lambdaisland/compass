@@ -13,7 +13,7 @@
   [:form :flex :flex-col :gap-4]
   ["[type=checkbox]" {:margin-right t/--size-2}]
   ["[type=submit]" {:background-color t/--highlight}
-   ["&[disabled]" {:background-color t/--gray-5}]]
+   ["&[disabled]" {:background-color t/--gray-2}]]
 
   ([identity]
    [:<>
