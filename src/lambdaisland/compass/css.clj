@@ -8,14 +8,15 @@
    [garden.compiler :as gc]
    [lambdaisland.ornament :as o]))
 
-(require 'lambdaisland.compass.css.styles)
-
 (o/set-tokens!
  {:components (with-meta components/girouette-components {:replace true})
   :colors {"surface-1" "var(--surface-1)"
            "surface-2" "var(--surface-2)"
            "surface-3" "var(--surface-3)"
            "surface-4" "var(--surface-4)"}} )
+
+;; Load AFTER setting tokens
+(require 'lambdaisland.compass.css.styles)
 
 (defn spit-styles []
   (spit "resources/public/css/styles.css"
