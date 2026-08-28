@@ -50,7 +50,6 @@ html {
   --workshop-color: var(--conj-purple-1);
   --break-color: var(--gray-7);
   --activity-color: var(--conj-green-1);
-
 }
 
 @media (prefers-color-scheme: light) {
@@ -90,7 +89,7 @@ html {
 :where(input[type=file])::-webkit-file-upload-button,
 :where(input[type=file])::file-selector-button {
   --_bg-dark: var(--gray-10);
-  --_text: var(--white);
+  --_text: light-dark(var(--black),var(--white))
   --_border: var(--conj-dark-blue-4);
   --_accent: light-dark(var(--black), var(--white));
   font-family: "IBM Plex Mono", "Fira Code", "Courier New", monospace;
