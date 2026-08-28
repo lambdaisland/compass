@@ -124,7 +124,8 @@
    [:path
     #_{:fill t/--text-1}
     #_{:color t/--text-1}]]
-  [:.bottom :mt-auto :w-full :text-center
+  [:.small-print :text-center [:a {:font-size t/--font-size-1 :text-decoration "underline" :color t/--text-2 :background-color "inherit"}]]
+  [:.bottom :mt-4 :w-full :text-center
    {:padding (str "0 " t/--size-10)}]
   ([user]
    [:<>
@@ -198,14 +199,17 @@
         [:li
          [:a {:href (url-for :admin/users), :on-click "document.body.classList.toggle('menu-open')"}
           [graphics/shield-check-icon]
-          "Manage Users"]]])]
+          "Manage Users"]]])
+     [:li.small-print
+      [:a {:href (url-for :documents/privacy-policy) :target "_blank"}
+       "Privacy Policy"]]]
+
     [:div.bottom
      [:a {:target "_blank" :href "https://magpie.software"}
       [:img.light-theme-only {:alt "A Magpie Production"
                               :src "https://magpie.software/images/magpie-production.webp"}]
       [:img.dark-theme-only {:alt "A Magpie Production"
-                             :src "https://magpie.software/images/magpie-production-dark.webp"}]]]
-    ]))
+                             :src "https://magpie.software/images/magpie-production-dark.webp"}]]]]))
 
 (o/defrules toggle-menu-button)
 
