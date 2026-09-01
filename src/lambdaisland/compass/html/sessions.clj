@@ -301,7 +301,7 @@
          (if (:session/ticket-required? session)
            [:p.large "YES ✅"]
            [:p.large "NO ❎"])]]
-     #_(when (session/organizing? session user))
+     #_(when (session/can-edit? session user))
      [:div.participants
       [:h3 "Participants (" signup-count ")"]
       (for [p participants]
@@ -311,8 +311,7 @@
 
      [:div.actions
 
-      (when (or (user/admin? user)
-                (session/organizing? session user))
+      (when (session/can-edit? session user)
         [:<>
          [:button
           {:hx-post (url-for :session/create-thread {:id (:db/id session)})

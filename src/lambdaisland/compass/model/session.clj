@@ -7,7 +7,8 @@
    [clojure.string :as str]
    [java-time.api :as time]
    [lambdaisland.compass.db :as db]
-   [lambdaisland.compass.config :as config]))
+   [lambdaisland.compass.config :as config]
+   [lambdaisland.compass.model.user :as user]))
 
 (defn participating?
   "If user participates this session"
@@ -15,8 +16,8 @@
   (some (comp #{(:db/id user)} :db/id)
         (:session/participants session)))
 
-(defn organizing?
-  "If user organizes this session"
+(defn can-edit?
+  "If user organizes or has permission to edit this session"
   [session user]
   (let [organized (:session/organized session)]
     (and
@@ -26,17 +27,17 @@
       ;; Condition 1: organized property record the user's :db/id
       (= (:db/id user)
          (:db/id organized))
+
       ;; Condition 2: organized property record the user's group :db/id
       (some (comp #{(:db/id user)} :db/id)
             (:user-group/users organized))
+
       ;; Condition 3: The user belongs to orga group
       (some :user-group/orga
-            (:user-group/_users user))))))
+            (:user-group/_users user))
 
-;; => {:day :today,
-;;     :type :all-types,
-;;     :my-activities :my-activities,
-;;     :include-past :include-past}
+      ;; Condition 4: has a staff ticket
+      (user/admin? user)))))
 
 (defn duration
   "Input is like `PT45M`"

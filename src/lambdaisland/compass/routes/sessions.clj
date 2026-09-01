@@ -108,8 +108,7 @@
         session (q/session id)
         organizer-id (get-in session [:session/organized :db/id])]
     (if session
-      (if (or (user/admin? identity)
-              (= (:db/id identity) organizer-id))
+      (if (session/can-edit? identity)
         (do
           @(db/transact
             [(-> (params->session-data params)
@@ -128,7 +127,7 @@
 
 (defn DELETE-session [{:keys [path-params identity]}]
   (let [session-eid (parse-long (:id path-params))]
-    (when (session/organizing? (db/entity session-eid) identity)
+    (when (session/can-edit? (db/entity session-eid) identity)
       @(db/transact [[:db/retractEntity session-eid]])
       (session-deleted-response session-eid))))
 
@@ -171,8 +170,7 @@
   [{:keys [identity path-params]}]
   (let [session-eid (parse-long (:id path-params))
         session (q/session session-eid)]
-    (if (or (user/admin? identity)
-            (session/organizing? session identity))
+    (if (session/can-edit? session identity)
       (if (:session/thread-id session)
         {:status 409
          :body "Session thread already exists"}
