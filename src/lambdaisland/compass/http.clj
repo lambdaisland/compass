@@ -22,7 +22,8 @@
    [reitit.ring.middleware.exception :as exception]
    [ring.adapter.jetty :as jetty]
    [ring.middleware.defaults :as ring-defaults]
-   [ring.middleware.session.cookie :as session-cookie]))
+   [ring.middleware.session.cookie :as session-cookie])
+  (:import org.eclipse.jetty.server.Server))
 
 (def ring-default-config
   {:params    {:urlencoded true
@@ -56,7 +57,7 @@
    (ring/redirect-trailing-slash-handler {:method :strip})
    (ring/create-default-handler opts)))
 
-(defn exception-handler [error request]
+(defn exception-handler [^Throwable error request]
   (let [error-id (random-uuid)]
     (log/error :http/error {:message "HTTP handler threw"
                             :error-id error-id
@@ -124,12 +125,21 @@
 
 (defmethod ig/init-key :compass/http [_ {:keys [port router dynamic?]}]
   (log/info :http/starting {:port port})
-  (jetty/run-jetty
-   (if dynamic?
-     #((handler router) %)
-     (handler router))
-   {:port port
-    :join? false}))
+  (let [^Server server (jetty/run-jetty
+                        (if dynamic?
+                          #((handler router) %)
+                          (handler router))
+                        {:port port
+                         :join? false})]
+    ;; Give existing connections time to finish. This assumes we get a
+    ;; SIGTERM (15), not a SIGKILL (9), and relies on the shutdown hook set up
+    ;; in [[lambdaisland.compass]].
+    (.setStopTimeout server 20000)
+    server))
 
-(defmethod ig/halt-key! :compass/http [_ http]
+(defmethod ig/halt-key! :compass/http [_ ^Server http]
+  ;; Do a graceful shutdown.
+  ;; Existing HTTP/1 connections get time to finish.
+  ;; HTTP/2 connections get a GOAWAY frame.
+  ;; WebSockets don't get graceful handling, but should rely on client reconnect logic.
   (.stop http))
