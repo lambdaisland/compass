@@ -25,16 +25,15 @@
      (some? user)
      (or
       ;; Condition 1: organized property record the user's :db/id
-      (= (:db/id user)
-         (:db/id organized))
+      (= (:db/id user) (:db/id organized))
 
-      ;; Condition 2: organized property record the user's group :db/id
-      (some (comp #{(:db/id user)} :db/id)
-            (:user-group/users organized))
+      ;; ;; Condition 2: organized property record the user's group :db/id
+      ;; (some (comp #{(:db/id user)} :db/id)
+      ;;       (:user-group/users organized))
 
-      ;; Condition 3: The user belongs to orga group
-      (some :user-group/orga
-            (:user-group/_users user))
+      ;; ;; Condition 3: The user belongs to orga group
+      ;; (some :user-group/orga
+      ;;       (:user-group/_users user))
 
       ;; Condition 4: has a staff ticket
       (user/admin? user)))))

@@ -41,9 +41,10 @@
    [:discord/refresh-token :string "Discord OAuth2 refresh-token"]
    [:discord/email :string "Email address we got from discord, not part of the profile, should rarely be used."]
 
-   [:user-group/orga :boolean "If this group is orga group or not"]
-   [:user-group/user-count :long "Number of people in this group"]
-   [:user-group/users :ref "Reference points to the user" :many]
+   ;; ;; Vestigial
+   ;; [:user-group/orga :boolean "If this group is orga group or not"]
+   ;; [:user-group/user-count :long "Number of people in this group"]
+   ;; [:user-group/users :ref "Reference points to the user" :many]
 
    [:session/external-id :string "Stable session identifier, to prevent the import from creating duplicates" :identity]
    [:session/title :string "Title of the talk/workshop/activity"]
