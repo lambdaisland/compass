@@ -4,6 +4,8 @@
   See also `bin/dev prod-repl`
   "
   (:require
+   [lambdaisland.compass.config :as config]
+   [lambdaisland.compass :as compass]
    [lambdaisland.compass.db :as db :refer :all]
    [lambdaisland.compass.model.user :as u]))
 
@@ -52,6 +54,9 @@
          :tito.registration/name      name
          :tito.registration/state     "complete"}}])))
 
+
+(defn ig-config []
+  (compass/ig-config))
 
 (comment
   (db/q '[:find (pull ?e [*])

@@ -3,9 +3,9 @@
   (:require
    [clojure.java.io :as io]
    [clojure.string :as str]
+   [garden.compiler :as gc]
    [lambdaisland.compass.css.components :as components]
    [lambdaisland.compass.css.tokens :as tokens]
-   [garden.compiler :as gc]
    [lambdaisland.ornament :as o]))
 
 (o/set-tokens!
@@ -13,7 +13,7 @@
   :colors {"surface-1" "var(--surface-1)"
            "surface-2" "var(--surface-2)"
            "surface-3" "var(--surface-3)"
-           "surface-4" "var(--surface-4)"}} )
+           "surface-4" "var(--surface-4)"}})
 
 ;; Load AFTER setting tokens
 (require 'lambdaisland.compass.css.styles)

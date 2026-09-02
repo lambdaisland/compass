@@ -19,6 +19,7 @@
    {:max-width "100vw"}
    [:#app {:max-width "80rem" :margin "0 auto"}
     [:>main :px-2 :py-3
+     :flex
      :flex-col
      {:min-height "100vh"}
      [:>* {:width "100%"}]
