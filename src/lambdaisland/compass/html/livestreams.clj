@@ -3,7 +3,8 @@
    [clojure.string :as str]
    [lambdaisland.compass.http.routing :refer [url-for]]
    [lambdaisland.ornament :as o]
-   [ring.middleware.anti-forgery :as anti-forgery]))
+   [ring.middleware.anti-forgery :as anti-forgery]
+   [lambdaisland.compass.config :as config]))
 
 (o/defstyled stream-list :ul
   :grid :gap-3 :p-0
@@ -14,8 +15,6 @@
 
 (o/defstyled player-frame :div
   :w-full
-  {:max-width "72rem"
-   :margin "0 auto"}
   [:mux-player :w-full
    {:aspect-ratio "16 / 9"
     :display "block"
@@ -36,14 +35,21 @@
          [:a {:href (url-for :ticket/connect)} "Connect your Ti.to ticket"]
          " to check your livestream access."])])])
 
-(defn show [{:keys [title playback-id]} playback-token]
-  [:section
-   [:p [:a {:href (url-for :streams/index)} "← All livestreams"]]
-   [:h2 title]
-   [player-frame
-    [:mux-player {"playback-id" playback-id
-                  "playback-token" playback-token
-                  "metadata-video-title" title}]]])
+(o/defstyled show :section
+  :flex-col
+  {:flex 1}
+  [player-frame {:flex 1}]
+  [:iframe {:height "13rem"}]
+  ([{:keys [title playback-id]} playback-token]
+   [:<>
+    [:p [:a {:href (url-for :streams/index)} "← All livestreams"]]
+    [:h2 title]
+    [player-frame
+     [:mux-player {"playback-id" playback-id
+                   "playback-token" playback-token
+                   "metadata-video-title" title}]]
+    (when-let [url (config/value :interprefy/iframe-link)]
+      [:iframe {:src url :scrolling "no"}])]))
 
 (defn forbidden []
   [:section
@@ -63,7 +69,8 @@
       [:div {:style "border: 1px solid; padding: 1em; margin-bottom: 1em;"}
        [:p "Livestream " [:strong (:title created-stream)] " created."]
        [:p "Stream URL: " [:code (:rtmps-url created-stream)]]
-       [:p "Stream key (shown once, copy it now): " [:code (:stream-key created-stream)]]])
+       (when-not (str/blank? (:stream-key created-stream))
+         [:p "Stream key (shown once, copy it now): " [:code (:stream-key created-stream)]])])
     [:table
      [:thead
       [:tr [:th "ID"] [:th "Title"] [:th "Playback ID"] [:th "Allowed ticket slugs"] [:th]]]
@@ -97,6 +104,12 @@
      [:label {:for "allowed-ticket-slugs"}
       [:span "Allowed Ti.to release slugs (comma-separated):"]
       [:input {:type "text" :name "allowed-ticket-slugs" :id "allowed-ticket-slugs" :placeholder "streaming, regular-conference"}]]
+     [:label {:for "mux-stream-id"}
+      [:span "MUX Stream ID (leave empty to create a new one):"]
+      [:input {:type "text" :name "mux-stream-id" :id "mux-stream-id" :placeholder ""}]]
+     [:label {:for "mux-playback-id"}
+      [:span "MUX Playback ID (leave empty to create a new one):"]
+      [:input {:type "text" :name "mux-playback-id" :id "mux-playback-id" :placeholder ""}]]
      [:label.checkbox
       [:span "Test stream"]
       [:span

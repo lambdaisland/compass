@@ -21,7 +21,7 @@
    [:public-profile/name :string "Publicly visible user name, e.g. 'Arne'"]
    [:public-profile/avatar-url :string "Relative or absolute URL of the user's avatar"]
    [:public-profile/bio :string "Free-form Markdown field"]
-   [:public-profile/hidden? :boolean "Hide this profile from listings or attendance lists"]
+   [:public-profile/hidden? :boolean "Hide this profile from listings or attendance lists (incognito mode)"]
    [:public-profile/links :ref "Links that are publicly visible" :many]
 
    [:private-profile/name :string "User name visible to contacts"]
@@ -91,7 +91,7 @@
 
    [:livestream/id :string "URL-safe Compass stream id/slug, e.g. `main-stage`" :identity]
    [:livestream/title :string "Display title of the livestream"]
-   [:livestream/mux-id :string "Mux live stream id"]
+   [:livestream/mux-id :string "Mux live stream id" :identity]
    [:livestream/playback-id :string "Mux signed playback id"]
    [:livestream/allowed-ticket-slugs :string "Ti.to release slugs granted access to this livestream" :many]])
 

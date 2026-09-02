@@ -100,15 +100,19 @@
   "Create a livestream: creates the underlying Mux live stream, then stores it
   in the database. Returns a map with the stored stream plus :stream-key
   (only available at creation time, not persisted)."
-  [{:keys [id title allowed-ticket-slugs test?]}]
+  [{:keys [id title allowed-ticket-slugs test? mux-stream-id mux-playback-id]}]
   (when-not (re-matches stream-id-pattern id)
     (throw (ex-info "Stream id must be a lowercase URL-safe slug, e.g. main-stage." {:id id})))
   (when (str/blank? title)
     (throw (ex-info "Stream title must not be blank." {})))
   (when (find-stream id)
     (throw (ex-info (str "A livestream with id " id " already exists.") {:id id})))
-  (let [live-stream (create-mux-live-stream! title :test? test?)
-        playback-id (signed-playback-id live-stream)]
+  (let [live-stream (if (str/blank? mux-stream-id)
+                      (create-mux-live-stream! title :test? test?)
+                      {:id (str/trim mux-stream-id)})
+        playback-id (if (str/blank? mux-playback-id)
+                      (signed-playback-id live-stream)
+                      (str/trim mux-playback-id))]
     (when-not playback-id
       (throw (ex-info "Mux created the stream but did not return a signed playback ID." {})))
     @(db/transact

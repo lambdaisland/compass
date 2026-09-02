@@ -113,7 +113,7 @@ body #app {
 }
 
 body #app > main {
-  padding: 0 0 var(--size-3) 0;
+  padding: 0;
   margin: 0;
 }
 

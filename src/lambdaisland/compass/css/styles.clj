@@ -64,4 +64,7 @@
    ;; dark/light utilities
    (gs/at-media {:prefers-color-scheme 'dark} [:.light-theme-only {:display "none"}])
    (gs/at-media {:prefers-color-scheme 'light} [:.dark-theme-only {:display "none"}])
+
+   [:#interprefyiFrame
+    {:height "10rem"}]
    ])

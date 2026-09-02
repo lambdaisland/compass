@@ -18,7 +18,11 @@
   [:body
    {:max-width "100vw"}
    [:#app {:max-width "80rem" :margin "0 auto"}
-    [:>main :px-2 :py-3]]])
+    [:>main :px-2 :py-3
+     :flex-col
+     {:min-height "100vh"}
+     [:>* {:width "100%"}]
+     [:&:last-child {:flex 1}]]]])
 
 (o/defstyled flash-box :div
   :my-3

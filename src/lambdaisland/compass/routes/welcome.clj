@@ -15,7 +15,9 @@
   (if (not= "on" (get form-params "accept-privacy-policy"))
     (GET-welcome req)
     (do
-      @(db/transact [{:db/id (:db/id identity) :privacy-policy/accepted-at (java.util.Date.)}])
+      @(db/transact [{:db/id (:db/id identity)
+                      :privacy-policy/accepted-at (java.util.Date.)
+                      :public-profile/hidden? (= "on" (get form-params "incognito"))}])
       (response/redirect (url-for :sessions/index)))))
 
 (defn routes []

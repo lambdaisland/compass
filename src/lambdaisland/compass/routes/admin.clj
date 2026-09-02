@@ -44,14 +44,16 @@
 (defn GET-livestreams [_req]
   {:html/body [livestreams-html/admin-index (mux/streams) nil]})
 
-(defn POST-livestreams [{{:strs [id title allowed-ticket-slugs test]} :form-params}]
+(defn POST-livestreams [{{:strs [id title allowed-ticket-slugs test mux-stream-id mux-playback-id]} :form-params}]
   (try
     (let [stream (mux/create-stream!
                   {:id id
                    :title title
+                   :mux-stream-id mux-stream-id
+                   :mux-playback-id mux-playback-id
                    :allowed-ticket-slugs (into #{}
-                                                (comp (map str/trim) (remove str/blank?))
-                                                (str/split (or allowed-ticket-slugs "") #","))
+                                               (comp (map str/trim) (remove str/blank?))
+                                               (str/split (or allowed-ticket-slugs "") #","))
                    :test? (= "true" test)})]
       {:html/body [livestreams-html/admin-index (mux/streams) stream]})
     (catch clojure.lang.ExceptionInfo e

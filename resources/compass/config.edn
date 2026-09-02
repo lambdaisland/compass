@@ -36,4 +36,5 @@
  ;; :mux/signing-private-key
  ;; :mux/playback-token-ttl-seconds ;; optional
 
+ ;; :interprefy/iframe-link
  }
