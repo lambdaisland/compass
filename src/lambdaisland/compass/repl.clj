@@ -23,8 +23,7 @@
                     (and [?e :public-profile/name ?n]
                          [(.contains ^String ?n ?n-e)])
                     (and [?e :discord/email ?n]
-                         [(.contains ^String ?n ?n-e)]))
-           ]
+                         [(.contains ^String ?n ?n-e)]))]
          (db/db)
          name-or-email)))
 
