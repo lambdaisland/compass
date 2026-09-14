@@ -41,6 +41,7 @@
   [player-frame {:flex 1}]
   [:iframe {:height "13rem"}]
   [:nav :flex-row :mt-3 :mb-4]
+  [:h2 :mb-3]
   ([{:keys [title playback-id] :as stream} playback-token streams]
    [:<>
     (when (< 1 (count streams))
