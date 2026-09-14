@@ -64,7 +64,7 @@
     (when-let [url (get (config/value :interprefy/iframe-link) (:id stream))]
       [:<>
        [:p [:strong "ENGLISH"] "   " "For audio translation, mute the video player above, and enable audio translation below."]
-       [:p [:strong "ESPAÑOLA"] "   " "Para la traducción de audio, silencia el reproductor de video de arriba, y activa la traducción de audio a continuación."]
+       [:p [:strong "ESPAÑOL"] "   " "Para la traducción de audio, silencia el reproductor de video de arriba, y activa la traducción de audio a continuación."]
        [:p [:strong "PORTUGUÊS"] "   " "Para tradução de áudio, silencie o reprodutor de vídeo acima e ative a tradução de áudio abaixo."]
        [:iframe {:src url :scrolling "no"}]])]))
 
