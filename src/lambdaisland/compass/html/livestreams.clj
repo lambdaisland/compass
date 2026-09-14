@@ -1,10 +1,10 @@
 (ns lambdaisland.compass.html.livestreams
   (:require
    [clojure.string :as str]
+   [lambdaisland.compass.config :as config]
+   [lambdaisland.compass.html.components :as c]
    [lambdaisland.compass.http.routing :refer [url-for]]
-   [lambdaisland.ornament :as o]
-   [ring.middleware.anti-forgery :as anti-forgery]
-   [lambdaisland.compass.config :as config]))
+   [lambdaisland.ornament :as o]))
 
 (o/defstyled stream-list :ul
   :grid :gap-3 :p-0
@@ -35,19 +35,27 @@
        [:a {:href (url-for :ticket/connect)} "Connect your Ti.to ticket"]
        " to get live stream access."])]])
 
-(o/defstyled show :section
+(o/defstyled show-page :section
   :flex-col
   {:flex 1}
   [player-frame {:flex 1}]
   [:iframe {:height "13rem"}]
-  [:nav :flex-row]
+  [:nav :flex-row :mt-3 :mb-4]
   ([{:keys [title playback-id] :as stream} playback-token streams]
    [:<>
     (when (< 1 (count streams))
       [:nav
-       (for [{:keys [title id]} streams]
-         [:a.btn {:href (url-for :streams/show {:stream-id id}) :disabled (= id (:id stream))} title])])
-    [:h2 title]
+       [c/toggle-group
+        {:value (:id stream)
+         :options
+         (for [{:keys [title id]} streams]
+           [id {:title title
+                :hx-get (url-for :streams/show {:stream-id id})
+                :hx-target (str "." show-page)
+                :hx-select (str "." show-page)}]
+
+           )}]])
+    [:h2 "Live stream: " title]
     [player-frame
      [:mux-player {"playback-id" playback-id
                    "playback-token" playback-token
@@ -59,11 +67,56 @@
        [:p [:strong "PORTUGUÊS"] "   " "Para tradução de áudio, silencie o reprodutor de vídeo acima e ative a tradução de áudio abaixo."]
        [:iframe {:src url :scrolling "no"}]])]))
 
-(defn forbidden []
-  [:section
-   [:h2 "Livestream unavailable"]
-   [:p "Your ticket does not include access to this livestream."]
-   [:p [:a {:href (url-for :streams/index)} "View your available livestreams"]]])
+(defn stream-form
+  "Create or edit form for a livestream. Pass nil to create a new stream, or an
+  existing stream to prefill the form and update it with a PUT."
+  [{:keys [id title mux-id playback-id allowed-ticket-slugs]}]
+  [:form.form-card-styling
+   {:method "post" :action (if id (str "/admin/livestreams/" id) "/admin/livestreams")}
+   [:label {:for "id"}
+    [:span "Stream ID (URL-safe slug, e.g. main-stage):"]
+    [:input (cond-> {:type "text" :name "id" :id "id" :required true
+                     :pattern "[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*"}
+              id (assoc :value id :readonly true))]]
+   [:label {:for "title"}
+    [:span "Title:"]
+    [:input (cond-> {:type "text" :name "title" :id "title" :required true}
+              title (assoc :value title))]]
+   [:label {:for "allowed-ticket-slugs"}
+    [:span "Allowed Ti.to release slugs (comma-separated):"]
+    [:input (cond-> {:type "text" :name "allowed-ticket-slugs" :id "allowed-ticket-slugs"
+                     :placeholder "streaming, regular-conference"}
+              allowed-ticket-slugs
+              (assoc :value (str/join ", " (sort allowed-ticket-slugs))))]]
+   [:label {:for "mux-stream-id"}
+    [:span (if id "MUX Stream ID:" "MUX Stream ID (leave empty to create a new one):")]
+    [:input (cond-> {:type "text" :name "mux-stream-id" :id "mux-stream-id"}
+              mux-id (assoc :value mux-id))]]
+   [:label {:for "mux-playback-id"}
+    [:span (if id "MUX Playback ID:" "MUX Playback ID (leave empty to create a new one):")]
+    [:input (cond-> {:type "text" :name "mux-playback-id" :id "mux-playback-id"}
+              playback-id (assoc :value playback-id))]]
+   (when-not id
+     [:label.checkbox
+      [:span "Test stream"]
+      [:span
+       [:input {:type "checkbox" :name "test" :value "true"}]
+       [:span "Create as Mux test stream (no live-stream usage charges, 5 min limit)"]]])
+   [:input {:type "submit" :value (if id "Save Livestream" "Create Live Stream")}]])
+
+(defn edit-stream
+  "Edit view for a livestream, showing the creation form prefilled with the
+  stream's current values."
+  ([stream] (edit-stream stream nil))
+  ([stream error-message]
+   [:section
+    [:h2 "Edit livestream"]
+    (when stream
+      [:p "Stream " [:strong (:title stream)]])
+    (when error-message
+      [:p.error error-message])
+    [stream-form stream]
+    [:p [:a {:href "/admin/livestreams"} "← Back to livestreams"]]]))
 
 (o/defstyled admin-index :section
   :flex-col :gap-4
@@ -71,10 +124,8 @@
   ([streams created-stream error-message]
    [:<>
     [:h2 "Manage livestreams"]
-    (when error-message
-      [:p {:style "color: red;"} error-message])
     (when created-stream
-      [:div {:style "border: 1px solid; padding: 1em; margin-bottom: 1em;"}
+      [:div
        [:p "Livestream " [:strong (:title created-stream)] " created."]
        [:p "Stream URL: " [:code (:rtmps-url created-stream)]]
        (when-not (str/blank? (:stream-key created-stream))
@@ -88,39 +139,11 @@
          [:td id]
          [:td title]
          [:td playback-id]
+         [:td (str/join ", " (sort allowed-ticket-slugs))]
          [:td
-          [:form {:method "post" :action (str "/admin/livestreams/" id "/update")}
-           [:input {:type "hidden" :name "__anti-forgery-token" :value anti-forgery/*anti-forgery-token*}]
-           [:input {:type "text"
-                    :name "allowed-ticket-slugs"
-                    :value (str/join ", " (sort allowed-ticket-slugs))
-                    :placeholder "streaming, regular-conference"}]
-           [:button {:type "submit"} "Save"]]]
-         [:td
-          [:form {:method "post" :action (str "/admin/livestreams/" id "/delete")}
-           [:input {:type "hidden" :name "__anti-forgery-token" :value anti-forgery/*anti-forgery-token*}]
-           [:button {:type "submit"} "Delete"]]]])]]
+          [:div
+           [:a.btn {:href (str "/admin/livestreams/" id "/edit")} "Edit"]
+           [:form {:method "post" :action (str "/admin/livestreams/" id "/delete")}
+            [:button {:type "submit"} "Delete"]]]]])]]
     [:h3 "Create livestream"]
-    [:form.form-card-styling {:method "post" :action "/admin/livestreams"}
-     [:input {:type "hidden" :name "__anti-forgery-token" :value anti-forgery/*anti-forgery-token*}]
-     [:label {:for "id"}
-      [:span "Stream ID (URL-safe slug, e.g. main-stage):"]
-      [:input {:type "text" :name "id" :id "id" :required true :pattern "[a-z0-9]+(-[a-z0-9]+)*"}]]
-     [:label {:for "title"}
-      [:span "Title:"]
-      [:input {:type "text" :name "title" :id "title" :required true}]]
-     [:label {:for "allowed-ticket-slugs"}
-      [:span "Allowed Ti.to release slugs (comma-separated):"]
-      [:input {:type "text" :name "allowed-ticket-slugs" :id "allowed-ticket-slugs" :placeholder "streaming, regular-conference"}]]
-     [:label {:for "mux-stream-id"}
-      [:span "MUX Stream ID (leave empty to create a new one):"]
-      [:input {:type "text" :name "mux-stream-id" :id "mux-stream-id" :placeholder ""}]]
-     [:label {:for "mux-playback-id"}
-      [:span "MUX Playback ID (leave empty to create a new one):"]
-      [:input {:type "text" :name "mux-playback-id" :id "mux-playback-id" :placeholder ""}]]
-     [:label.checkbox
-      [:span "Test stream"]
-      [:span
-       [:input {:type "checkbox" :name "test" :value "true"}]
-       [:span "Create as Mux test stream (no live-stream usage charges, 5 min limit)"]]]
-     [:input {:type "submit" :value "Create Live Stream"}]]]))
+    [stream-form nil]]))

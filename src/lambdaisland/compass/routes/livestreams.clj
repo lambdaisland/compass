@@ -18,9 +18,9 @@
   (if-let [stream (mux/find-stream (:stream-id path-params))]
     (if (livestream/accessible? identity stream)
       {:headers {"Cache-Control" "private, no-store"}
-       :html/body [html/show stream (mux/playback-token (:playback-id stream)) (mux/streams)]}
+       :html/body [html/show-page stream (mux/playback-token (:playback-id stream)) (mux/streams)]}
       {:status 403
-       :html/body [html/forbidden]})
+       :html/body [html/no-accessible-streams (boolean (user/assigned-ticket identity))]})
     {:status 404
      :html/body [:p "Livestream not found."]}))
 

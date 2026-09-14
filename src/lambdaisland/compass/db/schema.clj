@@ -89,6 +89,9 @@
    [:tito.release/title :string "Human readable name of the ticket type, e.g. `Early Bird`"]
    [:tito.release/slug :string "URL slug for the ticket type"]
 
+   ;; FIXME: Not changing this now because we have an existing database, but
+   ;; this should really be called `slug`, and be a regular field, not an
+   ;; identity, so it's possible to update this.
    [:livestream/id :string "URL-safe Compass stream id/slug, e.g. `main-stage`" :identity]
    [:livestream/title :string "Display title of the livestream"]
    [:livestream/mux-id :string "Mux live stream id" :identity]

@@ -13,7 +13,7 @@
    (java.util Base64)))
 
 (def default-token-ttl-seconds (* 12 60 60))
-(def stream-id-pattern #"[a-z0-9]+(?:-[a-z0-9]+)*")
+(def stream-id-pattern #"[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*")
 (def live-streams-url "https://api.mux.com/video/v1/live-streams")
 (def rtmps-url "rtmps://global-live.mux.com:443/app")
 
@@ -37,9 +37,10 @@
       (throw (ex-info "Mux livestream IDs must be unique" {:ids ids})))
     (mapv #(update % :allowed-ticket-slugs set) streams)))
 
-(defn- livestream->stream [{:livestream/keys [id title playback-id allowed-ticket-slugs]}]
+(defn- livestream->stream [{:livestream/keys [id title mux-id playback-id allowed-ticket-slugs]}]
   {:id id
    :title title
+   :mux-id mux-id
    :playback-id playback-id
    :allowed-ticket-slugs (set allowed-ticket-slugs)})
 
@@ -133,16 +134,35 @@
 (defn delete-stream! [id]
   @(db/transact [[:db/retractEntity [:livestream/id id]]]))
 
-(defn update-allowed-ticket-slugs! [id allowed-ticket-slugs]
-  (let [stream (find-stream id)]
+(defn update-stream!
+  "Update a stored livestream's title, Mux stream id, playback id, and allowed
+  ticket slugs. Returns the updated stream."
+  [id {:keys [title mux-id playback-id allowed-ticket-slugs]}]
+  (let [stream (find-stream id)
+        title (str/trim (or title ""))
+        mux-id (str/trim (or mux-id ""))
+        playback-id (str/trim (or playback-id ""))]
     (when-not stream
       (throw (ex-info (str "No livestream with id " id) {:id id})))
-    (let [new-slugs (set allowed-ticket-slugs)
+    (when (str/blank? title)
+      (throw (ex-info "Stream title must not be blank." {})))
+    (when (str/blank? mux-id)
+      (throw (ex-info "Mux stream ID must not be blank." {})))
+    (when (str/blank? playback-id)
+      (throw (ex-info "Stream playback ID must not be blank." {})))
+    (let [old-slugs (set (:allowed-ticket-slugs stream))
+          new-slugs (set allowed-ticket-slugs)
           retractions (map (fn [slug] [:db/retract [:livestream/id id] :livestream/allowed-ticket-slugs slug])
-                           (:allowed-ticket-slugs stream))
+                           (remove new-slugs old-slugs))
           additions (map (fn [slug] [:db/add [:livestream/id id] :livestream/allowed-ticket-slugs slug])
-                         new-slugs)]
-      @(db/transact (into (vec retractions) additions)))))
+                         (remove old-slugs new-slugs))]
+      @(db/transact
+        (into [{:db/id [:livestream/id id]
+                :livestream/title title
+                :livestream/mux-id mux-id
+                :livestream/playback-id playback-id}]
+              (concat retractions additions)))))
+  (find-stream id))
 
 (defn- decode-signing-key
   "Parse a base64-encoded PEM private key. Accepts both PKCS#1

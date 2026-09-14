@@ -44,42 +44,52 @@
 (defn GET-livestreams [_req]
   {:html/body [livestreams-html/admin-index (mux/streams) nil]})
 
+(defn parse-ticket-slugs
+  "Parse a comma-separated string of Ti.to release slugs into a set."
+  [allowed-ticket-slugs]
+  (into #{}
+        (comp (map str/trim) (remove str/blank?))
+        (str/split (or allowed-ticket-slugs "") #",")))
+
 (defn POST-livestreams [{{:strs [id title allowed-ticket-slugs test mux-stream-id mux-playback-id]} :form-params}]
+  (let [stream (mux/create-stream!
+                {:id id
+                 :title title
+                 :mux-stream-id mux-stream-id
+                 :mux-playback-id mux-playback-id
+                 :allowed-ticket-slugs (parse-ticket-slugs allowed-ticket-slugs)
+                 :test? (= "true" test)})]
+    {:html/body [livestreams-html/admin-index (mux/streams) stream]}))
+
+(defn GET-livestream-edit [{{:keys [stream-id]} :path-params}]
+  (if-let [stream (mux/find-stream stream-id)]
+    {:html/body [livestreams-html/edit-stream stream]}
+    {:status 404
+     :html/body [:p "Livestream not found."]}))
+
+(defn POST-edit-livestream [{{:keys [stream-id]} :path-params
+                             {:strs [title allowed-ticket-slugs mux-stream-id mux-playback-id]} :form-params}]
   (try
-    (let [stream (mux/create-stream!
-                  {:id id
-                   :title title
-                   :mux-stream-id mux-stream-id
-                   :mux-playback-id mux-playback-id
-                   :allowed-ticket-slugs (into #{}
-                                               (comp (map str/trim) (remove str/blank?))
-                                               (str/split (or allowed-ticket-slugs "") #","))
-                   :test? (= "true" test)})]
-      {:html/body [livestreams-html/admin-index (mux/streams) stream]})
+    (mux/update-stream!
+     stream-id
+     {:title title
+      :mux-id mux-stream-id
+      :playback-id mux-playback-id
+      :allowed-ticket-slugs (parse-ticket-slugs allowed-ticket-slugs)})
+    (response/redirect "/admin/livestreams"
+                       {:flash [:p "Livestream " stream-id " updated."]
+                        :status :see-other})
     (catch clojure.lang.ExceptionInfo e
-      (log/error :mux/create-stream-failed {} :exception e)
+      (log/error :mux/update-stream-failed {} :exception e)
       {:status 422
-       :html/body [livestreams-html/admin-index (mux/streams) nil (ex-message e)]})))
+       :html/layout false
+       :html/body [livestreams-html/stream-form (mux/find-stream stream-id) (ex-message e)]})))
 
 (defn POST-livestreams-delete [{{:keys [stream-id]} :path-params}]
   (mux/delete-stream! stream-id)
   (response/redirect "/admin/livestreams"
-                     {:flash [:p "Livestream " stream-id " deleted."]}))
-
-(defn POST-livestreams-update [{{:keys [stream-id]} :path-params
-                                {:strs [allowed-ticket-slugs]} :form-params}]
-  (try
-    (mux/update-allowed-ticket-slugs!
-     stream-id
-     (into #{}
-           (comp (map str/trim) (remove str/blank?))
-           (str/split (or allowed-ticket-slugs "") #",")))
-    (response/redirect "/admin/livestreams"
-                       {:flash [:p "Livestream " stream-id " updated."]})
-    (catch clojure.lang.ExceptionInfo e
-      (log/error :mux/update-stream-failed {} :exception e)
-      {:status 422
-       :html/body [livestreams-html/admin-index (mux/streams) nil (ex-message e)]})))
+                     {:flash [:p "Livestream " stream-id " deleted."]
+                      :status :see-other}))
 
 (defn routes []
   ["/admin" {:middleware [wrap-admin-only]}
@@ -87,7 +97,8 @@
               :get {:handler #'GET-users}}]
    ["/users/sync" {:post {:handler #'POST-users-sync}}]
    ["/livestreams" {:name :admin/livestreams
-                     :get {:handler #'GET-livestreams}
-                     :post {:handler #'POST-livestreams}}]
-   ["/livestreams/:stream-id/delete" {:post {:handler #'POST-livestreams-delete}}]
-   ["/livestreams/:stream-id/update" {:post {:handler #'POST-livestreams-update}}]])
+                    :get {:handler #'GET-livestreams}
+                    :post {:handler #'POST-livestreams}}]
+   ["/livestreams/:stream-id" {:post {:handler #'POST-edit-livestream}}]
+   ["/livestreams/:stream-id/edit" {:get {:handler #'GET-livestream-edit}}]
+   ["/livestreams/:stream-id/delete" {:post {:handler #'POST-livestreams-delete}}]])

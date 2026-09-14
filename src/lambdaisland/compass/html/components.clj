@@ -21,7 +21,9 @@
       }});"]]))
 
 (o/defstyled toggle-button :label
-  "Toggle implemented as a checkbox (can also be used as a radio button)."
+  "Toggle implemented as a checkbox (can also be used as a radio button).
+
+Make sure `props` has an `:id`, use `:checked?` for checked state."
   {:color t/--text-2}
   [:input :hidden]
   [:>.btn :w-full
@@ -48,18 +50,22 @@
        children]])))
 
 (o/defstyled toggle-group :div
-  :flex :flex-row
   "Multiple toggle buttons that act as a group (implemented as radio buttons)"
+  :flex :flex-row
   {--toggle-radius-left 0
    --toggle-radius-right 0}
   [":first-child > .btn" {--toggle-radius-left "0.5em"}]
   [":last-child > .btn" {--toggle-radius-right "0.5em"}]
   ([props]
    (for [[k v] (:options props)]
-     [toggle-button (assoc (dissoc props :options :value)
-                           :id (name k)
-                           :type "radio"
-                           :checked? (= (:value props) k)) v])))
+     [toggle-button
+      (cond-> (assoc (dissoc props :options :value)
+                     :id (name k)
+                     :type "radio"
+                     :checked? (= (:value props) k))
+        (map? v)
+        (merge (dissoc v :title)))
+      (if (map? v) (:title v) v)])))
 
 (o/defstyled form
   :form
