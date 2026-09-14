@@ -20,36 +20,44 @@
     :display "block"
     :background-color "#030507"}])
 
-(defn index [streams ticket-connected?]
+(defn no-configured-streams []
   [:section
    [:h2 "Livestreams"]
-   (if (seq streams)
-     [stream-list
-      (for [{:keys [id title]} streams]
-        [:li {:key id}
-         [:a {:href (url-for :streams/show {:stream-id id})} title]])]
-     [:div
+   [:div [:p "The organizer has not yet configured any live streams."]]])
+
+(defn no-accessible-streams [ticket-connected?]
+  [:section
+   [:h2 "Livestreams"]
+   [:div
+    (if ticket-connected?
       [:p "Your ticket does not include access to any livestreams."]
-      (when-not ticket-connected?
-        [:p
-         [:a {:href (url-for :ticket/connect)} "Connect your Ti.to ticket"]
-         " to check your livestream access."])])])
+      [:p
+       [:a {:href (url-for :ticket/connect)} "Connect your Ti.to ticket"]
+       " to get live stream access."])]])
 
 (o/defstyled show :section
   :flex-col
   {:flex 1}
   [player-frame {:flex 1}]
   [:iframe {:height "13rem"}]
-  ([{:keys [title playback-id]} playback-token]
+  [:nav :flex-row]
+  ([{:keys [title playback-id] :as stream} playback-token streams]
    [:<>
-    [:p [:a {:href (url-for :streams/index)} "← All livestreams"]]
+    (when (< 1 (count streams))
+      [:nav
+       (for [{:keys [title id]} streams]
+         [:a.btn {:href (url-for :streams/show {:stream-id id}) :disabled (= id (:id stream))} title])])
     [:h2 title]
     [player-frame
      [:mux-player {"playback-id" playback-id
                    "playback-token" playback-token
                    "metadata-video-title" title}]]
-    (when-let [url (config/value :interprefy/iframe-link)]
-      [:iframe {:src url :scrolling "no"}])]))
+    (when-let [url (get (config/value :interprefy/iframe-link) (:id stream))]
+      [:<>
+       [:p [:strong "ENGLISH"] "   " "For audio translation, mute the video player above, and enable audio translation below."]
+       [:p [:strong "ESPAÑOLA"] "   " "Para la traducción de audio, silencia el reproductor de video de arriba, y activa la traducción de audio a continuación."]
+       [:p [:strong "PORTUGUÊS"] "   " "Para tradução de áudio, silencie o reprodutor de vídeo acima e ative a tradução de áudio abaixo."]
+       [:iframe {:src url :scrolling "no"}]])]))
 
 (defn forbidden []
   [:section
@@ -115,4 +123,4 @@
       [:span
        [:input {:type "checkbox" :name "test" :value "true"}]
        [:span "Create as Mux test stream (no live-stream usage charges, 5 min limit)"]]]
-     [:input {:type "submit" :value "Create on Mux"}]]]))
+     [:input {:type "submit" :value "Create Live Stream"}]]]))

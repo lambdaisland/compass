@@ -2,20 +2,23 @@
   (:require
    [lambdaisland.compass.html.livestreams :as html]
    [lambdaisland.compass.http.response :as response]
+   [lambdaisland.compass.http.routing :refer [url-for]]
    [lambdaisland.compass.model.livestream :as livestream]
    [lambdaisland.compass.model.user :as user]
    [lambdaisland.compass.services.mux :as mux]))
 
 (defn GET-streams [{:keys [identity]}]
-  {:html/body [html/index
-               (livestream/accessible-streams identity (mux/streams))
-               (boolean (user/assigned-ticket identity))]})
+  (if-not (seq (mux/streams))
+    {:html/body [html/no-configured-streams]}
+    (if-let [stream (first (livestream/accessible-streams identity (mux/streams)))]
+      (response/redirect (url-for :streams/show {:stream-id (:id stream)}))
+      {:html/body [html/no-accessible-streams (boolean (user/assigned-ticket identity))]})))
 
 (defn GET-stream [{:keys [identity path-params]}]
   (if-let [stream (mux/find-stream (:stream-id path-params))]
     (if (livestream/accessible? identity stream)
       {:headers {"Cache-Control" "private, no-store"}
-       :html/body [html/show stream (mux/playback-token (:playback-id stream))]}
+       :html/body [html/show stream (mux/playback-token (:playback-id stream)) (mux/streams)]}
       {:status 403
        :html/body [html/forbidden]})
     {:status 404

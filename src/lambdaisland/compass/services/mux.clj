@@ -44,11 +44,13 @@
    :allowed-ticket-slugs (set allowed-ticket-slugs)})
 
 (defn streams []
-  (validate-streams
-   (map livestream->stream
-        (db/q '[:find [(pull ?e [*]) ...]
-                :where [?e :livestream/id]]
-              (db/db)))))
+  (sort-by
+   :db/id
+   (validate-streams
+    (map livestream->stream
+         (db/q '[:find [(pull ?e [*]) ...]
+                 :where [?e :livestream/id]]
+               (db/db))))))
 
 (defn find-stream [stream-id]
   (first (filter #(= stream-id (:id %)) (streams))))

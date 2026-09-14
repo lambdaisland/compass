@@ -41,8 +41,9 @@
 
 (defn streams-table [streams-data]
   (pprint/print-table
-   (for [{:keys [id stream_key playback_ids created_at test]} streams-data]
+   (for [{:keys [id meta stream_key playback_ids created_at test]} streams-data]
      (array-map
+      :title (:title meta)
       :id id
       :stream-key stream_key
       :playback-ids (str/join ", " (map :id playback_ids))

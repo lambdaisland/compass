@@ -7,6 +7,7 @@
    [lambdaisland.compass.html.graphics :as graphics]
    [lambdaisland.compass.http.routing :refer [url-for]]
    [lambdaisland.compass.model.user :as user]
+   [lambdaisland.compass.services.mux :as mux]
    [lambdaisland.ornament :as o]))
 
 (o/defrules notifier-dot
@@ -155,12 +156,13 @@
        {:href (url-for :sessions/index), :on-click "document.body.classList.toggle('menu-open')"}
        [graphics/sessions-icon]
        "Sessions & Activities"]]
-     [:li
-      [:a
-       {:href (url-for :streams/index)
-        :on-click "document.body.classList.toggle('menu-open')"}
-       [graphics/live-stream-icon]
-       "Livestreams"]]
+     (when (seq (mux/streams))
+       [:li
+        [:a
+         {:href (url-for :streams/index)
+          :on-click "document.body.classList.toggle('menu-open')"}
+         [graphics/live-stream-icon]
+         "Livestreams"]])
      [:li
       [:a
        {:href (url-for :session/new), :on-click "document.body.classList.toggle('menu-open')"}
