@@ -38,7 +38,7 @@
 (o/defstyled show-page :section
   :flex-col
   {:flex 1}
-  [player-frame {:flex 1}]
+  [player-frame {:flex 1} :mb-8]
   [:iframe {:height "13rem"}]
   [:nav :flex-row :mt-3 :mb-4]
   [:h2 :mb-3]
