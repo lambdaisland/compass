@@ -52,10 +52,9 @@
          (for [{:keys [title id]} streams]
            [id {:title title
                 :hx-get (url-for :streams/show {:stream-id id})
+                :hx-push-url true
                 :hx-target (str "." show-page)
-                :hx-select (str "." show-page)}]
-
-           )}]])
+                :hx-select (str "." show-page)}])}]])
     [:h2 "Live stream: " title]
     [player-frame
      [:mux-player {"playback-id" playback-id
