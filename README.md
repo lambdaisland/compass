@@ -1,5 +1,7 @@
 # Compass
 
+<strong><a href="#screenshots">Jump to Screenshots</a></strong>
+
 Compass is a conference companion app, where attendees can find the schedule,
 sign up for workshops or activities, access the live streams, and where they can
 add contacts, to keep in touch with other attendees after the event.
@@ -163,6 +165,6 @@ bin/launchpad dev --go
 
 ## License
 
-Copyright &copy; 2024 Arne Brasseur and Contributors
+Copyright &copy; 2024-2026 Arne Brasseur and Contributors
 
 Licensed under the term of the Mozilla Public License 2.0, see LICENSE.
