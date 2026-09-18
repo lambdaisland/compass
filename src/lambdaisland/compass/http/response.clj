@@ -29,7 +29,8 @@
    :html/body [auth-html/popup next-url]
    :headers {"HX-Retarget" "#modal"
              "HX-Reswap" "innerHTML"
-             "HX-Reselect" (str "." auth-html/popup)}})
+             "HX-Reselect" (str "." auth-html/popup)
+             "HX-Push-Url" "false"}})
 
 (defn wrap-requires-auth
   "Middleware that shows the login dialog if the user is not logged in"
