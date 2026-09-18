@@ -155,8 +155,8 @@ bin/launchpad dev --go
 
 <img src="screenshots/2024-09-20_125803.png">
 <img src="screenshots/2024-09-20_125913.png">
-<img src="screenshots/Screen Shot 2026-09-18 at 13.16.05.png">
-<img src="screenshots/Screen Shot 2026-09-18 at 13.16.08.png">
+<img width="300" src="screenshots/Screen Shot 2026-09-18 at 13.16.05.png">
+<img width="300" src="screenshots/Screen Shot 2026-09-18 at 13.16.08.png">
 <img src="screenshots/Screen Shot 2026-09-18 at 13.16.27.png">
 <img src="screenshots/Screen Shot 2026-09-18 at 13.16.30.png">
 <img src="screenshots/Screen Shot 2026-09-18 at 13.17.23.png">
