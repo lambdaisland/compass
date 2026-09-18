@@ -33,8 +33,14 @@
                          [?e :session/title]]
                        (db/db))))
 
-(defn unassign-ticket [user]
-  @(db/transact [[:db/retract (:db/id (u/assigned-ticket user)) :tito.ticket/assigned-to (:db/id user)]]))
+(defn unassign-ticket [u]
+  (let [user (if (string? u) (user u) u)]
+    @(db/transact [[:db/retract (:db/id (u/assigned-ticket user))
+                    :tito.ticket/assigned-to (:db/id user)]])))
+
+(defn undo-accept [u]
+  (let [user (if (string? u) (user u) u)]
+    @(db/transact [[:db/retract (:db/id user) :privacy-policy/accepted-at]])))
 
 (defn make-dummy-ticket [{:keys [release code email name]}]
   (let [release-id (db/q '[:find ?r .
@@ -70,7 +76,7 @@
         (db/db))
 
   (make-dummy-ticket {:release "comp-ticket"
-                      :code "DUMM"
+                      :code "DUMZ"
                       :email "arne@arnebrasseur.net"
                       :name "Arne"})
 
@@ -78,6 +84,10 @@
        (:tito.ticket/_assigned-to
         (user "arne.brasseur@gmail.com")))
 
+  (undo-accept (u/assigned-ticket "arne.brasseur@gmail.com"))
+  (unassign-ticket (user "arne@arnebrasseur.net"))
+  
+  :privacy-policy/accepted-at
   (into {}
         (:tito.ticket/release
          (u/assigned-ticket
