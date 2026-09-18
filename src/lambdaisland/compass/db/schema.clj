@@ -7,6 +7,8 @@
 (def schema
   [;; Start user entity
    [:user/uuid :uuid "Unique user identifier" :identity]
+   ;; FIXME: this is not a hash, and it should have a name that makes it clear
+   ;; it's used for the contact QR code
    [:user/hash :uuid "Temporary QR code identifier"]
    [:user/contacts :ref "People you connected with / accepted a connection
    request from. A :u/c B means that user A agrees to show their public profile

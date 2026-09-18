@@ -4,6 +4,7 @@
   See also `bin/dev prod-repl`
   "
   (:require
+   [clojure.string :as str]
    [lambdaisland.compass.config :as config]
    [lambdaisland.compass :as compass]
    [lambdaisland.compass.db :as db :refer :all]
@@ -35,12 +36,20 @@
 
 (defn unassign-ticket [u]
   (let [user (if (string? u) (user u) u)]
-    @(db/transact [[:db/retract (:db/id (u/assigned-ticket user))
-                    :tito.ticket/assigned-to (:db/id user)]])))
+    (if-let [ticket (u/assigned-ticket user)]
+      (do
+        @(db/transact [[:db/retract (:db/id ticket)
+                        :tito.ticket/assigned-to (:db/id user)]])
+        :ok)
+      :not-assigned)))
 
 (defn undo-accept [u]
   (let [user (if (string? u) (user u) u)]
-    @(db/transact [[:db/retract (:db/id user) :privacy-policy/accepted-at]])))
+    (if-let [uid (:db/id user)]
+      (do
+        @(db/transact [[:db/retract uid :privacy-policy/accepted-at]])
+        :ok)
+      :user-not-found)))
 
 (defn make-dummy-ticket [{:keys [release code email name]}]
   (let [release-id (db/q '[:find ?r .
@@ -59,6 +68,16 @@
          :tito.registration/name      name
          :tito.registration/state     "complete"}}])))
 
+(defn find-ticket [s]
+  (doseq [[id ref email] (db/q '[:find ?e ?ref ?email
+                                 :where
+                                 [?e :tito.ticket/reference ?ref]
+                                 [?e :tito.ticket/email ?email]]
+                               (db/db))]
+    (when (or (str/includes? (str/lower-case ref) (str/lower-case s))
+              (str/includes? (str/lower-case email) (str/lower-case s)))
+      (print (str ref "\t" email "\tUser: "))
+      (prn (some-> (db/entity id) :tito.ticket/assigned-to ((juxt :user/uuid :public-profile/name :discord/email))) ))))
 
 (defn ig-config []
   (compass/ig-config))
@@ -75,18 +94,20 @@
           :where [?e :tito.release/id]]
         (db/db))
 
+
   (make-dummy-ticket {:release "comp-ticket"
                       :code "DUMZ"
                       :email "arne@arnebrasseur.net"
                       :name "Arne"})
 
+
   (map datomic.api/touch
        (:tito.ticket/_assigned-to
         (user "arne.brasseur@gmail.com")))
 
-  (undo-accept (u/assigned-ticket "arne.brasseur@gmail.com"))
-  (unassign-ticket (user "arne@arnebrasseur.net"))
-  
+  (undo-accept "arne.brasseur@gmail.com")
+  (unassign-ticket "arne@arnebrasseur.net")
+
   :privacy-policy/accepted-at
   (into {}
         (:tito.ticket/release

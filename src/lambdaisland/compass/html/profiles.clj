@@ -2,13 +2,13 @@
   "Views and components (hiccup/ornament) related to profiles"
   {:ornament/prefix "profiles-"}
   (:require
+   [clojure.string :as str]
    [lambdaisland.compass.css.tokens :as t :refer :all]
-   [lambdaisland.compass.db.queries :as queries]
    [lambdaisland.compass.html.components :as c]
    [lambdaisland.compass.http.routing :refer [url-for]]
    [lambdaisland.compass.model.user :as user]
-   [markdown-to-hiccup.core :as m]
-   [lambdaisland.ornament :as o]))
+   [lambdaisland.ornament :as o]
+   [markdown-to-hiccup.core :as m]))
 
 ;; UI of profile detail
 
@@ -18,6 +18,8 @@
     {:href (url-for :profile/edit)} "Edit Profile"]))
 
 (o/defstyled profile-detail :div#detail
+  :flex-col :gap-4
+  [:button {:align-self "flex-start"}]
   [c/image-frame :w-100px {t/--arc-thickness "7%"}]
   [:.details
    [:.bio :mt-2]
@@ -34,7 +36,7 @@
    [:<>
     [:div [c/image-frame {:profile/image (user/avatar-css-value user)}]]
     [:div.details
-     [:h3.title name]
+     [:h3.title name "'s Profile"]
      (when (:public-profile/bio user)
        [:div.bio
         (m/component (m/md->hiccup (:public-profile/bio user)))])
@@ -45,17 +47,24 @@
          [:div.link-ref (:profile-link/href link)]])]]
     ;; if the user is connected (contact), show "contact card"
     (when (some #{(:db/id viewer)} (map :db/id (:user/contacts user)))
-      [:div.contact-card
-       [:div.details
-        [:h3.title (:private-profile/name user)]
-        (when (:private-profile/bio user)
-          [:div.bio
-           (m/component (m/md->hiccup (:private-profile/bio user)))])
-        [:div.links
-         (for [link (:private-profile/links user)]
-           [:div.link
-            [:div.link-type (:profile-link/type link)]
-            [:div.link-ref (:profile-link/href link)]])]]])
+      (if (or
+           (not (str/blank? (:private-profile/name user)))
+           (not (str/blank? (:private-profile/bio user)))
+           (seq (:private-profile/links user)))
+        [:div.contact-card
+         [:div.details
+          [:h3.title (:private-profile/name user)]
+          (when (:private-profile/bio user)
+            [:div.bio
+             (m/component (m/md->hiccup (:private-profile/bio user)))])
+          [:div.links
+           (for [link (:private-profile/links user)]
+             [:div.link
+              [:div.link-type (:profile-link/type link)]
+              [:div.link-ref (:profile-link/href link)]])]]]
+        (if (= (:db/id viewer) (:db/id user))
+          [:p "Configure what your Contacts see in the Profile settings."]
+          [:p "The user did not configure any contact information."])))
     ;; hide edit button unless it's your own profile
     (when (= (:db/id viewer) (:db/id user))
       [:div.actions

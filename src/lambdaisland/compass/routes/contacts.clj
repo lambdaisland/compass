@@ -20,24 +20,27 @@
   {:html/body [h/contact-detail
                (:identity req)]})
 
-(defn eid->qr-hash
+(defn eid->qr-uuid
   "create an uuid as the hash for eid to prevent guessing
    store this uuid in the user"
   [user-eid]
-  (let [qr-hash (random-uuid)]
+  (let [qr-uuid (random-uuid)]
     @(db/transact [{:db/id user-eid
-                    :user/hash qr-hash}])
-    qr-hash))
+                    :user/hash qr-uuid}])
+    qr-uuid))
 
-(defn qr-hash->eid
-  "Accept a uuid type's qr-hash, and use it to query the
+(defn qr-uuid->eid
+  "Accept a uuid type's qr-uuid, and use it to query the
    user's eid"
-  [qr-hash]
+  [qr-uuid]
   (db/q '[:find ?e .
           :in $ ?hash
           :where
           [?e :user/hash ?hash]]
-        (db/db) qr-hash))
+        (db/db)
+        (if (string? qr-uuid)
+          (parse-uuid qr-uuid)
+          qr-uuid)))
 
 (defn GET-qr-html [req]
   {:html/body [h/qr-dialog]
@@ -47,8 +50,8 @@
   [{:keys [identity] :as req}]
   (let [user-eid (:db/id identity)
         host (config/value :compass/origin)
-        qr-hash (str (eid->qr-hash user-eid))
-        url (str host (url-for :contact/add {:qr-hash qr-hash}))
+        qr-uuid (str (eid->qr-uuid user-eid))
+        url (str host (url-for :contact/add {:qr-uuid qr-uuid}))
         qr-image (qr/as-bytes (qr/from url :size [400 400]))]
     (-> (ring-response/response qr-image)
         (assoc-in [:headers "content-type"] "image/png"))))
@@ -63,15 +66,10 @@
 
 (defn GET-contact
   [req]
-  {:html/body
-   [:div
-    [:a
-     {:href (url-for :profile/index)
-      :style {:display "none"}
-      :hx-trigger "contact-added from:body"}]
-    [:button
-     {:hx-post (url-for :contact/add {:qr-hash (get-in req [:path-params :qr-hash])})}
-     (str "Accept invite")]]})
+  (let [qr-uuid     (get-in req [:path-params :qr-uuid])
+        contact-eid (qr-uuid->eid qr-uuid)
+        contact     (db/entity contact-eid)]
+    {:html/body [h/accept-invite-html qr-uuid contact]}))
 
 (defn DELETE-contact
   [req]
@@ -87,8 +85,8 @@
    Decode it and add that contact"
   [{:keys [identity] :as req}]
   (let [user-eid (:db/id identity)
-        qr-hash (parse-uuid (get-in req [:path-params :qr-hash]))
-        contact-eid (qr-hash->eid qr-hash)
+        qr-uuid (parse-uuid (get-in req [:path-params :qr-uuid]))
+        contact-eid (qr-uuid->eid qr-uuid)
         ;; According to the schema
         ;; A :u/c B means that user A agrees to show their public profile to user B.
         ;; contact -> A
@@ -97,8 +95,7 @@
                           :user/contacts user-eid}
                          {:db/id user-eid
                           :user/contacts contact-eid}])]
-    {:location :contact/add
-     :hx/trigger "contact-added"}))
+    {:location :contacts/index}))
 
 (defn routes []
   [["/contact"
@@ -107,7 +104,7 @@
             :get {:handler GET-qr-html}}]
     ["/qr.png" {:name :contact/qr-png
                 :get {:handler GET-qr-code}}]
-    ["/:qr-hash"
+    ["/:qr-uuid"
      {:name :contact/add
       :post       {:handler POST-contact}
       :get        {:handler GET-contact}}]
@@ -123,3 +120,22 @@
        {:name :attendees/index
         :middleware [[response/wrap-requires-auth]]
         :get        {:handler GET-attendees}}]]])
+
+(comment
+
+  (qr-uuid->eid #uuid "5243e338-b6d5-4517-a24f-1205bf9f4604")
+
+  (clojure.java.browse/browse-url
+   (str "http://localhost:8099/contact/"
+        (eid->qr-uuid
+         (db/q '[:find ?e .
+                 :in $ ?n-e
+                 :where
+                 (or-join [?e ?n-e]
+                          (and [?e :public-profile/name ?n]
+                               [(.contains ^String ?n ?n-e)])
+                          (and [?e :discord/email ?n]
+                               [(.contains ^String ?n ?n-e)]))]
+               (db/db)
+               "arne@lambdaisland.com"))))
+  )
