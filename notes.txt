@@ -22,33 +22,33 @@
     - [X] Image
     - [X] Requires ticket?
     - [X] Visible/published?
-  - [ ] Organizer tools
-    - [ ] Message participants (discord)
-      - [ ] Or create private channel
+  - [-] Organizer tools
+    - [X] Message participants (discord)
+      - [X] Or create private channel
     - [ ] Split into groups
       - [ ] e.g. Mystery dinner - Split into groups of 5-8 people
       - [ ] e.g. #PairWithMe - Split into groups of 2
     - [ ] Manage waiting list
-- [ ] People
+- [X] Contacts
   
-- [ ] Profile
-  - [ ] Publicly visible name (can be alias)
-  - [ ] Name
-  - [ ] Email
-  - [ ] Social media / contact
+- [-] Profile
+  - [X] Publicly visible name (can be alias)
+  - [X] Name
+  - [X] Email
+  - [X] Social media / contact
   - [ ] Privacy controls
     - [ ] Fine grained
     - [ ] Unlisted / Listed / Connected
-  - [ ] Link ticket (or via discord bot?)
-  - [ ] Send connection request
-    - [ ] QR code?
+  - [X] Link ticket (or via discord bot?)
+  - [-] Send connection request
+    - [X] QR code?
     - [ ] Discord - do you want to connect with this person?
 
-- [ ] Discord bot
-  - [ ] Add to HoC server
-  - [ ] Give them a role for the activities app
+- [-] Discord bot
+  - [X] Add to HoC server
+  - [X] Give them a role for the activities app
   - [ ] Ask for their Ti.to booking code
-  - [ ] Give them a role for ticket holder
+  - [X] Give them a role for ticket holder
   - [ ] reminder for upcoming activities
 
 https://discord.com/developers/applications/1228962758796775444/bot

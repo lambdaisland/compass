@@ -1,25 +1,57 @@
-# Conference Compass
+# Compass
 
-Conference activities and planning app.
+Compass is a conference companion app, where attendees can find the schedule,
+sign up for workshops or activities, access the live streams, and where they can
+add contacts, to keep in touch with other attendees after the event.
+
+Compass allows any attendee to create their own activities, and so is especially
+well suited for community and unconference style events with a high level of
+participation. People can star/bookmark or sign up for their favorite
+activities/sessions. Activity organizers can limit the capacity, so e.g. if you
+want to take up to 5 people to the climbing gym or go for Thai dinner with up to
+8 people you can do that.
+
+Compass integrates with Discord for auth, and Tito for ticketing. People log in
+with their Discord account, which adds them to the conference Discord server,
+and based on their ticket they get specific Discord roles (e.g. speaker,
+organiser, sponsor). It's also possible to automatically create a thread with
+everyone who signed up for a session, so you can discuss particulars there. We
+may add other login options in the future, but these integration features do
+make it quite attractive if your event does happen to use Discord.
+
+Compass was originally developed for [Heart of
+Clojure](https://heartofclojure.eu), and is being used for the
+[Clojure/conj](https://clojure-conj.org) and [HeartConf](https://heartconf.eu)
+conferences. It was inspired by the old [Eurucamp Activities
+App](https://github.com/heartofclojure/activities). Eurucamp really pioneered
+attendee-led activities during and in the fringe of the event. We hope Compass
+may carry that torch into the future.
+
+Compass is optimised for use on both desktop and mobile, and follows the
+light/dark mode settings of the user's operating system, making it a pleasant
+experience to use on the go during the event. The app can be fully styled and
+customised to follow the house style of the event.
+
+## Hosting Compass
+
+Compass is a self-hosted Clojure application, using Datomic as its database.
+It's not especially hard to host it yourself, but it's not trivial either. For a
+hands-off hosted solution, including importing your schedule, and
+branding/styling, contact Arne from [Magpie Solutions](https://magpie.software/).
+
+While we'd love to offer a free hosted version for FOSS community events, that's
+currently not feasible, because hosting does cost money, and because there's a
+bit of manual setup needed for each event. That said for non-commercial events
+that strengthen the FOSS ecosystem we're happy to provide a heavily discounted
+rate.
+
+## Technologies
 
 - Clojure backend + HTMX
 - Datomic
 - Discord for Auth
 - Integrant
 - [Ornament](https://github.com/lambdaisland/ornament) and [Open Props](https://open-props.style/)
-
-This will be used at [Heart of Clojure](https://heartofclojure.eu), replacing
-the aging [Eurucamp Activities App](https://github.com/heartofclojure/activities) which we used five years ago
-(and which stopped being developed several years before that).
-
-In the Compass app people can find the conference schedule, but also any
-additional activities, and they can add their own activities, unconference
-style.
-
-People can star/bookmark or sign up for their favorite activities/sessions.
-Activity organizers can limit the capacity, so e.g. if you want to take up to 5
-people to the climbing gym or go for Thai dinner with up to 8 people you can do
-that.
 
 ## Discord
 
