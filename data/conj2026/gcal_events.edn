@@ -1,0 +1,42 @@
+;; Maps conj2026 sessions to their pre-existing Google Calendar event ids on the
+;; "Clojure Conj 2026" calendar. `bin/sync-gcal` only ever updates events listed
+;; here -- it never creates or deletes events, so adding a new event to the
+;; calendar (via the web UI) and then adding its id here is how you opt it into
+;; automatic syncing.
+;;
+;; :gcal/title-override lets a specific event keep custom title styling
+;; (e.g. the keynote asterisks) instead of the computed "{title} — {subtitle}".
+;;
+;; Deliberately excluded: the Closing Party event
+;; (vs5sqgg7b6c7q7hacutq74va98) -- it was hand-edited after creation (custom
+;; `location` field, a calendar label, a reminder override) and the Calendar
+;; API's events.patch has no way to preserve a `location` field it isn't told
+;; about, so an automatic sync would silently wipe it. Sync that one by hand.
+{"1299890"                             {:gcal/event-id       "fuhrrjmc9rv39g43oladvgo5rg"
+                                        :gcal/title-override "*In Context — Rich Hickey*"}
+ "1248150"                             {:gcal/event-id "9nh4tfr7dvv5hbfnlsi92tgssc"}
+ "1228103"                             {:gcal/event-id "c8v5qdl3o60m9a8k40qrc2ol5k"}
+ "1242600"                             {:gcal/event-id "m8tm7tsef5gd610hsptrrmb79o"}
+ "1262514"                             {:gcal/event-id "78hrn55tkleo3c6aroff18af8k"}
+ "1263871"                             {:gcal/event-id "l2vl381pblpq2835jp44arge9s"}
+ "1263920"                             {:gcal/event-id "ee1ou5me4gifv8pmi8aqrc5vjc"}
+ "1232577"                             {:gcal/event-id "vdnuf7lk8ok01i71ekjaaj8pd8"}
+ "1263325"                             {:gcal/event-id "osfrfcmp4ae433queicnn346s0"}
+ "1263970"                             {:gcal/event-id "mn1a922b5crvqqi8jtb38l95g0"}
+ "1250010"                             {:gcal/event-id "n8dj9a16a27cmait7h9f5odu6k"}
+ "1240615"                             {:gcal/event-id "vrev7cdqjcm8qh15jv6tdh2m8g"}
+ "8b5b4a27-8d0e-4f41-b2c0-6d16104e2b08" {:gcal/event-id "14dtccorrle96g9ie62arjl4sc"}
+ "8a72337e-3194-44a0-8dff-5db087ebc2bb" {:gcal/event-id "94np009thuh0kitou4tf7vctn4"}
+ "1262755"                             {:gcal/event-id "bni0c4kpo92j6fmaqqsjae5vvo"}
+ "1257073"                             {:gcal/event-id "fhbdt7rh5do8qc1122ir9v18bs"}
+ "1261206"                             {:gcal/event-id "b2g79s7hoo5agke326kfkt8dm8"}
+ "1263299"                             {:gcal/event-id "f7pgmg4i0ko7hj8o6htb73rf20"}
+ "1263835"                             {:gcal/event-id "taauo0p3v9775t7kuvs2k4vva0"}
+ "1259441"                             {:gcal/event-id "1cgbg61ue4p4vt1cqqbqib7egk"}
+ "1263247"                             {:gcal/event-id "1fo82dr59ule7f8j56lh85rmoc"}
+ "1263921"                             {:gcal/event-id "rm036o1tgfhssfula2qqgrj280"}
+ "1263994"                             {:gcal/event-id "k7q0h8i2r2bme0o2b5bm1ss6uc"}
+ "1263959"                             {:gcal/event-id "h180qhu96lo6a0806v7ugsaq9s"}
+ "1244725"                             {:gcal/event-id "toe4h1d528sr4en9aut3ls4r8o"}
+ "1275989"                             {:gcal/event-id       "18992er08jvdl66b2vp56h6gm4"
+                                        :gcal/title-override "*How to Make Things, and Why — Stuart Halloway*"}}
