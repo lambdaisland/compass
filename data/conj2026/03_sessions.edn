@@ -7,7 +7,7 @@
    :session/type :session.type/break,
    :session/capacity 500,
    :session/description
-   "Whether you're joining the workshop day or just checking in for the conference, stop by and get set up early."}
+   "Whether you're joining the workshop day or simply checking in for the conference, stop by and get set up early.\n\nPlease note that the workshop day wristband must be worn throughout the day. Badges must also be worn and remain visible throughout all three days of the Conj. If you are not checking in for the workshop day, you will not be permitted to enter the venue on Wednesday.\n\nAt the registration desk, you can request to have a label with your Discord or Slack handle printed and affixed to your badge. If you do not wish to be photographed, please request the appropriate sticker and place it somewhere clearly visible, ideally on your T-shirt or shirt."}
   {:session/external-id "b214a221-5829-41d5-a6d9-a53e53ae0075",
    :session/title "Morning Coffee",
    :session/time #time/zdt "2026-09-30T08:30-04:00[America/New_York]",
@@ -101,7 +101,7 @@
    "https://cdn.sessionize.com/image/92cf-400o400o1-h5iwi1d9yNDVAazq1XvV4G.jpg",
    :session/title "AI Tools & Practices Showcase",
    :session/description
-   "This fast-paced session of attendee demos will be a showcase of tools and practices that are making a real difference for Clojure developers today. You will see editor tools, REPL integration, connections to external systems, managing agents, and more! All experience levels are welcome. Expand the horizon of what you can do with AI and Clojure and bring those ideas back to your own projects.\r\nThe format will consist of a series of short demos (10 minutes each), culminating in a speaker panel Q&A with the audience. Due to the rapid pace of the AI development scene, demos will be proposed and chosen by the attendees a few weeks before the event.\n\n## Eric Dallo\n\nSoftware Engineer at Nubank, Emacs fanatic, NixOS enthusiast, and maintainer of some open-source projects like clojure-lsp, emacs-lsp, clj-easy and others, focusing on the developer experience.\r\n",
+   "This fast-paced session of attendee demos will be a showcase of tools and practices that are making a real difference for Clojure developers today.\r\n\r\nHour 1 talks: \"Just-in-Time Context for Agents\" by Lukas Domagala, \"The Philosophy of AI\" by Lorelai Lyons, \"Secret Sauce for Claude and Clojure\" by Jonathon McKitrick, \"Keeping Things Apart\" by Apollo Nicolson\r\n\r\nHour 2 talks: \"Wagoe the framework \" by Thijs Creemers, \"Leverage AI to do the nasty stuff\" by Santiago Cabrera, \"The Literate One-shot\" by Kimo K, \"ORC: A Lab for Self-Evolving Agents\" by Daryl Roberts\r\n\r\nHour 3 talks: \"Neither Gets the Last Word\" by Marc Limotte, \"Prompt: Play Tetris\" by Ag Ibragimov, ending with a speaker Q&A\n\n## Eric Dallo\n\nSoftware Engineer at Nubank, Emacs fanatic, NixOS enthusiast, and maintainer of some open-source projects like clojure-lsp, emacs-lsp, clj-easy and others, focusing on the developer experience.\r\n",
    :session/external-id "1261261",
    :session/subtitle "Eric Dallo",
    :session/location :location.type/w205abcd,
@@ -124,7 +124,8 @@
    :session/location :location.type/registration-desk,
    :session/type :session.type/break,
    :session/capacity 500,
-   :session/description ""}
+   :session/description
+   "Meant for conference attendees who were unable to check in on Wednesday.\n\nAt the registration desk, you can request that a label with your Discord or Slack handle be printed and affixed to your badge. If you do not wish to be photographed, please request the appropriate sticker and place it somewhere clearly visible, ideally on your T-shirt or shirt.\n\nPlease note that badges must be worn and remain visible throughout both days of the conference."}
   {:session/external-id "b51b565f-875b-4f67-89c7-b47acd86c535",
    :session/title "Morning Coffee",
    :session/time #time/zdt "2026-10-01T08:00-04:00[America/New_York]",
@@ -315,15 +316,24 @@
    :session/capacity 500,
    :session/description
    "Join us for Board Game Night. No experience (or obsession with board games) required. Come hang out, meet other developers, and have some fun."}
+  {:session/external-id "cf13df4f-5801-48e9-a20a-1aac2667485a",
+   :session/title "Late Registration",
+   :session/time #time/zdt "2026-10-02T08:00-04:00[America/New_York]",
+   :session/duration "PT70M",
+   :session/location :location.type/registration-desk,
+   :session/type :session.type/break,
+   :session/capacity 500,
+   :session/description
+   "Meant to be only for those who couldn't check in before Friday. (You should be in already!).\n\nAt the registration desk, you can request that a label with your Discord or Slack handle be printed and affixed to your badge. If you do not wish to be photographed, please request the appropriate sticker and place it somewhere clearly visible, ideally on your T-shirt or shirt.\n\nPlease note that badges must be worn and remain visible throughout the day."}
   {:session/external-id "e982f4e2-999c-4c54-8107-326065511f79",
    :session/title "Morning Coffee",
-   :session/time #time/zdt "2026-10-02T09:00-04:00[America/New_York]",
-   :session/duration "PT30M",
+   :session/time #time/zdt "2026-10-02T08:00-04:00[America/New_York]",
+   :session/duration "PT70M",
    :session/location :location.type/_206ab,
    :session/type :session.type/break,
    :session/capacity 500,
    :session/description ""}
-  {:session/time #time/zdt "2026-10-02T09:30-04:00[America/New_York]",
+  {:session/time #time/zdt "2026-10-02T09:10-04:00[America/New_York]",
    :session/image
    "https://cdn.sessionize.com/image/082f-400o400o1-Qjyr1C17HnZKb5eRTdy5r.jpg",
    :session/title "Making Simple Faster",
@@ -335,7 +345,7 @@
    :session/type :session.type/session,
    :session/capacity 500,
    :session/duration "PT40M"}
-  {:session/time #time/zdt "2026-10-02T09:30-04:00[America/New_York]",
+  {:session/time #time/zdt "2026-10-02T09:10-04:00[America/New_York]",
    :session/image
    "https://cdn.sessionize.com/image/d72b-400o400o1-Bg8dBZFeQFcgb4Yy952kPN.jpg",
    :session/title "Production ClojureDart for iOS, Android, and macOS",
@@ -347,7 +357,7 @@
    :session/type :session.type/session,
    :session/capacity 500,
    :session/duration "PT40M"}
-  {:session/time #time/zdt "2026-10-02T10:20-04:00[America/New_York]",
+  {:session/time #time/zdt "2026-10-02T10:00-04:00[America/New_York]",
    :session/image
    "https://cdn.sessionize.com/image/585e-400o400o1-HNcFDQw5asBdT3FPqFNq4t.jpg",
    :session/title "Compiling Clojure in Parallel using Bazel",
@@ -359,7 +369,7 @@
    :session/type :session.type/session,
    :session/capacity 500,
    :session/duration "PT40M"}
-  {:session/time #time/zdt "2026-10-02T10:20-04:00[America/New_York]",
+  {:session/time #time/zdt "2026-10-02T10:00-04:00[America/New_York]",
    :session/image
    "https://cdn.sessionize.com/image/1a4e-400o400o1-EXCnYDKjxzpM34sT6j9Lpq.jpg",
    :session/title "Where Did This div Come From?",
@@ -371,7 +381,7 @@
    :session/type :session.type/session,
    :session/capacity 500,
    :session/duration "PT40M"}
-  {:session/time #time/zdt "2026-10-02T11:10-04:00[America/New_York]",
+  {:session/time #time/zdt "2026-10-02T10:50-04:00[America/New_York]",
    :session/image
    "https://cdn.sessionize.com/image/187b-400o400o1-EQPUNAGrxDs1knyjWpMhkP.jpg",
    :session/title "The Code Was the Easy Part",
@@ -383,7 +393,7 @@
    :session/type :session.type/session,
    :session/capacity 500,
    :session/duration "PT40M"}
-  {:session/time #time/zdt "2026-10-02T11:10-04:00[America/New_York]",
+  {:session/time #time/zdt "2026-10-02T10:50-04:00[America/New_York]",
    :session/image
    "https://cdn.sessionize.com/image/c64c-400o400o1-7RDfwYeY8fEmJMdmRRfiTB.jpg",
    :session/title "Applied Logic Programming",
@@ -397,26 +407,26 @@
    :session/duration "PT40M"}
   {:session/external-id "f551f102-5581-4f38-b7ee-2ac2200137e1",
    :session/title "Lunch, not provided",
-   :session/time #time/zdt "2026-10-02T11:50-04:00[America/New_York]",
+   :session/time #time/zdt "2026-10-02T11:30-04:00[America/New_York]",
    :session/duration "PT90M",
    :session/location :location.type/off-site,
    :session/type :session.type/break,
    :session/capacity 500,
    :session/description ""}
-  {:session/time #time/zdt "2026-10-02T13:20-04:00[America/New_York]",
+  {:session/time #time/zdt "2026-10-02T13:00-04:00[America/New_York]",
    :session/image
    "https://cdn.sessionize.com/image/515f-400o400o1-p61Tqcqyzihra23gvP7GAS.png",
    :session/title
-   "Smuggling Clojure into Statically Compiled Video Games",
+   "Smuggling Clojure into Statically Compiled Video Games with Silk",
    :session/description
-   "If you're anything like me, you got into programming to make video games. Eventually you found the Lispest Lisp, and now you can't imagine building a game without your REPL. But everyone knows a \"real\" game ships to Steam, PlayStation, and Nintendo, and for various wise reasons, existing Clojure implementations do not.\r\n\r\nBeing immune to wisdom, I lobotomized ClojureCLR and Lua and glued them together with a new runtime and a JIT-enabled bytecode compiler, keeping ClojureCLR's data structures. Silk is the first Clojure able to ship to Desktop, iOS, Android, Xbox, Nintendo, and PlayStation. It keeps eval, defmacro, and a live REPL on locked-down platforms without the runtime code generation every other Clojure needs to boot. As a fun side effect, it can compile static binaries, like Go, via a self-hosted compiler.\r\n\r\nVisit with some language hackery and join me at the end of this 10-year rabbit hole to uncover what it takes to smuggle Clojure into statically compiled video games.\n\n## James Tolton\n\nIndie game dev, content creator, and language hacker. Author of libapl-clj, libscryer-clj, and scrypy, designer of libpython-clj's user-facing API, and architect of the Silk programming language.",
+   "If you're anything like me, you got into programming to make video games. Eventually you found the Lispest Lisp, and now you can't imagine building a game without your REPL. But everyone knows a \"real\" game ships to Steam, PlayStation, and Nintendo, and for various wise reasons, existing Clojure implementations do not.\r\n\r\nBeing immune to wisdom, I lobotomized ClojureCLR and Lua and glued them together with a new runtime and a JIT-enabled bytecode compiler, keeping ClojureCLR's data structures. Silk is a Clojure able to ship to Desktop, iOS, Android, Xbox, Nintendo, and PlayStation. It keeps eval, defmacro, and a live REPL on locked-down platforms without the runtime code generation every other Clojure needs to boot. As a fun side effect, it can compile static binaries, like Go, via a self-hosted compiler.\r\n\r\nVisit with some language hackery and join me at the end of this 10-year rabbit hole to uncover what it takes to smuggle Clojure into statically compiled video games.\n\n## James J. Tolton\n\nIndie game dev, content creator, and language hacker. Author of libapl-clj, libscryer-clj, and scrypy, designer of libpython-clj's user-facing API, and architect of the Silk programming language.",
    :session/external-id "1263247",
-   :session/subtitle "James Tolton",
+   :session/subtitle "James J. Tolton",
    :session/location :location.type/w207ab,
    :session/type :session.type/session,
    :session/capacity 500,
    :session/duration "PT40M"}
-  {:session/time #time/zdt "2026-10-02T13:20-04:00[America/New_York]",
+  {:session/time #time/zdt "2026-10-02T13:00-04:00[America/New_York]",
    :session/image
    "https://cdn.sessionize.com/image/0734-400o400o1-QWB6KY5BgHn4x4bHLy5joB.jpg",
    :session/title "A GIS DSL Across the JVM and the Browser",
@@ -428,7 +438,7 @@
    :session/type :session.type/session,
    :session/capacity 500,
    :session/duration "PT40M"}
-  {:session/time #time/zdt "2026-10-02T14:10-04:00[America/New_York]",
+  {:session/time #time/zdt "2026-10-02T13:50-04:00[America/New_York]",
    :session/image
    "https://cdn.sessionize.com/image/7719-400o400o1-PyHBMw6Q2Rt1f5ivwZHbdM.jpg",
    :session/title "Modeling a Fabric Stash with Datomic",
@@ -440,7 +450,7 @@
    :session/type :session.type/session,
    :session/capacity 500,
    :session/duration "PT40M"}
-  {:session/time #time/zdt "2026-10-02T14:10-04:00[America/New_York]",
+  {:session/time #time/zdt "2026-10-02T13:50-04:00[America/New_York]",
    :session/image
    "https://cdn.sessionize.com/image/4eae-400o400o1-hYocqAceZHMGSQ1qsj3Gus.jpg",
    :session/title "Teaching Automata Theory with Clojure",
@@ -454,8 +464,8 @@
    :session/duration "PT40M"}
   {:session/external-id "98d97c67-5a38-4abd-bb7c-9626514b8180",
    :session/title "Coffee Break",
-   :session/time #time/zdt "2026-10-02T14:50-04:00[America/New_York]",
-   :session/duration "PT40M",
+   :session/time #time/zdt "2026-10-02T14:30-04:00[America/New_York]",
+   :session/duration "PT60M",
    :session/location :location.type/_206ab,
    :session/type :session.type/break,
    :session/capacity 500,
@@ -477,7 +487,7 @@
    "https://cdn.sessionize.com/image/e172-400o400o1-YsheEmBHCWiD2n1D9mZ5La.jpg",
    :session/title "How to Make Things, and Why",
    :session/description
-   "This is a talk about how to find flow, power, and joy in making software. It is about how to share the love of making with others, and how to nurture and protect communities of makers.\n\n## Stuart Halloway\n\nStuart Halloway is a Distinguished Engineer at Nubank. He is a Clojure committer, and the architect of the Datomic database. Stuart was a founder and President of Cognitect (formerly Relevance).\r\n\r\nStuart has spoken at a variety of industry events, including StrangeLoop, Clojure/conj, EuroClojure, ClojureWest, SpeakerConf, QCon, GOTO, OSCON, RailsConf, RubyConf, JavaOne, and NFJS.\r\n\r\nStuart has written a number of books and technical articles. Of these, he is most proud of Programming Clojure.",
+   "This is a talk about how to find flow, power, and joy in making software. It is about how to share the love of making with others, and how to nurture and protect communities of makers.\n\n## Stuart Halloway\n\nHe is a Clojure committer, and the architect of the Datomic database. Stuart was a founder and President of Cognitect (formerly Relevance).\r\n\r\nStuart has spoken at a variety of industry events, including StrangeLoop, Clojure/conj, EuroClojure, ClojureWest, SpeakerConf, QCon, GOTO, OSCON, RailsConf, RubyConf, JavaOne, and NFJS.\r\n\r\nStuart has written a number of books and technical articles. Of these, he is most proud of Programming Clojure.",
    :session/external-id "1275989",
    :session/subtitle "Stuart Halloway",
    :session/location :location.type/w207abcd,
@@ -485,10 +495,11 @@
    :session/capacity 500,
    :session/duration "PT40M"}
   {:session/external-id "d555e417-53db-42f4-8de6-21bfa9c3344b",
-   :session/title "Closing Party",
+   :session/title "Closing Party @ Charlotte Beer Garden",
    :session/time #time/zdt "2026-10-02T19:00-04:00[America/New_York]",
    :session/duration "PT180M",
    :session/location :location.type/off-site,
    :session/type :session.type/break,
    :session/capacity 500,
-   :session/description ""}]}
+   :session/description
+   "Join us at Charlotte Beer Garden for the official Clojure/Conj closing celebration!\n\nAfter three days of workshops, talks, and community conversations, we’ll gather for a relaxed evening of good company, great conversations, and an extraordinary selection of beers. Charlotte Beer Garden features more than 400 beers on tap and is part of the beer garden family associated with Guinness World Records for its incredible variety of draft beers.  \n\nYou'll get one welcome drink (alcoholic or non-alcoholic) plus light snacks. Come raise a glass, connect with fellow Clojurists, and celebrate everything we’ve learned and shared together."}]}
