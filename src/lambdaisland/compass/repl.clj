@@ -69,20 +69,29 @@
          :tito.registration/state     "complete"}}])))
 
 (defn find-ticket [s]
-  (doseq [[id ref email] (db/q '[:find ?e ?ref ?email
-                                 :where
-                                 [?e :tito.ticket/reference ?ref]
-                                 [?e :tito.ticket/email ?email]]
-                               (db/db))]
+  (doseq [[id ref email rid rname rslug]
+          (db/q '[:find ?e ?ref ?email ?release-id ?release-name ?release-slug
+                  :where
+                  [?e :tito.ticket/reference ?ref]
+                  [?e :tito.ticket/email ?email]
+                  [?e :tito.ticket/release ?release]
+                  [?release :tito.release/id ?release-id]
+                  [?release :tito.release/title ?release-name]
+                  [?release :tito.release/slug ?release-slug]]
+                (db/db))]
     (when (or (str/includes? (str/lower-case ref) (str/lower-case s))
               (str/includes? (str/lower-case email) (str/lower-case s)))
       (print (str ref "\t" email "\tUser: "))
-      (prn (some-> (db/entity id) :tito.ticket/assigned-to ((juxt :user/uuid :public-profile/name :discord/email))) ))))
+      (prn (some-> (db/entity id) :tito.ticket/assigned-to ((juxt :user/uuid :public-profile/name :discord/email))) )
+      (println rid rname rslug))))
 
 (defn ig-config []
   (compass/ig-config))
 
 (comment
+  (require 'lambdaisland.compass.repl)
+  (in-ns 'lambdaisland.compass.repl)
+
   (db/q '[:find (pull ?e [*])
           :where [?e :tito.ticket/id]]
         (db/db))

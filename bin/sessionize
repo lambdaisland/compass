@@ -4,12 +4,15 @@
   (:require
    [babashka.curl :as curl]
    [cheshire.core :as json]
+   [clojure.edn :as edn]
+   [clojure.java.io :as io]
    [clojure.pprint :as pprint]
    [clojure.string :as str]
-   [lambdaisland.cli :as cli])
+   [lambdaisland.cli :as cli]
+   [java-time-literals.core :as time-literals])
   (:import
-   (java.time.format DateTimeFormatter)
-   (java.time Duration LocalDateTime ZoneId ZonedDateTime)))
+   (java.time Duration LocalDateTime ZoneId ZonedDateTime)
+   (java.time.format DateTimeFormatter)))
 
 (defmethod pprint/simple-dispatch ZonedDateTime [zdt]
   (pprint/write-out (tagged-literal 'time/zdt (str zdt))))
@@ -117,7 +120,7 @@
        :session.type/color color
        :db/ident           (safe-keyword "session.type" (kebab name))})))
 
-(defn write-edn [path data]
+(defn write-migration [path data]
   (clojure.java.io/make-parents path)
   (binding [*print-namespace-maps* false]
     (spit path
@@ -145,13 +148,52 @@
              (count rooms) "rooms,"
              (count categories) "categories")
 
-    (write-edn (str data-dir "/01_locations.edn") (build-locations rooms categories))
-    (write-edn (str data-dir "/02_session_types.edn") (build-session-types categories))
-    (write-edn (str data-dir "/03_sessions.edn") (build-sessions sessions speakers rooms categories timezone))
+    (write-migration (str data-dir "/01_locations.edn") (build-locations rooms categories))
+    (write-migration (str data-dir "/02_session_types.edn") (build-session-types categories))
+    (write-migration (str data-dir "/03_sessions.edn") (build-sessions sessions speakers rooms categories timezone))
 
+    (println "Done!")))
+
+(defn slurp-edn [f]
+  (edn/read-string
+   {:readers {'time/zdt time-literals/parse-zoned-date-time}}
+   (slurp f)))
+
+(defn data-dir-sessions [data-dir]
+  (apply merge
+         (map (comp
+               (partial into {} (map (juxt :session/external-id identity)))
+               :tx-data
+               slurp-edn)
+              (sort
+               (filter #(str/ends-with? % "_sessions.edn")
+                       (file-seq (io/file data-dir)))))))
+
+(defn update-sessions
+  "Update sessions based on changes in Sessionize
+
+  Create a new migration, containing updated session information, only for those
+  that changed upstream in sessionize."
+  [{:keys [endpoint-id data-dir timezone] :as opts}]
+  (println "Fetching data from Sessionize for endpoint:" endpoint-id)
+  (let [timezone                                     (ZoneId/of timezone)
+        {:keys [sessions speakers rooms categories]} (fetch-data endpoint-id)
+        old-sessions                                 (data-dir-sessions data-dir)
+        new-sessions                                 (build-sessions sessions speakers rooms categories timezone)
+        diff                                         (filter (fn [s]
+                                                               (not= s (get old-sessions (:session/external-id s))))
+                                                             new-sessions)
+        next-migration-idx                           (->> data-dir io/file file-seq (map java.io.File/.getName)
+                                                          (keep #(re-find #"^\d+" (str %)))
+                                                          (map parse-long) (apply max) (inc))
+        migration-file                               (str data-dir (format "/%02d_sessions.edn" next-migration-idx))]
+    (println "Sessions:" (count new-sessions) "of which" (count diff) "changed.")
+    (when (seq diff)
+      (write-migration migration-file diff))
     (println "Done!")))
 
 (cli/dispatch*
  {:name    "sessionize"
-  :commands ["import <endpoint-id>" #'import]
+  :commands ["import <endpoint-id>" #'import
+             "update-sessions <endpoint-id>" #'update-sessions]
   :flags   flags})

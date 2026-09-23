@@ -1,3 +1,4 @@
-{:deps {com.lambdaisland/launchpad {:mvn/version "0.54.242-alpha"}
-        com.lambdaisland/cli {:mvn/version "1.30.130"}
-        com.lambdaisland/shellutils  {:mvn/version "0.3.20"}}}
+{:deps {com.lambdaisland/launchpad            {:mvn/version "0.54.242-alpha"}
+        com.lambdaisland/cli                  {:mvn/version "1.30.130"}
+        com.lambdaisland/shellutils           {:mvn/version "0.3.20"}
+        java-time-literals/java-time-literals {:mvn/version "2018-04-06"}}}
