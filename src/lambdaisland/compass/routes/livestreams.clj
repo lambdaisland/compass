@@ -12,7 +12,7 @@
     {:html/body [html/no-configured-streams]}
     (if-let [stream (first (livestream/accessible-streams identity (mux/streams)))]
       (response/redirect (url-for :streams/show {:stream-id (:livestream/id stream)}))
-      {:html/body [html/no-accessible-streams (boolean (user/assigned-ticket identity))]})))
+      {:html/body [html/no-accessible-streams (seq (user/assigned-tickets identity))]})))
 
 (defn GET-stream [{:keys [identity path-params]}]
   (if-let [stream (mux/find-stream (:stream-id path-params))]
@@ -21,7 +21,7 @@
        :html/body [html/show-page stream (mux/playback-token (:livestream/playback-id stream))
                    (livestream/accessible-streams identity (mux/streams))]}
       {:status 403
-       :html/body [html/no-accessible-streams (boolean (user/assigned-ticket identity))]})
+       :html/body [html/no-accessible-streams (seq (user/assigned-tickets identity))]})
     {:status 404
      :html/body [:p "Livestream not found."]}))
 

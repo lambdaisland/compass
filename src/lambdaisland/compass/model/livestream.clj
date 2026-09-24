@@ -17,5 +17,5 @@
   (filterv #(accessible? identity %) streams))
 
 (defn ticket-streams [ticket streams]
-  (filterv #(contains? (:livestream/allowed-ticket-slugs streams)
+  (filterv #(contains? (:livestream/allowed-ticket-slugs %)
                        (-> ticket :tito.ticket/release :tito.release/slug)) streams))
