@@ -11,14 +11,14 @@
   (if-not (seq (mux/streams))
     {:html/body [html/no-configured-streams]}
     (if-let [stream (first (livestream/accessible-streams identity (mux/streams)))]
-      (response/redirect (url-for :streams/show {:stream-id (:id stream)}))
+      (response/redirect (url-for :streams/show {:stream-id (:livestream/id stream)}))
       {:html/body [html/no-accessible-streams (boolean (user/assigned-ticket identity))]})))
 
 (defn GET-stream [{:keys [identity path-params]}]
   (if-let [stream (mux/find-stream (:stream-id path-params))]
     (if (livestream/accessible? identity stream)
       {:headers {"Cache-Control" "private, no-store"}
-       :html/body [html/show-page stream (mux/playback-token (:playback-id stream))
+       :html/body [html/show-page stream (mux/playback-token (:livestream/playback-id stream))
                    (livestream/accessible-streams identity (mux/streams))]}
       {:status 403
        :html/body [html/no-accessible-streams (boolean (user/assigned-ticket identity))]})

@@ -17,44 +17,19 @@
 (def live-streams-url "https://api.mux.com/video/v1/live-streams")
 (def rtmps-url "rtmps://global-live.mux.com:443/app")
 
-(defn- valid-stream? [{:keys [id title playback-id allowed-ticket-slugs]}]
-  (and (string? id)
-       (re-matches stream-id-pattern id)
-       (string? title)
-       (not (str/blank? title))
-       (string? playback-id)
-       (not (str/blank? playback-id))
-       (coll? allowed-ticket-slugs)
-       (every? string? allowed-ticket-slugs)))
-
-(defn validate-streams [streams]
-  (let [streams (vec (or streams []))
-        ids (map :id streams)]
-    (when-let [invalid (first (remove valid-stream? streams))]
-      (throw (ex-info "Invalid Mux livestream configuration"
-                      {:stream (dissoc invalid :playback-id)})))
-    (when-not (= (count ids) (count (distinct ids)))
-      (throw (ex-info "Mux livestream IDs must be unique" {:ids ids})))
-    (mapv #(update % :allowed-ticket-slugs set) streams)))
-
-(defn- livestream->stream [{:livestream/keys [id title mux-id playback-id allowed-ticket-slugs]}]
-  {:id id
-   :title title
-   :mux-id mux-id
-   :playback-id playback-id
-   :allowed-ticket-slugs (set allowed-ticket-slugs)})
-
 (defn streams []
   (sort-by
    :db/id
-   (validate-streams
-    (map livestream->stream
-         (db/q '[:find [(pull ?e [*]) ...]
-                 :where [?e :livestream/id]]
-               (db/db))))))
+   (db/entities '[:find [?e ...]
+                  :where [?e :livestream/id]]
+                (db/db))))
 
 (defn find-stream [stream-id]
-  (first (filter #(= stream-id (:id %)) (streams))))
+  (db/entity (db/q '[:find ?e .
+                     :in $ ?id
+                     :where [?e :livestream/id ?id]]
+                   (db/db)
+                   stream-id)))
 
 (defn- basic-authorization [token-id secret-key]
   (str "Basic "
@@ -150,7 +125,7 @@
       (throw (ex-info "Mux stream ID must not be blank." {})))
     (when (str/blank? playback-id)
       (throw (ex-info "Stream playback ID must not be blank." {})))
-    (let [old-slugs (set (:allowed-ticket-slugs stream))
+    (let [old-slugs (set (:livestream/allowed-ticket-slugs stream))
           new-slugs (set allowed-ticket-slugs)
           retractions (map (fn [slug] [:db/retract [:livestream/id id] :livestream/allowed-ticket-slugs slug])
                            (remove new-slugs old-slugs))

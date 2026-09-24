@@ -1,9 +1,11 @@
 (ns lambdaisland.compass.html.ticket
   (:require
+   [lambdaisland.compass.css.tokens :as t]
    [lambdaisland.compass.html.components :as c]
    [lambdaisland.compass.http.routing :refer [url-for]]
+   [lambdaisland.compass.model.livestream :as livestream]
+   [lambdaisland.compass.services.mux :as mux]
    [lambdaisland.ornament :as o]))
-
 
 (o/defstyled connect-ticket-form :form
   ([ref email]
@@ -37,10 +39,10 @@
   ([email tickets]
    [:<>
     [:h2 "Ticket Confirmation"]
-    [:p "Attach these tickets to your Confpass.me account:"]
+    [:p "Add these tickets to your Confpass.me account:"]
     [:form.ticket-confirmation {:method "post" :action (url-for :ticket/confirm)}
      [:input {:type "hidden" :name "email" :value email}]
-     (for [{:tito.ticket/keys [reference email release assigned-to]} tickets]
+     (for [{:tito.ticket/keys [reference email release assigned-to] :as ticket} tickets]
        [:label.checkbox {:for reference}
         [:span
          [:input {:id reference
@@ -51,8 +53,10 @@
                   :checked (not assigned-to)}]
          [:div 
           [:p {:class (when assigned-to "assigned")} [:code reference] " " (:tito.release/title release) " " [:code "(" email ")"]] 
+          (when-let [streams (seq (livestream/ticket-streams ticket (mux/streams)))]
+            [:p "Includes access to live stream: " (interpose ", " (map :livestream/title streams))])
           (when assigned-to
-            [:span "This ticket has already been assigned to " [c/inline-user assigned-to]])]]])
+            [:div "This ticket has already been assigned to " [c/inline-user assigned-to]])]]])
      [:p "If you have additional tickets in a separate order you can add them in the next step."]
      [:input {:type "submit" :value "Confirm"
               :cx-enabled-by ".ticket-confirmation input[type=checkbox]"
@@ -80,7 +84,9 @@
           [:div.ref [:code reference]]
           [:div.info 
            [:div.release (:tito.release/title release)]
-           [:div.email name [:code "<" email ">"]]]
+           [:div.email name [:code "<" email ">"]]
+           (when-let [streams (seq (livestream/ticket-streams ticket (mux/streams)))]
+             [:p "Includes access to live stream: " (interpose ", " (map :livestream/title streams))])]
           [:div.actions
            [:button {:hx-confirm (str "Removing ticket " reference " " (:tito.release/title release) ", are you sure?")
                      :hx-delete (url-for :ticket/ticket {:ticket-id (:db/id ticket)})}

@@ -45,28 +45,6 @@
   (String. (.decode (Base64/getUrlDecoder) segment)
            StandardCharsets/UTF_8))
 
-(deftest stream-validation
-  (is (= [{:id "main-stage"
-           :title "Main Stage"
-           :playback-id "playback"
-           :allowed-ticket-slugs #{"streaming"}}]
-         (mux/validate-streams
-          [{:id "main-stage"
-            :title "Main Stage"
-            :playback-id "playback"
-            :allowed-ticket-slugs ["streaming"]}])))
-  (is (thrown-with-msg? clojure.lang.ExceptionInfo #"unique"
-                        (mux/validate-streams
-                         [{:id "main" :title "One" :playback-id "one"
-                           :allowed-ticket-slugs []}
-                          {:id "main" :title "Two" :playback-id "two"
-                           :allowed-ticket-slugs []}])))
-  (is (thrown-with-msg? clojure.lang.ExceptionInfo #"Invalid"
-                        (mux/validate-streams
-                         [{:id "Not URL safe" :title "Title"
-                           :playback-id "playback"
-                           :allowed-ticket-slugs []}]))))
-
 (deftest signed-playback-id
   (is (= "signed-id"
          (mux/signed-playback-id

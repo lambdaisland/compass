@@ -48,7 +48,7 @@
     [nav-bar-logo]
     [:button {:cx-toggle "menu-open" :cx-target "body"}
      [graphics/hamburger]
-     (when (and user (not (user/assigned-ticket user)))
+     (when (and user (not (seq (user/assigned-tickets user))))
        [:div.notifier-dot])]]))
 
 (o/defstyled site-name-no-nav :nav
@@ -141,8 +141,12 @@
        [:li.discord-button
         [auth/discord-button {:text "Sign in with Discord"}]])
      (when user
-       (if-let [ticket (user/assigned-ticket user)]
-         [:li "Ti.to ticket " [:strong (:tito.ticket/reference ticket)]]
+       (if-let [tickets (user/assigned-tickets user)]
+         [:li "Ti.to ticket" (if (= 1 (count tickets)) " " "s ")
+          (interpose
+           ","
+           (for [t tickets]
+             [:strong (:tito.ticket/reference t)]))]
          [:li
           [:a {:href (url-for :ticket/connect)
                :on-click "document.body.classList.toggle('menu-open')"}
@@ -169,11 +173,7 @@
        "Create Activity"]]
      [:li
       [:hr]]
-     [:li
-      [:a
-       {:href (url-for :profile/edit), :on-click "document.body.classList.toggle('menu-open')"}
-       [graphics/cog-icon]
-       [:span "Profile & Settings"]]]
+
      [:li
       [:a
        {:href (url-for :contacts/index), :on-click "document.body.classList.toggle('menu-open')"}
@@ -184,6 +184,16 @@
            :hx-target "#modal"
            :on-click "document.body.classList.toggle('menu-open')"}
        [graphics/scan-icon] "Add Contact"]]
+     [:li
+      [:a
+       {:href (url-for :profile/edit), :on-click "document.body.classList.toggle('menu-open')"}
+       [graphics/cog-icon]
+       [:span "Profile & Settings"]]]
+     (when (seq (user/assigned-tickets user))
+       [:li
+        [:a {:href (url-for :ticket/overview)}
+         [graphics/ticket-icon] "Your Tickets"]]
+       )
      #_[:li
         [:hr]]
      #_[:li

@@ -34,14 +34,6 @@
                          [?e :session/title]]
                        (db/db))))
 
-(defn unassign-ticket [u]
-  (let [user (if (string? u) (user u) u)]
-    (if-let [ticket (u/assigned-ticket user)]
-      (do
-        @(db/transact [[:db/retract (:db/id ticket)
-                        :tito.ticket/assigned-to (:db/id user)]])
-        :ok)
-      :not-assigned)))
 
 (defn undo-accept [u]
   (let [user (if (string? u) (user u) u)]
@@ -160,11 +152,14 @@
         vals
         (filter #(< 1 (count %)))
         (filter #(apply not= (map :tito.ticket/registration %)))))
+
+  (filter #(not= (:tito.ticket/email %) (str/trim (str/lower-case (:tito.ticket/email %))))
+          all-tick)
   
   (doseq [{:tito.ticket/keys [_registration]
            :tito.registration/keys [reference email name state]} all-reg
-          :when (some (fn [r] (and (:tito.ticket/email r)
-                                   (not= email (:tito.ticket/email r)))) _registration)]
+          #_#_:when (some (fn [r] (and (:tito.ticket/email r)
+                                       (not= email (:tito.ticket/email r)))) _registration)]
     (println reference name (str "<" email ">") (str "[" state "]"))
     (doseq [{:tito.ticket/keys [reference release name email]} _registration]
       (println "  -" reference (:tito.release/title release) "-" name (str "<" email ">")))

@@ -12,10 +12,11 @@
     (str "url(" (assets/image-url url) ")")
     (str "var(--gradient-" (inc (mod (:db/id user) 7)) ")")))
 
-(defn assigned-ticket [user]
-  (first (:tito.ticket/_assigned-to user)))
+(defn assigned-tickets
+  [user]
+  (:tito.ticket/_assigned-to user))
 
 (defn admin? [user]
-  (when-let [ticket (assigned-ticket user)]
-    (some #{(:tito.release/slug (:tito.ticket/release ticket))}
+  (when-let [tickets (seq (assigned-tickets user))]
+    (some (into #{} (keep #(-> % :tito.ticket/release :tito.release/slug)) tickets)
           (config/value :tito/admin-slugs))))

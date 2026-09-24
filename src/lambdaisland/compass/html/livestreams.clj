@@ -42,14 +42,14 @@
   [:iframe {:height "13rem"}]
   [:nav :flex-row :mt-3 :mb-4]
   [:h2 :mb-3]
-  ([{:keys [title playback-id] :as stream} playback-token streams]
+  ([{:livestream/keys [title playback-id] :as stream} playback-token streams]
    [:<>
     (when (< 1 (count streams))
       [:nav
        [c/toggle-group
-        {:value (:id stream)
+        {:value (:livestream/id stream)
          :options
-         (for [{:keys [title id]} streams]
+         (for [{:livestream/keys [title id]} streams]
            [id {:title title
                 :hx-get (url-for :streams/show {:stream-id id})
                 :hx-push-url (url-for :streams/show {:stream-id id})
@@ -60,7 +60,7 @@
      [:mux-player {"playback-id" playback-id
                    "playback-token" playback-token
                    "metadata-video-title" title}]]
-    (when-let [url (get (config/value :interprefy/iframe-link) (:id stream))]
+    (when-let [url (get (config/value :interprefy/iframe-link) (:livestream/id stream))]
       [:<>
        [:p [:strong "ENGLISH"] "   " "For audio translation, mute the video player above, and enable audio translation below."]
        [:p [:strong "ESPAÑOL"] "   " "Para la traducción de audio, silencia el reproductor de video de arriba, y activa la traducción de audio a continuación."]
@@ -70,7 +70,7 @@
 (defn stream-form
   "Create or edit form for a livestream. Pass nil to create a new stream, or an
   existing stream to prefill the form and update it with a PUT."
-  [{:keys [id title mux-id playback-id allowed-ticket-slugs]}]
+  [{:livestream/keys [id title mux-id playback-id allowed-ticket-slugs]}]
   [:form.form-card-styling
    {:method "post" :action (if id (str "/admin/livestreams/" id) "/admin/livestreams")}
    [:label {:for "id"}
@@ -112,7 +112,7 @@
    [:section
     [:h2 "Edit livestream"]
     (when stream
-      [:p "Stream " [:strong (:title stream)]])
+      [:p "Stream " [:strong (:livestream/title stream)]])
     (when error-message
       [:p.error error-message])
     [stream-form stream]
@@ -134,7 +134,7 @@
      [:thead
       [:tr [:th "ID"] [:th "Title"] [:th "Playback ID"] [:th "Allowed ticket slugs"] [:th]]]
      [:tbody
-      (for [{:keys [id title playback-id allowed-ticket-slugs]} streams]
+      (for [{:livestream/keys [id title playback-id allowed-ticket-slugs]} streams]
         [:tr {:key id}
          [:td id]
          [:td title]

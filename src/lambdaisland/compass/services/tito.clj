@@ -137,6 +137,30 @@
      ref
      email)))
 
+(defn find-tickets-by-ref
+  "Look up tickets by registration reference (4 character code+suffix).
+
+  Will validate that the email matches the email on the ticket, and that they
+  are not yet assigned. 
+  
+  Returns ticket entities."
+  [ref email]
+  (let [ref (subs (str/upper-case ref) 0 4)]
+    (db/entities
+     '[:find
+       [?ticket ...]
+       :in $ ?ref ?email
+       :where
+       [?reg :tito.registration/reference ?ref]
+       [?ticket :tito.ticket/registration ?reg]
+       [?ticket :tito.ticket/email ?tito-email]
+       [(clojure.string/lower-case ?tito-email) ?tito-email1]
+       [(clojure.string/trim ?tito-email1) ?tito-email2]
+       [(= ?email ?tito-email2)]]
+     (db/db)
+     ref
+     email)))
+
 (defn find-free-tickets-by-refs
   "Look up tickets by registration reference (4 character code+suffix).
 

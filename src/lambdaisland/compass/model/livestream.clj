@@ -3,19 +3,19 @@
   (:require
    [lambdaisland.compass.model.user :as user]))
 
-(defn ticket-release-slug [identity]
-  (some-> identity
-          user/assigned-ticket
-          :tito.ticket/release
-          :tito.release/slug))
+(defn ticket-release-slugs [identity]
+  (set 
+   (map (comp :tito.release/slug
+              :tito.ticket/release)
+        (user/assigned-tickets identity))))
 
 (defn accessible? [identity stream]
-  (contains? (:allowed-ticket-slugs stream)
-             (ticket-release-slug identity)))
+  (some (ticket-release-slugs identity)
+        (:livestream/allowed-ticket-slugs stream)))
 
 (defn accessible-streams [identity streams]
   (filterv #(accessible? identity %) streams))
 
 (defn ticket-streams [ticket streams]
-  (filterv #(contains? (:allowed-ticket-slugs streams)
+  (filterv #(contains? (:livestream/allowed-ticket-slugs streams)
                        (-> ticket :tito.ticket/release :tito.release/slug)) streams))

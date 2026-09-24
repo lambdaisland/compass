@@ -30,8 +30,8 @@
      [:button {:type "submit"} "Refetch ticket status from Ti.to"]]
     [:pre
      (util/pprint-str (for [u (all-users)]
-                        (into (if-let [t  (user/assigned-ticket u)]
-                                {:tito/ticket (into {} t)}
+                        (into (if-let [tickets (seq (user/assigned-tickets u))]
+                                {:tito/tickets (mapv #(into {} %) tickets)}
                                 {})
                               u)))]]})
 
