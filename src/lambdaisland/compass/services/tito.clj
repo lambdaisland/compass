@@ -113,19 +113,76 @@
   @(db/transact (tickets-tx)))
 
 (defn find-tickets
-  "Look up tickets by registration reference (4 character code).
+  "Look up tickets by registration reference (4 character code) + email
+
+  This drops the numeric suffix off of the reference, if present, and normalizes
+  email addresses (trim+lower-case) both on the input and in the ti.to data.
+  
+  Will return all tickets in the order assigned to the given email address."
+  [ref email]
+  (let [ref (subs (str/upper-case ref) 0 4)
+        email (str/trim (str/lower-case email))]
+    (db/entities
+     '[:find
+       [?ticket ...]
+       :in $ ?ref ?email
+       :where
+       [?reg :tito.registration/reference ?ref]
+       [?ticket :tito.ticket/registration ?reg]
+       [?ticket :tito.ticket/email ?tito-email]
+       [(clojure.string/lower-case ?tito-email) ?tito-email1]
+       [(clojure.string/trim ?tito-email1) ?tito-email2]
+       [(= ?email ?tito-email2)]]
+     (db/db)
+     ref
+     email)))
+
+(defn find-free-tickets-by-refs
+  "Look up tickets by registration reference (4 character code+suffix).
+
+  Will validate that the email matches the email on the ticket, and that they
+  are not yet assigned. 
+  
+  Returns ticket entities."
+  [references email]
+  (db/entities
+   '[:find
+     [?ticket ...]
+     :in $ [?ref ...] ?email
+     :where
+     [?ticket :tito.ticket/reference ?ref]
+     [?ticket :tito.ticket/email ?tito-email]
+     [(clojure.string/lower-case ?tito-email) ?tito-email1]
+     [(clojure.string/trim ?tito-email1) ?tito-email2]
+     [(= ?email ?tito-email2)]
+     (not [?ticket :tito.ticket/assigned-to])]
+   (db/db)
+   references
+   email))
+
+(defn find-tickets-by-email
+  "Look up tickets by email address on the ticket.
 
   Returns a vector of found ticket maps (including release information)."
-  [reference]
+  [email]
   (db/q
    '[:find
      [(pull ?ticket [* {:tito.ticket/release [*]}]) ...]
-     :in $ ?ref
+     :in $ ?email
      :where
-     [?reg :tito.registration/reference ?ref]
-     [?ticket :tito.ticket/registration ?reg]]
+     [?ticket :tito.ticket/email ?e0]
+     [(clojure.string/lower-case ?e0) ?e1]
+     [(clojure.string/trim ?e1) ?e2]
+     [(= ?email ?e2)]]
    (db/db)
-   reference))
+   (str/trim (str/lower-case email))))
+
+(defn assigned-in-tito?
+  "Has this ticket been assigned to someone in ti.to, i.e. does it have an email address
+
+  The alternative is that it is \"new\" or \"reminder\"."
+  [ticket]
+  (-> ticket :tito.ticket/state #{"complete" "incomplete"}))
 
 (defmethod ig/init-key :tito/sync [_ {:keys [interval-seconds]}]
   (log/info :tito/starting-sync-loop {:interval-seconds interval-seconds})

@@ -103,6 +103,9 @@
   (when-let [e (d/entity (db) lookup)]
     (->munged-entity e)))
 
+(defn entities [& args]
+  (map entity (apply q args)))
+
 (comment
   ;; reload schema and data
   (user/reset)

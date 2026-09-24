@@ -1,4 +1,5 @@
 (ns lambdaisland.compass.model.livestream
+  "Livestream related logic, and ticket-based access control"
   (:require
    [lambdaisland.compass.model.user :as user]))
 
@@ -14,3 +15,7 @@
 
 (defn accessible-streams [identity streams]
   (filterv #(accessible? identity %) streams))
+
+(defn ticket-streams [ticket streams]
+  (filterv #(contains? (:allowed-ticket-slugs streams)
+                       (-> ticket :tito.ticket/release :tito.release/slug)) streams))

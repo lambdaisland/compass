@@ -56,11 +56,12 @@
         slug->role-id (config/value :discord/ticket-roles)
         add-role! (fn add-role! [slug]
                     (when-let [role-id (slug->role-id slug)]
-                      (discord-bot-request
-                       :put
-                       (str "/guilds/"  (config/value :discord/server-id)
-                            "/members/" user-id
-                            "/roles/"   role-id))))]
+                      (when-not (str/blank? role-id)
+                        (discord-bot-request
+                         :put
+                         (str "/guilds/"  (config/value :discord/server-id)
+                              "/members/" user-id
+                              "/roles/"   role-id)))))]
     (if-let [response (add-role! slug)]
       (<= 200 (:status response) 299)
       true)))

@@ -24,24 +24,33 @@ function ensure_show_modal() {
   document.getElementById("modal").addEventListener('htmx:afterSwap', showModal)
 }
 
-// cx-enabled-by: Element is disabled until all referenced checkboxes are checked.
-// Attribute value is a space-separated list of CSS selectors pointing to
-// checkbox <input> elements. When every one of them is checked, the disabled
-// attribute is removed from the target element.
+// cx-enabled-by: Element is disabled until all referenced checkboxes are
+// checked, or text inputs have some non-blank value. Attribute value is a
+// space-separated list of CSS selectors pointing to checkbox <input> elements.
+// When every one of them is checked, the disabled attribute is removed from the
+// target element.
+//
+// Combine with cx-enabled-by-policy="one" to enable as soon as at least one
+// checkbox is checked.
 function handle_cx_enabled_by(el) {
   let selector = el.getAttribute('cx-enabled-by');
-  let checkboxes = document.querySelectorAll(selector);
+  let policy = el.getAttribute('cx-enabled-by-policy');
+  let inputs = document.querySelectorAll(selector);
 
+  let nonEmpty = input => input.getAttribute("type") == "checkbox" ? input.checked : input.value != "";
+  
   function updateEnabled() {
-    let allChecked = Array.from(checkboxes).every(cb => cb.checked);
-    el.toggleAttribute('disabled', !allChecked);
-    el.toggleAttribute('cx-disabled', !allChecked);
+    let enable = policy == "one"
+        ? Array.from(inputs).find(nonEmpty)
+        : Array.from(inputs).every(nonEmpty);
+    el.toggleAttribute('disabled', !enable);
+    el.toggleAttribute('cx-disabled', !enable);
   }
 
   updateEnabled();
-  checkboxes.forEach(cb => {
-    cb.removeEventListener('change', updateEnabled);
-    cb.addEventListener('change', updateEnabled);
+  inputs.forEach(cb => {
+    cb.removeEventListener('input', updateEnabled);
+    cb.addEventListener('input', updateEnabled);
   });
 }
 

@@ -68,7 +68,9 @@
     (println "Deleting" id)
     (mux-request opts {:method :delete :path (str "/video/v1/assets/" id)})))
 
-(defn mux-new-stream [opts]
+(defn mux-new-stream
+  {:flags ["--title <title>" "Set the stream title"]}
+  [{:keys [title] :as opts}]
   (streams-table
    [(:data
      (mux-request
@@ -76,7 +78,8 @@
       {:method :post
        :path "/video/v1/live-streams"
        :body {:playback_policy ["public"]
-              :new_asset_settings {:playback_policy ["public"]}}}))]))
+              :new_asset_settings {:playback_policy ["public"]}
+              :meta (cond-> {} title (assoc :title title))}}))]))
 
 (defn mux-rm-playback-id [{:keys [stream-id playback-id] :as opts}]
   (mux-request

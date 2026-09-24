@@ -126,18 +126,13 @@
 
 (o/defstyled accept-invite-html :div
   :flex-col :gap-4
-  [c/avatar {:width "1.5em"
-             :height "1.5em"
-             :margin-bottom "-0.4em"
-             :margin-right "0.5em"
-             :display "inline-block"}]
+
   [:button {:align-self "flex-start"}]
   ([qr-uuid contact]
    [:<>
     [:h1 "Add a new contact"]
     [:section
-     [c/avatar (user/avatar-css-value contact)]
-     [:strong (:public-profile/name contact)] " wants to add you as a contact."]
+     [c/inline-user contact] " wants to add you as a contact."]
     [:section
      "Configure the Contact Card in your Profile Settings to decide which information to share with them."]
     [:button

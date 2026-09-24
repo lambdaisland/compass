@@ -80,8 +80,7 @@
     (when user
       [:<>
        [c/avatar (user/avatar-css-value user)]
-       "Signed in as " (:public-profile/name user) "." [:a {:href (url-for :logout/index)} "Sign out"]])]
-   ))
+       "Signed in as " (:public-profile/name user) "." [:a {:href (url-for :logout/index)} "Sign out"]])]))
 
 (o/defstyled menu-panel :nav
   :bg-surface-2

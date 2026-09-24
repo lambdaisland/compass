@@ -3,7 +3,7 @@
   (:require
    [lambdaisland.compass.css.tokens :as t]
    [lambdaisland.compass.html.graphics :as graphics]
-   [lambdaisland.compass.http.routing :refer [url-for]]
+   [lambdaisland.compass.model.user :as user]
    [lambdaisland.ornament :as o]
    [ring.middleware.anti-forgery :as anti-forgery]))
 
@@ -84,6 +84,17 @@ Make sure `props` has an `:id`, use `:checked?` for checked state."
    :background-size "cover"}
   ([image]
    [:<> {:style {:background-image image}}]))
+
+(o/defstyled inline-user :span
+  [avatar {:width "1.5em"
+           :height "1.5em"
+           :margin-bottom "-0.4em"
+           :margin-right "0.5em"
+           :display "inline-block"}]
+  ([user]
+   [:<>
+    [avatar (user/avatar-css-value user)]
+    [:strong (:public-profile/name user)]]))
 
 (o/defstyled image-frame :div
   [:.img :w-full
