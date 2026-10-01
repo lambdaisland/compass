@@ -18,8 +18,7 @@
    [girouette.tw.svg :as svg]
    [girouette.tw.table :as table]
    [girouette.tw.transform :as transform]
-   [girouette.tw.typography :as typography]
-   ))
+   [girouette.tw.typography :as typography]))
 
 (def overrides
   [;; Use open props sizing

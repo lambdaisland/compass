@@ -67,6 +67,45 @@ Make sure `props` has an `:id`, use `:checked?` for checked state."
         (merge (dissoc v :title)))
       (if (map? v) (:title v) v)])))
 
+(o/defstyled switch :label
+  "iOS-style switch built on a native checkbox with role=switch.
+
+Takes `:id` and `:checked?`, plus two label children (left and right)."
+  :flex :items-center :gap-2 :justify-center
+  {:cursor "pointer"}
+  [:input :hidden]
+  [:.track
+   {:position "relative"
+    :width "2.75rem"
+    :height "1.5rem"
+    :border-radius t/--radius-round
+    :background-color t/--surface-4
+    :transition "background-color 200ms ease-in-out"}]
+  [:.knob
+   {:position "absolute"
+    :top "0.15rem"
+    :left "0.15rem"
+    :width "1.2rem"
+    :height "1.2rem"
+    :border-radius t/--radius-round
+    :background-color t/--text-1
+    :transition "transform 200ms ease-in-out"}]
+  ["input:checked ~ .track" {:background-color t/--highlight}]
+  ["input:checked ~ .track .knob" {:transform "translateX(1.25rem)"}]
+  ([{:keys [id checked?] :as props} left right]
+   [:<>
+    {:for id}
+    [:span left]
+    [:input (merge {:id id
+                    :type "checkbox"
+                    :role "switch"
+                    :name id
+                    :value id
+                    :checked (when checked? "checked")}
+                   (dissoc props :id :checked?))]
+    [:span.track [:span.knob]]
+    [:span right]]))
+
 (o/defstyled form
   :form
   ([props & children]

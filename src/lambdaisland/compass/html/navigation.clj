@@ -96,16 +96,17 @@
   [:svg {:width  t/--font-size-5
          :height t/--font-size-5}]
   [:.bar :flex :justify-between :p-3 :mb-2 :border-b-4 :border-surface-3]
-  [:>ul {:flex 1}]
-  [:li :font-size-3 :my-4
-   [:>hr :my-6]
+  [:>ul :flex-col :gap-3 {:flex 1}]
+  [:.divider :p-0 {:flex 0}]
+  [:li :font-size-3
+   [:>hr :my-1]
    #_[:svg [:path :w-5 :h-5]]
+   [:>a :block]
    [:>a
-    :block
     :bg-surface-1 :hover:bg-surface-3
     ;; {:background t/--highlight}
     ;; [:&:hover {:background t/--highlight-yellow}]
-    :px-4 :py-4 :mx-4 :my-2 :rounded-lg
+    :px-4 :py-4 :mx-4 :rounded-lg
     :no-underline]
    {:font-size t/--font-size-3}
    [:&:last-child :border-0]
@@ -127,6 +128,12 @@
     #_{:fill t/--text-1}
     #_{:color t/--text-1}]]
   [:.small-print :text-center [:a {:font-size t/--font-size-1 :text-decoration "underline" :color t/--text-2 :background-color "inherit"}]]
+  [:li.time-toggle {:margin-top "auto"}
+   [:&.hidden {:display "none"}]]
+  [c/switch
+   :bg-surface-1 :hover:bg-surface-3
+   :px-4 :py-4 :mx-4 :my-2 :rounded-lg
+   {:color t/--link}]
   [:.bottom :mt-4 :w-full :text-center
    {:padding (str "0 " t/--size-10)}]
   ([user]
@@ -171,8 +178,8 @@
        {:href (url-for :session/new), :on-click "document.body.classList.toggle('menu-open')"}
        [graphics/plus-icon]
        "Create Activity"]]
-     [:li
-      [:hr]]
+
+     [:li.divider [:hr]]
 
      [:li
       [:a
@@ -192,19 +199,10 @@
      (when (seq (user/assigned-tickets user))
        [:li
         [:a {:href (url-for :ticket/overview)}
-         [graphics/ticket-icon] "Your Tickets"]]
-       )
-     #_[:li
-        [:hr]]
-     #_[:li
-        [:a {:href "https://github.com/heartofclojure/heartofclojure-site-2024/wiki/Attendee-Guide-2024"
-             :target "_blank"}
-         [graphics/book-open-icon]
-         "Attendee Guide"]]
+         [graphics/ticket-icon] "Your Tickets"]])
      (when (user/admin? user)
        [:<>
-        [:li
-         [:hr]]
+        [:li.divider [:hr]]
         [:li
          [:a {:href (url-for :admin/livestreams), :on-click "document.body.classList.toggle('menu-open')"}
           [graphics/shield-check-icon]
@@ -215,9 +213,12 @@
           "Manage Users"]]])
      [:li.small-print
       [:a {:href (url-for :documents/privacy-policy) :target "_blank"}
-       "Privacy Policy"]]]
+       "Privacy Policy"]]
+     [:li.time-toggle.hidden
+      [c/switch {:id "time-mode"} "Event Time" "Browser Time"]]]
 
     [:div.bottom
+
      [:a {:target "_blank" :href "https://magpie.software"}
       [:img.light-theme-only {:alt "A Magpie Production"
                               :src "https://magpie.software/images/magpie-production.webp"}]
