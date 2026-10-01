@@ -104,21 +104,23 @@
   "Same as [[POST-create-session]], but edits an existing session."
   [{:keys [params path-params identity]}]
   (let [{:keys [id]} path-params
-        id (parse-long id)
-        session (q/session id)
+        id           (parse-long id)
+        session      (q/session id)
         organizer-id (get-in session [:session/organized :db/id])]
     (if session
       (if (session/can-edit? session identity)
         (do
           @(db/transact
             [(-> (params->session-data params)
-                 (assoc :db/id id))])
+                 (assoc :db/id id)
+                 ;; Editing a session shouldn't change the organizer
+                 (dissoc :session/organized))])
           ;; TODO add a @everyone notification via discord/send-session-thread-message if there is a thread and something important changes
           {:location [:session/get {:id id}]
-           :flash "Successfully edited!"})
-        {:status 403
+           :flash    "Successfully edited!"})
+        {:status    403
          :html/body [:p "You're not the organizer of this session."]})
-      {:status 404
+      {:status    404
        :html/body [:p "Not found."]})))
 
 (defn session-deleted-response [session-eid]
