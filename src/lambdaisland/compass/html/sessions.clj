@@ -115,6 +115,18 @@
      (when (< 0 m)
        (str m " min")))))
 
+(defn ordinal-suffix [n]
+  (if (<= 11 (mod n 100) 13)
+    "th"
+    (case (mod n 10) 1 "st" 2 "nd" 3 "rd" "th")))
+
+(defn format-day-heading [day]
+  (str (time/format "EEEE, " day)
+       (time/as day :day-of-month)
+       (ordinal-suffix (time/as day :day-of-month))
+       " of "
+       (time/format "LLLL" day)))
+
 (o/defstyled img+join-widget :div
   :flex-col :items-center :py-3 :mx-2
   ([session user]
@@ -169,8 +181,10 @@
     [:div.details
      [:h2.title
       [:a {:href (url-for :session/get {:id (:db/id session)})}
-       [:span.datetime
-        (str (time/truncate-to (time/local-time time) :minutes)) " · "]
+       [:time.datetime {:data-datetime-format "time"
+                        :datetime (time/format :iso-offset-date-time time)}
+        (str (time/truncate-to (time/local-time time) :minutes))]
+       " · "
        title]]
      [:h3.subtitle (session/subtitle session)]
      #_[:div.expansion
@@ -273,12 +287,13 @@
       [:div
        [:div.datetime
         (when time
-          (str
+          [:time {:data-datetime-format "datetime"
+                  :datetime (time/format :iso-offset-date-time time)}
            (subs (str/capitalize (str (time/day-of-week time))) 0 3)
            " "
            (time/format "dd.MM" time)
            ", "
-           (time/truncate-to (time/local-time time) :minutes)))
+           (time/truncate-to (time/local-time time) :minutes)])
         " → "
         (fmt-dur duration)]]
       (when (and duration time)
@@ -356,7 +371,8 @@
      :hx-disinherit "hx-swap"}
     (for [[day sessions] (group-by #(time/truncate-to (:session/time %) :days) sessions)]
       [:<>
-       [:h2 (time/format "EEEE, dd'th of' LLLL" day)]
+       [:h2 [:time {:datetime (time/format :iso-offset-date-time day)}
+             (format-day-heading day)]]
        [:div.sessions
         (for [session (sort-by :session/time sessions)]
           [session-card session user])]])]))
