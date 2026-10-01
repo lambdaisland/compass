@@ -108,7 +108,7 @@
         session (q/session id)
         organizer-id (get-in session [:session/organized :db/id])]
     (if session
-      (if (session/can-edit? identity)
+      (if (session/can-edit? session identity)
         (do
           @(db/transact
             [(-> (params->session-data params)
