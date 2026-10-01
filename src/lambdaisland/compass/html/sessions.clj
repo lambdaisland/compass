@@ -127,6 +127,28 @@
        " of "
        (time/format "LLLL" day)))
 
+(defn format-time [t]
+  (str (time/truncate-to (time/local-time t) :minutes)))
+
+(defn format-datetime [t]
+  (str (subs (str/capitalize (str (time/day-of-week t))) 0 3)
+       " "
+       (time/format "dd.MM" t)
+       ", "
+       (format-time t)))
+
+(defn offset-label [t]
+  (let [total-seconds (.getTotalSeconds (.getOffset ^java.time.ZonedDateTime t))]
+    (if (zero? total-seconds)
+      "UTC"
+      (let [sign (if (neg? total-seconds) "-" "+")
+            abs-seconds (abs total-seconds)
+            hours (quot abs-seconds 3600)
+            minutes (quot (rem abs-seconds 3600) 60)]
+        (str "UTC" sign hours
+             (when (pos? minutes)
+               (str ":" (format "%02d" minutes))))))))
+
 (o/defstyled img+join-widget :div
   :flex-col :items-center :py-3 :mx-2
   ([session user]
@@ -182,8 +204,9 @@
      [:h2.title
       [:a {:href (url-for :session/get {:id (:db/id session)})}
        [:time.datetime {:data-datetime-format "time"
-                        :datetime (time/format :iso-offset-date-time time)}
-        (str (time/truncate-to (time/local-time time) :minutes))]
+                        :datetime (time/format :iso-offset-date-time time)
+                        :title (str (format-time time) " (" (offset-label time) ")")}
+        (format-time time)]
        " · "
        title]]
      [:h3.subtitle (session/subtitle session)]
@@ -288,12 +311,9 @@
        [:div.datetime
         (when time
           [:time {:data-datetime-format "datetime"
-                  :datetime (time/format :iso-offset-date-time time)}
-           (subs (str/capitalize (str (time/day-of-week time))) 0 3)
-           " "
-           (time/format "dd.MM" time)
-           ", "
-           (time/truncate-to (time/local-time time) :minutes)])
+                  :datetime (time/format :iso-offset-date-time time)
+                  :title (str (format-datetime time) " (" (offset-label time) ")")}
+           (format-datetime time)])
         " → "
         (fmt-dur duration)]]
       (when (and duration time)

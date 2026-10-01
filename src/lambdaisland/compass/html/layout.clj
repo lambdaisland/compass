@@ -69,6 +69,7 @@
     [:script {:defer true
               :src "https://cdn.jsdelivr.net/npm/@mux/mux-player@3.13.2"}]
     [:script {:src "/js/cx.js"}]
+    [:script {:src "/js/timeswitch.js"}]
     (when (config/value :live.js?)
       [:script {:src "/js/live.js#css"}])
     head]

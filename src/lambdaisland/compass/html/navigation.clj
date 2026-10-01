@@ -128,7 +128,7 @@
     #_{:fill t/--text-1}
     #_{:color t/--text-1}]]
   [:.small-print :text-center [:a {:font-size t/--font-size-1 :text-decoration "underline" :color t/--text-2 :background-color "inherit"}]]
-  [:li.time-toggle {:margin-top "auto"}
+  [:li.timeswitch {:margin-top "auto"}
    [:&.hidden {:display "none"}]]
   [c/switch
    :bg-surface-1 :hover:bg-surface-3
@@ -214,7 +214,7 @@
      [:li.small-print
       [:a {:href (url-for :documents/privacy-policy) :target "_blank"}
        "Privacy Policy"]]
-     [:li.time-toggle.hidden
+     [:li.timeswitch.hidden {:title "Show all times in the time zone of the event (in-person), or in your local timezone (remote/streaming)."}
       [c/switch {:id "time-mode"} "Event Time" "Browser Time"]]]
 
     [:div.bottom
