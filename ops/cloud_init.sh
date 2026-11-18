@@ -219,7 +219,9 @@ After=txor.service
 Restart=always
 RestartSec=1
 WorkingDirectory=/home/compass/app/current
-ExecStart=/usr/local/bin/clojure -J-Dclojure.main.report=stderr -J-Dclojure.server.repl='{:port 5555 :accept clojure.core.server/repl}' -A:prod -M -m co.gaiwan.compass run --env prod --config /home/compass/config.edn
+# -XX:-UseBASE64Intrinsics: interim mitigation for CVE-2026-114938 (Java4Shell).
+# Remove once the JDK is 17.0.21.1 or later.
+ExecStart=/usr/local/bin/clojure -J-XX:-UseBASE64Intrinsics -J-Dclojure.main.report=stderr -J-Dclojure.server.repl='{:port 5555 :accept clojure.core.server/repl}' -A:prod -M -m co.gaiwan.compass run --env prod --config /home/compass/config.edn
 User=compass
 
 [Install]

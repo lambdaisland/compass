@@ -11,6 +11,7 @@
                         "regular-ticket" "1267502146643820564"
                         "streaming"      "1276449596171747339"}
  ;; confgure locally
+ ;; :http/session-cookie-key "<16 bytes>" ;; cookie session store key
  ;; :discord/client-secret ""
  ;; :discord/bot-token ""
  :uploads/dir          "/home/compass/uploads"

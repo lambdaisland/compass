@@ -25,7 +25,17 @@
    [ring.middleware.session.cookie :as session-cookie])
   (:import org.eclipse.jetty.server.Server))
 
-(def ring-default-config
+(defn session-store-opts
+  "Options for Ring's cookie session store. The 16-byte key comes from config
+  (:http/session-cookie-key, set in the server's config.edn), never from source.
+  Without one, Ring picks a random key, so sessions do not survive a restart."
+  []
+  (if-let [k (config/value :http/session-cookie-key)]
+    {:key (.getBytes ^String k "UTF-8")}
+    (do (log/warn :message "No :http/session-cookie-key configured; using a random session key")
+        {})))
+
+(defn ring-default-config []
   {:params    {:urlencoded true
                :multipart  true
                :nested     true
@@ -35,7 +45,7 @@
                :cookie-attrs {:http-only true
                               ;; 5 days
                               :max-age (* 60 60 24 5)}
-               :store (session-cookie/cookie-store {:key "zsrpNuvjTqFcz6fg"})}
+               :store (session-cookie/cookie-store (session-store-opts))}
    :security  {:anti-forgery   true
                :frame-options  :sameorigin
                :content-type-options :nosniff}
@@ -109,7 +119,7 @@
                    (fn [r]
                      (assoc-in (h r) [:headers "Max-Age"] "0")))
                  [middleware/wrap-log-request {}]
-                 [ring-defaults/wrap-defaults ring-default-config]
+                 [ring-defaults/wrap-defaults (ring-default-config)]
                  middleware/wrap-identity
                  middleware/wrap-welcome-page
                  middleware/wrap-render
